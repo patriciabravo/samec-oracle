@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="mb-3">
+    <button id="btn_iniciar_autoevaluacion" class="btn btn-primary">
+        Iniciar Autoevaluación
+    </button>
+</div>
+
+<table id="tabla_ipress" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID IPRESS</th>
+            <th>Nombre</th>
+            <th>Nivel</th>
+            <th>IPRESS Activa</th>
+            <th>ID Autoevaluación</th>
+            <th>Estado Autoevaluacion</th>
+        </tr>
+    </thead>
+</table>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('autoevaluacion.static', filename='js/autoevaluacion_eventos.js') }}"></script>
+<script>
+    AutoevaluacionEvent.init();
+</script>
+{% endblock %}

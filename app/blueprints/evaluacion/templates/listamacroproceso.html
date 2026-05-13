@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div class="card">
+    <div class="card-header py-4">
+        <span class="titulo_nivel_2">Avance por Macroprocesos</span>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-6">        
+                <div class="card mt-3">
+                <div class="card-body">
+                    <h6 class="card-title">Avance de calificación</h6>
+                    <div class="progress" style="height:25px;">
+                        <div id="resultado_avance_calificacion"
+                            class="progress-bar progress-bar-striped"
+                            role="progressbar"
+                            style="width:0%">
+                            0%
+                        </div>
+                    </div>
+                    <div id="detalle_avance" class="mt-2 text-muted small"></div>
+                </div>
+                </div>
+            </div>        
+            <div class="col-md-6">      
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title">Avance de reporte de fuentes</h6>
+
+                        <div class="progress" style="height:25px;">
+                            <div id="resultado_avance_fuentes"
+                                class="progress-bar progress-bar-striped bg-info"
+                                role="progressbar"
+                                style="width:0%">
+                                0%
+                            </div>
+                        </div>
+                        <div id="detalle_avance_fuentes" class="mt-2 text-muted small"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                        <table id="tbl_evaluacion_macroprocesos" class="table table-striped table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>MACROPROCESO</th>
+                                <th>AVANCE</th>
+                                <th>ACCION</th>
+                            </tr>
+                        </thead>
+                        </table>
+                <div class="row p-10 mt-2">
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                           <label class="form-check-label" for="estadoSwitch">Activar/Desactivar Reporte</label>
+                           <input class="form-check-input" type="checkbox" id="estadoSwitch" data-id="{{ IdAutoevaluacion }}" data-ipress="{{ id_ipress_export or current_user.id_ipress }}"  {% if estado_ae == 1 %}checked{% endif %}>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <!-- include el grafico -->
+                {% set rol_id = 2 %}
+                {% include "graficos/estadisticaspuntajes.html" %}
+                <div class="row mb-3">
+                    <div class="col-md-12 text-center pt-10">
+                        <form method="POST" id="frm_ir_calculo" action="{{ url_for('calculoacredita.resultados') }}" class="d-inline m-0">
+                            <input type="hidden" name="id_autoevaluacion" id="id_autoevaluacion" value="{{ IdAutoevaluacion }}">
+                            <input type="hidden" name="id_ipress" id="id_ipress" value="{{ id_ipress_export or current_user.id_ipress }}">
+                            <button type="submit" class="btn btn-secondary btn-text-azul btn-lg fs-4"><i class="fas fa-percentage"></i>Calcular porcentaje</button>
+                        </form>&nbsp;&nbsp;&nbsp;
+                        {% if id_ipress_export %}
+                        <a href="{{ url_for('resultados.export_word_autoevaluacion', id_ipress=id_ipress_export, id_mp=0) }}"
+                        class="btn btn-secondary btn-text-azul btn-lg fs-3"><i class="fas fa-sticky-note"></i>Generar Anexo 2 (Word)</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('evaluacion.static', filename='js/evaluacionlistamp.js') }}"></script>
+<script>
+    const IdIpress = "{{ id_ipress_export or current_user.id_ipress }}";
+    const ID_AUTOEVALUACION = "{{ IdAutoevaluacion }}";
+    EvaluadorListaMpEvent.init();
+</script>
+{% endblock %}

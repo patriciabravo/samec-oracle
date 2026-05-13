@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header py-4">
+        <span class="titulo_nivel_2">Cálculo del Porcentaje Alcanzado</span>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-end mb-3">
+            <button type="button" id="btnExportarExcel" class="btn btn-success btn-sm" disabled title="Exportar a Excel (requiere datos en el grid)">
+                <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+            </button>
+        </div>
+        <table id="tablaAcredita" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2">MACROPROCESO</th>
+                    <th colspan="4">TOTAL CRITERIOS</th>
+                    <th colspan="4">PUNTAJE MAXIMO POR TIPO</th>
+                    <th colspan="4">PUNTAJE MAXIMO POR PESO</th>   
+                    <th colspan="3">PTC</th>  
+                    <th colspan="3" style="background-color:red;">PTE X TIPO CRIT</th>
+                    <th colspan="3">PTE MAX x PROPORCION</th>  
+                    <th colspan="4">PTE x MACROPROCESO</th>
+                    <th>% MP</th>
+                    <th>PTJE MIN</th>
+                    <th>PTJE OBT</th>
+                    <th>CUMPLIM.</th>
+
+                </tr>
+                <tr>                   
+                    <th>EST</th>
+                    <th>PROC</th>
+                    <th>RES</th>
+                    <th>TOT</th>
+
+                    <th>EST</th>
+                    <th>PROC</th>
+                    <th>RES</th>
+                    <th>TOT</th>
+
+                    <th>EST</th>
+                    <th>PROC</th>
+                    <th>RES</th>
+                    <th>TOT</th>
+                    
+<!-- PTC-->
+                    <th>EST</th>
+                    <th>PROC</th>
+                    <th>RES</th>
+<!-- Puntaje obtenido por tipo de criterio -->
+                    <th>EST</th>
+                    <th>PROC</th>
+                    <th>RES</th>
+<!-- Puntaje max por proporcion -->
+                    <th>EST</th>
+                    <th>PROC</th>
+                    <th>RES</th>
+<!-- Puntaje obtenido macroproceso -->
+                    <th>EST</th>
+                    <th>PROC</th>
+                    <th>RES</th>
+                    <th>TOT</th>
+<!-- macroproceso constante -->
+                    <th>CTE</th>
+<!-- ULTIMAS COLS-->
+                    <th>X MP</th>
+                    <th>X MP</th>
+                    <th>X MP</th>                  
+                </tr>
+            </thead>
+        </table>
+        <br><br><br>
+
+        <table id="tablaCategorias" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>MACROPROCESO</th>
+                    <th>AP_puntaje_max_categoria</th>
+                    <th>AQ_porcentaje_categoria</th>
+                    <th style="background-color:blue">AR_total_ptje_categoria_max</th>
+                    <th>AS_puntaje_max_categoria</th>
+                    <th style="background-color:blue">AT_puntaje_obtenido</th> 
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                <th></th>
+                <th>Porcentaje</th>
+                <th id="porcentaje"></th>
+                <th id="btn_porcentaje"><button id="btnGuardarAutoevaluacion" class="btn btn-success btn-lg">Guardar Puntaje</button></th>
+                </tr>
+            </tfoot>
+        </table>
+
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('calculoacredita.static', filename='js/calculoacredita.js') }}"></script>
+<script>
+    const ID_AUTOEVALUACION = {{ id_autoevaluacion | tojson }};
+    const ID_IPRESS = {{ id_ipress | tojson }};
+    CalculoAcreditaEvent.init();
+</script>
+{% endblock %}

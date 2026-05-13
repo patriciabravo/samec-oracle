@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header py-4">
+        <span class="titulo_nivel_2">{{nombre_macroproceso}} - Busqueda de Fuentes por Criterios</span>
+    </div>
+    <div class="card-body">
+        <a href="/evaluacion/listado" class="btn btn-light-primary py-1 px-2">
+                &lt;&lt; Regresar
+        </a><br><br>      
+         <div class="row p-5">
+            <div class="col-md-2">
+                <label class="form-label">Filtrar por Estándar</label>
+            </div>
+            <div class="col-md-8">
+                <select id="sel_estandar" class="form-select">
+                </select>
+            </div>
+            <div class="col-md-2"></div>            
+        </div>
+        
+        <input type="hidden" name="id_macroproceso" id="id_macroproceso" value="{{id_macroproceso}}">        
+        <table id="tbl_estandar_criterios" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ESTÁNDAR</th>
+                    <th>CRITERIOS</th>
+                    <th>TOTAL CONDICIONES</th>
+                    <th>CALIFICADO</th>
+                    <th>ACCION</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('evaluacion.static', filename='js/reportaevaluador.js') }}"></script>
+<script>
+    const IdAutoevaluacion = {{id_autoevaluacion}};
+    const idMacroproceso = {{id_macroproceso|tojson}};
+    const nomMacroproceso = {{nombre_macroproceso|tojson}};
+    ReportaEvaluadorEvent.init();
+</script>
+{% endblock %}

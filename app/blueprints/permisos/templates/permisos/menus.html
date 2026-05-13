@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-header card-subtitle-header py-6">
+        Lista de Menus
+  </div>
+  <div class="card-body">
+        <table id="tablaMenus" class="table table-striped table-bordered gy-5 gs-7 ">
+      <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre del Menú</th>
+            <th>Ícono</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('permisos.static', filename='js/menus/general.js') }}"></script>
+<script>
+    MenuEvent.init();
+</script>
+{% endblock %}

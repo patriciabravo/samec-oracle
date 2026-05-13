@@ -1,0 +1,239 @@
+{% extends "layout.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header card-subtitle-header py-6">
+        Lista de Usuarios
+  </div>
+  <div class="card-body">
+      <div class="text-end pb-5">
+        {% if current_user.roles_asociados | selectattr('id_rol', 'in', [ROLES["ROL_GERENTE_GAMCC"], ROLES["ROL_ADMINISTRADOR"]]) | list | length > 0 %}
+            <button class="btn btn-back-azul btn-new-user-general" data-bs-toggle="modal" data-bs-target="#CrearUsuarioGeneral" data-tipo="nuevo">
+              <i class="bi bi-person-plus fs-3 text-white"></i> Nuevo usuario
+            </button>
+            <a class="btn btn-back-azul" id="btn-nuevo-usuario-generico" data-bs-toggle="modal" data-bs-target="#CrearUsuarioGenerico">
+              <i class="bi bi-person-plus fs-3 text-white"></i> Nuevo usuario IPRESS
+            </a>
+        {% endif %}
+      </div>
+        <table id="usuariosTable" class="table table-striped table-bordered gy-5 gs-7 ">
+          <thead>
+                 <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>                    
+                    <th>Nombres Completos</th>
+                    <th>Documento</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Nombre de Red</th>
+                    <th>Nombre de Ipress</th>
+                    <th>Rol definido</th>
+                    <th>Fecha de Registro</th>
+                    <th>Activo</th>                   
+                    <th>Acciones</th>
+                </tr>
+          </thead>
+        </table>
+  </div>
+</div>
+
+<div class="modal fade" id="CrearUsuarioGeneral" tabindex="-1" aria-labelledby="CrearUsuarioGeneral" >
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <form id="form_nuevo_usuario" class="form" action="{{ url_for('usuario.grabarusuariogeneral') }}" method="POST">    
+      <!-- HEADER -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="editarModalLabel">Nuevo Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <!-- BODY -->
+      <div class="modal-body">
+        <input type="hidden" name="id_usuario" id="id_usuario" value="">
+        <input type="hidden" name="id_persona" id="id_persona" value="">
+        <div class="row g-4 p-2">
+            <div class="col-md-6 fv-row">
+              <label for="apellidos" class="form-label">Usuario</label>
+              <input type="text" class="form-control form-control-sm" id="username" name="username">
+            </div>
+            <div class="col-md-6 fv-row">
+              <label for="apellidos" class="form-label">Correo Electrónico</label>
+              <input type="text" class="form-control form-control-sm" id="correo" name="correo">
+            </div>
+        </div>
+        <div class="row g-4 p-2">
+            <div class="col-md-12 fv-row">
+              <label for="tipo_documento" class="form-label">Seleccione Persona</label>
+              <select class="form-select form-select-sm" id="select_persona" name="select_persona">
+                <option value="">Seleccione persona</option>
+              </select>
+            </div>            
+        </div>
+        <div class="row g-4 p-2" id="fila_password">
+            <div class="col-md-6 fv-row">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="********">
+            </div>
+            <div class="col-md-6 fv-row">
+              <label for="password" class="form-label">Repetir Contraseña</label>
+              <input type="password" class="form-control form-control-sm" id="password_repeat" name="password_repeat" placeholder="********">
+            </div>
+        </div>
+        <div class="row g-4 p-2">
+          <div class="col-md-6 fv-row">
+              <label for="rol" class="form-label">Rol</label>
+              <select class="form-select form-select-sm" id="sel_rol_essalud" name="sel_rol_essalud">
+                <option value="">Seleccione Rol</option>
+                <option value="{{ ROLES['ROL_GERENTE_GAMCC'] }}">Gerente GAMCC</option>
+                <option value="{{ ROLES['ROL_GESTOR_GAMCC'] }}">Gestor GAMCC</option>
+                <option value="{{ ROLES['ROL_RED'] }}">RED</option>
+                <option value="{{ ROLES['ROL_ADMINISTRADOR'] }}">Administrador</option>
+              </select>            
+          </div>
+          <div class="col-md-6 fv-row d-none" id="div_show_red">
+            <label for="red" class="form-label">Red</label>
+            <select class="form-select form-select-sm" id="sel_red" name="sel_red">
+              <option value="">Seleccione Red</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row g-4 p-2">
+            <div class="col-md-12 fv-row d-none" id="div_show_red_asignadas">
+              <label for="redes_asignadas" class="form-label">Redes Asignadas</label>
+              <select class="form-select form-select-sm" id="sel_redes_asignadas" name="sel_redes_asignadas[]" multiple>
+                <option value="">Seleccione Redes Asignadas</option>
+              </select>
+            </div>
+        </div>
+        <div class="row g-4 p-2">
+            <div class="col-md-12 fv-row">
+                  <label for="ipress_asignada" class="form-label">Estado:&nbsp;&nbsp;</label>&nbsp;&nbsp;&nbsp;
+                  <input type="radio" id="activo" name="estado" style="vertical-align: middle; margin-top: -2px;" value="1" checked>
+                  <label for="activo">&nbsp;Activo</label>
+                  <input type="radio" id="inactivo" name="estado" style="vertical-align: middle; margin-top: -2px;" value="0">
+                  <label for="inactivo">&nbsp;Inactivo</label>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-back-gris" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" id="btn_guarda_usuariogeneral"  class="btn btn-back-azul">Guardar</button>
+      </div>
+
+    </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="CrearUsuarioGenerico" tabindex="-1" aria-labelledby="CrearUsuarioGenerico" >
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <form id="form_nuevo_usuario_generico" class="form" action="{{ url_for('usuario.grabarusuariogenerico') }}" method="POST">    
+      <!-- HEADER -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="editarModalLabel">Nuevo Usuario Generico</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <!-- BODY -->
+      <div class="modal-body">
+        <input type="hidden" name="id_usuario_generico" id="id_usuario_generico" value="">
+          <div class="row g-4 p-2">
+            <div class="col-md-6 fv-row">
+              <label for="username" class="form-label">Usuario</label>
+              <input type="text" class="form-control form-control-sm" id="username_generico" name="username_generico">
+            </div>
+            <div class="col-md-6 fv-row">
+              <label for="correo" class="form-label">Correo Electrónico</label>
+              <input type="text" class="form-control form-control-sm" id="correo_generico" name="correo_generico">
+            </div>
+          </div>          
+          <div class="row g-4 p-2">
+            <div class="col-md-6 fv-row">
+              <label for="rol" class="form-label">Rol</label>
+              <select class="form-select form-select-sm" id="sel_rol_essalud_generico" name="sel_rol_essalud_generico">
+                <option value="">Seleccione Rol</option>
+                <option value="{{ ROLES['ROL_EVALUADOR_IPRESS'] }}">Evaluador IPRESS</option>
+                <option value="{{ ROLES['ROL_COORDINADOR_IPRESS'] }}">Evaluado IPRESS</option>
+              </select>            
+            </div>
+            <div class="col-md-6 fv-row">
+              <label for="ipress_asignada" class="form-label">IPRESS</label>
+              <select class="form-select form-select-sm" id="sel_ipress" name="sel_ipress">
+                <option value="">Seleccione IPRESS</option>
+              </select>
+            </div>
+          </div>
+          <div class="row g-4 p-2">
+            <div class="col-md-12 fv-row">
+                  <label for="ipress_asignada" class="form-label">Estado:&nbsp;&nbsp;</label>&nbsp;&nbsp;&nbsp;
+                  <input type="radio" id="activo_ipress" name="estado_user_ipress" style="vertical-align: middle; margin-top: -2px;" value="1" checked>
+                  <label for="activo">&nbsp;Activo</label>
+                  <input type="radio" id="inactivo_ipress" name="estado_user_ipress" style="vertical-align: middle; margin-top: -2px;" value="0">
+                  <label for="inactivo">&nbsp;Inactivo</label>
+            </div>
+          </div>    
+          <div class="row g-4 p-2" id="fila_password">
+            <div class="col-md-6 fv-row"> 
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control form-control-sm" id="password2" name="password2" placeholder="********">
+            </div>
+            <div class="col-md-6 fv-row">
+              <label for="password" class="form-label">Repetir Contraseña</label>
+              <input type="password" class="form-control form-control-sm" id="password_repeat2" name="password_repeat2" placeholder="********">
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-back-gris" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" id="btn_guarda_usuariogenerico"  class="btn btn-back-azul">Guardar</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="CambiarPasswordUsuario" tabindex="-1" aria-labelledby="CambiarPasswordUsuario" >
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <form id="form_change_password_usuario" class="form" action="" method="POST">    
+      <!-- HEADER -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="CambiarPwdModalLabel">Cambiar Contraseña</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <!-- BODY -->
+      <div class="modal-body">
+        <input type="hidden" name="id_usuario_change" id="id_usuario_change" value="">
+        <div class="row g-4 p-2">
+          <div class="col-md-6 fv-row">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control form-control-sm" id="password_user" name="password_user" placeholder="********">
+          </div>
+          <div class="col-md-6 fv-row">
+            <label for="password" class="form-label">Repetir Contraseña</label>
+            <input type="password" class="form-control form-control-sm" id="password_repeat_user" name="password_repeat_user" placeholder="********">
+          </div>
+        </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-back-gris" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" id="btn_cambia_password"  class="btn btn-back-azul">Cambiar Contraseña</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const ROLES = {{ roles | tojson }};
+</script>
+<script src="{{ url_for('usuario.static', filename='js/bandeja-usuario/event.js') }}"></script>
+<script>
+    BandejaUsuarioEvent.init();
+</script>
+{% endblock %}

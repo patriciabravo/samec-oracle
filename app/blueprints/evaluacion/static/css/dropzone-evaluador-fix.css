@@ -1,0 +1,150 @@
+/*
+ * plugins.bundle.css incluye:
+ *   .dz-image img { filter: blur(8px); transform: scale(1.05) }
+ * y luego .dropzone .dz-preview .dz-image img { display:block } sin quitar filter.
+ * El blur en 120×120 hace que la miniatura parezca un bloque de color plano.
+ * También .dropzone .dz-preview:hover .dz-image img vuelve a aplicar blur.
+ */
+/*
+ * Dropzone: .dropzone.dz-clickable * { cursor: default } anula el cursor en hijos.
+ * Además .dz-preview:hover .dz-details (z-index:20) cubre la miniatura y muestra cursor default.
+ */
+#tbl_evaluador_reporte .dropzone.dz-clickable .dz-preview.dz-image-preview .dz-image,
+#form_calcular_puntaje_criterio .dropzone.dz-clickable .dz-preview.dz-image-preview .dz-image {
+    cursor: zoom-in !important;
+}
+
+#tbl_evaluador_reporte .dropzone .dz-preview.dz-image-preview .dz-details,
+#form_calcular_puntaje_criterio .dropzone .dz-preview.dz-image-preview .dz-details {
+    pointer-events: none !important;
+}
+
+#tbl_evaluador_reporte .dropzone .dz-preview .dz-remove,
+#form_calcular_puntaje_criterio .dropzone .dz-preview .dz-remove {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+#tbl_evaluador_reporte .dropzone .dz-image img[data-dz-thumbnail],
+#form_calcular_puntaje_criterio .dropzone .dz-image img[data-dz-thumbnail] {
+    cursor: zoom-in !important;
+}
+
+#tbl_evaluador_reporte .dz-image img,
+#form_calcular_puntaje_criterio .dz-image img {
+    -webkit-filter: none !important;
+    filter: none !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    display: block !important;
+    cursor: zoom-in !important;
+}
+
+#tbl_evaluador_reporte .dropzone .dz-preview:hover .dz-image img,
+#form_calcular_puntaje_criterio .dropzone .dz-preview:hover .dz-image img {
+    -webkit-filter: none !important;
+    filter: none !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+}
+
+/* —— Modal SweetAlert2: vista previa sin scroll + flechas galería —— */
+.swal2-container:has(.swal-eval-gallery) {
+    overflow-y: hidden !important;
+}
+
+.swal2-popup.swal-eval-gallery {
+    overflow: hidden;
+}
+
+.swal2-html-container.swal-eval-gallery-html {
+    overflow: hidden !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0.25rem 0 0 !important;
+}
+
+.swal-eval-gallery-viewport {
+    position: relative;
+    width: 100%;
+    max-width: min(92vw, 1040px);
+    height: min(calc(100vh - 220px), 72vh, 640px);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bs-gray-100, #f5f8fa);
+    border-radius: 0.475rem;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.swal-eval-gallery-img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
+.swal-eval-gallery-prev,
+.swal-eval-gallery-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0.15rem 0.75rem rgba(0, 0, 0, 0.12);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.swal-eval-gallery-prev {
+    left: 0.65rem;
+}
+
+.swal-eval-gallery-next {
+    right: 0.65rem;
+}
+
+.swal-eval-gallery-prev:disabled,
+.swal-eval-gallery-next:disabled {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+
+.swal-eval-gallery-html {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swal-eval-gallery-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.swal-eval-gallery-img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  display: block;
+}

@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="align-middle align-items-center">
+{% set rol_id = 3 %}
+{% set id_red = user.id_red %}
+{% include "graficos/estadisticaspuntajes.html" %}
+</div>									
+{% endblock %}

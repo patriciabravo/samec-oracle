@@ -1,0 +1,42 @@
+#myDropzone {
+    display: flex;             /* Para centrar vertical y horizontal */
+    justify-content: center;
+    align-items: center;
+    text-align: center;         /* Centra el texto dentro del bloque */
+    border: 2px dashed #0077C8; /* Opcional: borde punteado */
+    min-height: 100px;          /* Ajusta altura según lo necesites */
+}
+
+#myDropzone .dz-message {
+    font-size: 16px;
+    color: #0077C8;
+}
+
+#myDropzone .dz-preview {
+ width: 60%;
+}
+
+#myDropzone .dz-preview .dz-image {
+ width: 100%;
+}
+
+#myDropzone .dz-preview a.dz-remove {
+  background-color: #dbdfe18d !important;
+  margin: -20px !important;
+  width: 45px !important;
+  height: 45px !important;
+}
+
+#myDropzone .dz-preview a.dz-remove::after {
+  background-color: #4A90E2 !important;
+}
+
+#myDropzone .dz-preview .dz-success-mark svg path{
+    fill: #44b15d  !important;      /* verde de éxito */
+    stroke: #28a745 !important;    /* si deseas bordes */
+}
+
+#myDropzone .dz-preview .dz-error-mark svg path{
+    fill: #d8434f  !important;    
+    stroke: #dc3545  !important; 
+}

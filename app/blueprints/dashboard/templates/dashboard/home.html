@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="container my-5">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h2 class="display-5">Recursos de Normas Técnicas Peruanas</h2>
+      <p class="lead text-muted">
+        Consulta y descarga información oficial sobre la Norma Técnica.
+      </p>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <!-- Link a catálogo de Normas Técnicas Peruanas -->
+    <div class="col-md-6 mb-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Catálogo de Normas Técnicas Peruanas</h5>
+          <p class="card-text text-muted">
+            Visita el catálogo oficial de Normas Técnicas Peruanas en la web del Instituto Nacional de Calidad (INACAL).
+          </p>
+          <a href="https://www.inacal.gob.pe/cid/categoria/normas-tecnicas-peruanas" target="_blank" class="btn btn-primary">
+            Ver Normas Técnicas Peruanas
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Link a Sala de Lectura de Normas Técnicas -->
+    <div class="col-md-6 mb-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Listado de Normas (Sala de Lectura)</h5>
+          <p class="card-text text-muted">
+            Accede al listado completo de Normas Técnicas Peruanas disponibles para lectura o descarga.
+          </p>
+          <a href="https://salalecturavirtual.inacal.gob.pe:8098/" target="_blank" class="btn btn-success">
+            Ver listado de criterios
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+{% endblock %}

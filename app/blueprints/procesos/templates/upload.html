@@ -1,0 +1,39 @@
+<form id="uploadForm" enctype="multipart/form-data">
+  <div style="display: flex; gap: 10px; align-items:center">
+
+    <!-- BOTÓN SUBIR PERSONALIZADO -->
+    <label for="fileInput" 
+           style="
+             padding:8px 15px;
+             background:#007bff;
+             color:white;
+             border-radius:6px;
+             cursor:pointer;">
+      Subir
+    </label>
+
+    <!-- INPUT FILE OCULTO -->
+    <input type="file" id="fileInput" name="file"
+           accept=".pdf, .docx, .xlsx"
+           style="display:none">
+
+    <!-- NOMBRE DEL ARCHIVO SELECCIONADO -->
+    <span id="fileName" style="font-size:14px; color:#555"></span>
+
+    <!-- BOTÓN GUARDAR ARCHIVO -->
+    <button type="button" id="saveBtn"
+            style="
+              padding:8px 15px;
+              background:green;
+              color:white;
+              border:none;
+              border-radius:6px;
+              cursor:pointer;
+            ">
+      Guardar
+    </button>
+  </div>
+</form>
+
+<!-- Vincular archivo JS -->
+<script src="{{ url_for('procesos.static', filename='js/upload.js') }}"></script>

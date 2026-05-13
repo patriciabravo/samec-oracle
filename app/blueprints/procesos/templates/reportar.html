@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+</div>
+<div class="card">
+    <div class="card-header py-4">
+        <span class="titulo_nivel_2">Listado de Procesos Institucionales</span>        
+    </div>
+
+    <div class="card-body">
+        <table id="tablaProcesosInstitucionales" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>PROCESO INSTITUCIONAL</th>
+                    <th>ESTADO</th>
+                    <th>CANTIDAD OBSERVACIONES</th>
+                    <th>FUENTES DOCUMENTARIAS</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div class="card border-0">
+            <div class="card-body text-end">
+                <span class="badge bg-danger text-white me-2">Pendiente</span>
+                <small class="me-4">No se ha cargado ningún documento</small>&nbsp;&nbsp;&nbsp;
+                <span class="badge bg-warning text-white me-2">En proceso</span>
+                <small class="me-4">Se han cargado algunos documentos</small>&nbsp;&nbsp;&nbsp;
+                <span class="badge bg-success text-white me-2">Completado</span>
+                <small>Todos los documentos han sido cargados</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('procesos.static', filename='js/evaluadolistado.js') }}"></script>
+<script>
+    const IdAutoevaluacion = {{id_autoevaluacion}};
+    ProcessEvent.init();
+</script>
+{% endblock %}

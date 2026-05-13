@@ -1,0 +1,118 @@
+/* Ocultar logo minimizado por defecto */
+.logo-default { display: inline-block; }
+.logo-minimize { display: none; }
+
+/* Cuando el sidebar se minimiza */
+body[data-kt-app-sidebar-minimize="on"] .logo-default { display: none; }
+body[data-kt-app-sidebar-minimize="on"] .logo-minimize { display: inline-block; }
+
+
+.logo-img {
+  padding-top: 0px;           /* espacio interno */
+  background-color: #fff;  /* opcional: se nota el padding si hay fondo */
+  display: inline-block;   /* necesario para que respete el padding */
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.app_name_text{
+  font-size:30px !important;
+  font-weight: 600 !important;
+  color: #0077C8 !important;
+  line-height: 1.1 !important;
+  padding-top: 10px !important;
+}
+
+.app_name_title_text{
+  padding-top: 10px !important;
+  font-size:21px !important;
+  font-weight: 500 !important;
+  color: #0077C8 !important;
+  line-height: 1.1 !important;
+}
+
+.app_name_subtext{
+  font-size:16px !important;
+  font-weight: 500 !important;
+  color: #66B8F0 !important;
+  line-height: 1.1 !important;
+  padding-top: 7px !important;
+}
+
+.titulo_nivel_2{
+  padding-top: 15px !important;
+  font-size:18px !important;
+  color: #1c6fa4 !important;
+}
+
+div#kt_app_toolbar_container h1.page-heading{
+  font-size:24px !important;
+  font-weight: 600 !important;
+  color: #0077C8 !important;
+}
+
+.card-main-title{
+  font-size:24px !important;
+  font-weight: 500 !important;
+  color: #0077C8 !important;
+  line-height: 1.5;
+}
+
+.card-subtitle-header{
+  font-size:18px !important;
+  font-weight: 500 !important;
+  color: #0077C8 !important;
+  min-height: 50px !important;
+  line-height: 0.8 !important;
+}
+
+
+.btn-text-azul {
+  color: #0077C8 !important;
+}
+
+.btn-text-azul i{
+  color: #0077C8 !important;
+  font-weight: 500;
+}
+
+
+.btn-back-azul {
+ background-color: #0077C8 !important;
+ color:#ffffff !important;
+}
+
+.btn-back-gris {
+ background-color: #E0E0E0 !important;
+ color:#0077C8 !important;
+}
+
+.btn-icon-lg{
+    font-size: 4rem;
+}
+
+/***** Datatable Estilos ***/
+/* Ajustar fuente y color de toda la tabla */
+table.dataTable {
+    font-size: 14px;
+    color: #1c6fa4;
+}
+
+/* Centrar encabezados */
+table.dataTable thead th {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+    color: #1c6fa4;
+}
+
+/* Ajustar color del header */
+table.dataTable thead {
+    background-color: #d6e8f3;
+    color: #1c6fa4;
+}
+
+table.dataTable tbody tr.dtrg-group.dtrg-start.dtrg-level-0{
+    font-weight: 700;
+    padding: 8px 12px;
+}

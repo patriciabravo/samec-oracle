@@ -1,0 +1,11 @@
+#kt_sign_in_form h1, #kt_sign_up_form h1{
+  color: #0077C8;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+
+#kt_sign_in_form h2, #kt_sign_up_form h2{
+
+  color: #0077C8;
+}

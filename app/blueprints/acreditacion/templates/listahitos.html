@@ -1,0 +1,589 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header py-4">
+        <h4>Hitos de la Acreditación</h4>
+    </div>
+    <div class="card-body">
+
+            <div class="p-4 text-center text-white text-lg bg-dark rounded-top">
+                <span class="text-uppercase">Seguimiento - </span>
+                <span class="text-medium">HITOS DEL PROCESO</span>
+            </div>
+
+            <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
+                <div class="w-100 text-center py-1 px-2">
+                    <span class="text-medium">Proceso:</span> Autoevaluación
+                </div>
+                <div class="w-100 text-center py-1 px-2">
+                    <span class="text-medium">Estado:</span> En Proceso
+                </div>
+                <div class="w-100 text-center py-1 px-2">
+                    <span class="text-medium">Avance:</span> 45%
+                </div>
+            </div>
+
+            <div class="card-body">
+              <div class="steps d-flex flex-wrap justify-content-between padding-top-2x padding-bottom-1x">
+                  <!-- HITO 1 -->
+                  <div class="step completed">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-note2"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 1</h4>
+                  </div>
+                  <!-- HITO 2 -->
+                  <div class="step completed">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-user"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 2</h4>
+                  </div>
+                  <!-- HITO 3 -->
+                  <div class="step completed">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-network"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 3</h4>
+                  </div>
+                  <!-- HITO 4 -->
+                  <div class="step active">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-tools"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 4</h4>
+                  </div>
+                  <!-- HITO 5 -->
+                  <div class="step">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-display2"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 5</h4>
+                  </div>
+                  <!-- HITO 6 -->
+                  <div class="step">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-folder"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 6</h4>
+                  </div>
+                  <!-- HITO 7 -->
+                  <div class="step">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-graph1"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 7</h4>
+                  </div>
+                  <!-- HITO 8 -->
+                  <div class="step">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-check"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 8</h4>
+                  </div>
+                  <!-- HITO 9 -->
+                  <div class="step">
+                      <div class="step-icon-wrap">
+                          <div class="step-icon">
+                              <i class="pe-7s-flag"></i>
+                          </div>
+                      </div>
+                      <h4 class="step-title">Hito 9</h4>
+                  </div>
+              </div>
+          </div>
+          <!--   Todos  -->
+          <div class="card shadow-sm border-0">
+              <div class="card-body">
+                  <div class="table-responsive">
+                      <table class="table align-middle table-bordered">
+                          <thead class="table-light">
+                              <tr>
+                                  <th width="25%">Hito</th>
+                                  <th width="20%">Comité</th>
+                                  <th width="20%">Plantilla</th>
+                                  <th width="20%">Subir Archivo</th>
+                                  <th width="15%">Documento</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <!-- HITO 1 -->
+                              <tr>
+                                  <td>
+                                      <strong>Hito 1: Conformación del Equipo de Acreditación</strong>
+                                  </td>
+
+                                  <td>
+                                      <button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito1">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Equipo de Acreditación
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-secondary btn-sm" id="btnDescargarHito1">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <!--<label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 1
+                                          <input type="file" hidden>
+                                      </label>-->
+                                      <input type="hidden" class="filesToInsertDB" id="filesToInsertDB_H1" name="filesToInsertDB_H1">
+                                      <div class="dropzone" id="dropzone_H1">
+                                          <div class="dz-message needsclick text-center">
+                                              <i class="bi bi-file-earmark-pdf-fill text-danger fs-1 mb-3"></i>
+                                              <div class="ms-4">
+                                                  <span class="fs-7 fw-semibold text-gray-500">
+                                                      Arrastre un PDF o haga click aquí
+                                                      Solo se permiten archivos PDF
+                                                  </span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  <td class="text-center">
+                                      <button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i>Ver
+                                      </button>
+                                  </td>
+                              </tr>
+                              <!-- HITO 2 -->
+                              <tr>
+                                  <td><strong>Hito 2: Conformación de Equipo de Evaluadores Internos</strong></td>
+                                  <td>
+                                      <button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito2">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Equipo de Evaluadores Internos
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-secondary btn-sm">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 2
+                                          <input type="file" hidden>
+                                      </label>
+                                  </td>
+                                  <td class="text-center">
+                                      <button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i>Ver
+                                      </button>
+                                  </td>
+                              </tr>
+                              <!-- HITO 3 -->
+                              <tr>
+                                  <td><strong>Hito 3</strong></td>
+
+                                  <td>
+                                     <!--<button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito3">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Comité
+                                      </button>-->
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-outline-secondary btn-sm">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 3
+                                          <input type="file" hidden>
+                                      </label>
+                                  </td>
+                                  <td class="text-center">
+                                      <!--<button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i> Ver
+                                      </button>-->
+                                  </td>
+                              </tr>
+                              <!-- HITO 4 -->
+                              <tr>
+                                  <td><strong>Hito 4</strong></td>
+                                  <td>
+                                      <!--<button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito4">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Comité
+                                      </button>-->
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-outline-secondary btn-sm">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 4
+                                          <input type="file" hidden>
+                                      </label>
+                                  </td>
+                                  <td class="text-center">
+                                      <!--<button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i>
+                                      </button>-->
+                                  </td>
+                              </tr>
+                              <!-- HITO 5 -->
+                              <tr>
+                                  <td><strong>Hito 5</strong></td>
+                                  <td>
+                                     <!-- <button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito5">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Comité
+                                      </button>-->
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-outline-secondary btn-sm">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 5
+                                          <input type="file" hidden>
+                                      </label>
+                                  </td>
+                                  <td class="text-center">
+                                      <!--<button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i>
+                                      </button>-->
+                                  </td>
+                              </tr>
+                              <!-- HITO 6 -->
+                              <tr>
+                                  <td><strong>Hito 6</strong></td>
+                                  <td>
+                                      <!--<button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito6">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Comité
+                                      </button>-->
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-outline-secondary btn-sm">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 6
+                                          <input type="file" hidden>
+                                      </label>
+                                  </td>
+                                  <td class="text-center">
+                                      <!--<button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i>
+                                      </button>-->
+                                  </td>
+                              </tr>
+                              <!-- HITO 7 -->
+                              <tr>
+                                  <td><strong>Hito 7</strong></td>
+                                  <td>
+                                      <!--<button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito7">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Comité
+                                      </button>-->
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-outline-secondary btn-sm">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 7
+                                          <input type="file" hidden>
+                                      </label>
+                                  </td>
+                                  <td class="text-center">
+                                      <!--<button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i>
+                                      </button>-->
+                                  </td>
+                              </tr>
+                              <!-- HITO 8 -->
+                              <tr>
+                                  <td><strong>Hito 8</strong></td>
+                                  <td>
+                                      <!--<button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito8">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Comité
+                                      </button>-->
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-outline-secondary btn-sm">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 8
+                                          <input type="file" hidden>
+                                      </label>
+                                  </td>
+                                  <td class="text-center">
+                                      <!--<button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i>
+                                      </button>-->
+                                  </td>
+                              </tr>
+                              <!-- HITO 9 -->
+                              <tr>
+                                  <td><strong>Hito 9</strong></td>
+                                  <td>
+                                      <!--<button class="btn btn-primary btn-sm"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#modalHito9">
+                                          <i class="bi bi-people-fill"></i>
+                                          Definir Comité
+                                      </button>-->
+                                  </td>
+                                  <td>
+                                      <button class="btn btn-outline-secondary btn-sm">
+                                          <i class="bi bi-download"></i>
+                                          Descargar Plantilla
+                                      </button>
+                                  </td>
+                                  <td>
+                                      <label class="btn btn-success btn-sm mb-0">
+                                          <i class="bi bi-upload"></i>
+                                          Subir Hito 9
+                                          <input type="file" hidden>
+                                      </label>
+                                  </td>
+                                  <td class="text-center">
+                                      <!--<button class="btn btn-outline-dark btn-sm">
+                                          <i class="bi bi-eye-fill"></i>
+                                      </button>-->
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+    </div>
+</div>
+
+<!-- MODAL HITO 1 -->
+<div class="modal fade" id="modalHito1" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form id="form_hito_1" class="form" action="" method="POST"> 
+    <div class="modal-content">      
+        <div class="modal-header">
+                  <h5 class="modal-title">
+                      Definir Comité de Acreditación - Hito 1
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        
+        <div class="modal-body">
+                  <div class="mb-3 text-end">
+                          <button type="button" class="btn btn-light-primary btn-sm" id="btnAgregarMiembro"> <i class="bi bi-plus-lg"></i>
+                              Agregar Miembro
+                          </button>
+                  </div>
+                  <div class="table-responsive">
+                      <table class="table table-bordered align-middle">
+                          <thead class="table-light">
+                              <tr>
+                                  <th width="40%">
+                                      Nombre
+                                  </th>
+                                  <th width="40%">
+                                      Cargo
+                                  </th>
+                                  <th width="10%">
+                                      ¿Es Líder?
+                                  </th>
+                                  <th width="10%" class="text-center">
+                                      Acción
+                                  </th>
+                              </tr>
+                          </thead>
+                          <tbody id="tablaMiembros">
+                              <tr>
+                                  <td>
+                                      <input type="text"
+                                            class="form-control"
+                                            name="miembro_nombre[0]"
+                                            placeholder="Ingrese nombre">
+                                  </td>
+                                  <td>
+                                      <input type="text"
+                                            class="form-control"
+                                            name="miembro_cargo[0]"
+                                            placeholder="Ingrese cargo">
+                                  </td>
+                                  <td>
+                                      <select class="form-select"
+                                              name="miembro_lider[0]">
+                                          <option value="NO" selected>NO</option>
+                                          <option value="SI">SI</option>
+                                      </select>
+                                  </td>
+                                  <td class="text-center">
+                                      <!--<button type="button" class="btn btn-light-danger btn-sm btnEliminarComite">
+                                          <i class="bi bi-trash"></i>
+                                      </button>-->
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  
+                  </div>
+        </div>
+        <div class="modal-footer">
+                  <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary" id="btnGuardarComite">Guardar Comité</button>
+              </div>
+        </div>        
+    </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL HITO 2 -->
+<div class="modal fade" id="modalHito2" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Conformación del Equipo de Evaluadores Internos - Hito 2
+                </h5>
+                <button type="button"  class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <!-- BODY -->
+            <div class="modal-body">
+                <div class="alert bg-warning-subtle text-warning mb-4">
+                    Registre como mínimo 5 evaluadores internos e indique si el evaluador es líder.
+                </div>
+                <!-- BOTÓN AGREGAR -->
+                <div class="mb-3 text-end">
+                    <button type="button"  class="btn btn-sm" onclick="agregarEvaluador()"> <i class="bi bi-plus-lg"></i>
+                        Agregar Evaluador
+                    </button>
+                </div>
+                <!-- TABLA -->
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="70%">
+                                    Nombre del Evaluador
+                                </th>
+                                <th width="20%">
+                                    ¿Es Líder?
+                                </th>
+                                <th width="10%" class="text-center">
+                                    Acción
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaEvaluadores">
+                            <!-- FILA -->
+                            <tr>
+                                <td>
+                                    <input type="text"
+                                           class="form-control"
+                                           placeholder="Ingrese nombre del evaluador">
+                                </td>
+                                <td>
+                                    <select class="form-select">
+                                        <option value="NO" selected>NO</option>
+                                        <option value="SI">SI</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-sm"
+                                            onclick="eliminarEvaluador(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar
+                      </button>
+                <button type="button" class="btn btn-primary">
+                    Guardar Evaluadores
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('acreditacion.static', filename='js/bandeja.js') }}"></script>
+<script src="{{ url_for('acreditacion.static', filename='js/formvalidator_hito1.js') }}"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+<link rel="stylesheet" href="{{ url_for('acreditacion.static', filename='css/steps.css') }}">
+<script>
+    const ID_AUTOEVALUACION = {{ id_autoevaluacion | tojson }};
+    const ID_IPRESS = {{ id_ipress | tojson }};
+    ListadoEvent.init();
+    FormValidatorHito1.init();
+</script>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block styles %}
+<!--<link href="{{ url_for('evaluacion.static', filename='css/dropzone-evaluador-fix.css') }}" rel="stylesheet">-->
+{% endblock %}
+
+{% block content %}
+<input type="hidden" id="id_criterio" value="{{ id_criterio }}">
+<div class="card">
+    <div class="card-header py-4">
+        <span class="titulo_nivel_2"><b>CRITERIO:</b> {{ nombre_criterio }}</span>
+        <div class="text-end">
+            <span id="texto_puntaje">Sin Calificar</span>            
+        </div>
+
+    </div>
+    <div class="card-body">
+        <form action="evaluacion/reportaevaluador" method="post">
+            <input type="hidden" name="id_autoevaluacion" value="{{id_autoevaluacion}}" >
+            <input type="hidden" name="id_macroproceso" value="{{id_macroproceso}}" >
+            <input type="hidden" name="nombre_macroproceso" value="{{nombre_macroproceso}}" >
+            <button type="submit" class="btn btn-light-primary py-1 px-2">&lt;&lt; Regresar</button>
+        </form>
+        <br><br> 
+
+        <form id="form_calcular_puntaje_criterio" action="{{ url_for('evaluacion.upsert_autoevaluacion') }}" method="POST">
+        <input type="hidden" name="id_autoevaluacion" id="id_autoevaluacion" value="{{id_autoevaluacion}}">
+        <input type="hidden" name="id_criterio_calcular" id="id_criterio_calcular" value="">
+        <input type="hidden" name="puntaje_total_criterio" id="puntaje_total_criterio" value="">
+        <input type="hidden" name="puntaje_actual_criterio" id="puntaje_actual_criterio" value="{{puntaje_actual_criterio}}">
+        <input type="hidden" name="cantidad_a_reportar" id="cantidad_a_reportar" value="{{cantidad_a_reportar}}">
+        <input type="hidden" name="regla_puntaje2_1condicion" id="regla_puntaje2_1condicion" value="{{regla_puntaje2_1condicion}}">
+        <input type="hidden" name="es_precalificado" id="es_precalificado" value="{{es_precalificado}}">
+        <input type="hidden" name="filesToSend" id="filesToSend" value="">
+        
+        <table id="tbl_evaluador_reporte" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>TECNICA</th>
+                    <th>TIPO DE DOCUMENTO</th>
+                    <th>FUENTE</th>
+                    <th>OBSERVACIONES/COMENTARIOS</th>
+                </tr>
+            </thead>
+        </table>        
+        <div class="row justify-content-end p-10">
+            <!-- aqui va el desplegable 0,1,2-->
+            <div class="col-md-5" id="califica_puntaje_2">
+            </div>
+            <div class="col-md-7 text-end">
+                <button type="submit" class="btn btn-primary" id="grabar_puntaje_criterio">Grabar Puntaje Criterio</button>
+            </div>
+        </div>
+        </form>       
+    </div>
+</div>
+<div class="modal fade" id="modalPreview" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-3">
+      <img id="previewImage" src="" class="img-fluid" />
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('evaluacion.static', filename='js/evaluadorcalificar.js') }}"></script>
+<script>
+    const IdAutoevaluacion = "{{ id_autoevaluacion }}";
+    EvaluadorCalificarEvent.init();
+</script>
+{% endblock %}

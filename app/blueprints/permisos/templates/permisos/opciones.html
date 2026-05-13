@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-header card-subtitle-header py-6">
+        Menu de Opciones
+         <button class="btn btn-primary btn-sm" id="btnNuevaOpcion" data-bs-toggle="modal" data-bs-target="#modalNuevaOpcion">
+            <i class="fas fa-plus"></i> Nueva Opción
+        </button>
+  </div>
+  </div>
+  
+  <div class="card-body">
+        <table id="tablaOpciones" class="table table-striped table-bordered gy-5 gs-7 ">
+      <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Ruta</th>
+            <th>id_menu</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      </table>
+  </div>
+</div>
+<!-- Modal para Editar -->
+<div class="modal fade" id="modalEditarOpcion" tabindex="-1" aria-labelledby="modalEditarOpcionLabel">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="form_editar_opcion" action="{{ url_for('permisos.grabaropcion') }}" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarOpcionLabel">Editar Opción</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="id_opcion" name="id_opcion">
+          <input type="hidden" id="id_menu" name="id_menu">
+
+
+          <div class="row g-4 p-2">
+            <div class="col-md-6 fv-row">
+              <label class="form-label">Nombre de Opción</label>
+              <input type="text" class="form-control form-control-sm" id="nombre_opcion" name="nombre_opcion" required>
+            </div>
+            <div class="col-md-6 fv-row">
+              <label class="form-label">Ruta</label>
+              <input type="text" class="form-control form-control-sm" id="ruta_opcion" name="ruta_opcion" required>
+            </div>
+          </div>
+
+          <div class="row g-4 p-2">
+            <div class="col-md-6 fv-row">
+              <label class="form-label">Menú Asociado</label>
+              <input type="text" class="form-control form-control-sm" id="nombre_menu" name="nombre_menu" readonly>
+            </div>
+            <div class="col-md-6 fv-row">
+              <label class="form-label">Estado</label>
+              <select class="form-select form-select-sm" id="activo" name="activo">
+                <option value="true">Activo</option>
+                <option value="false">Inactivo</option>
+              </select>
+            </div>
+          </div>
+          <input type="hidden" id="icono_opcion" name="icono_opcion" value="svg-icon">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Modal Crear Nueva Opción -->
+<div class="modal fade" id="modalNuevaOpcion" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="form_nueva_opcion" action="{{ url_for('permisos.grabaropcion') }}" method="POST">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Nueva Opción</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="row g-4 p-2">
+            <div class="col-md-6">
+              <label class="form-label">Nombre de Opción</label>
+              <input type="text" class="form-control form-control-sm" name="nombre_opcion" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Ruta</label>
+              <input type="text" class="form-control form-control-sm" name="ruta_opcion" required>
+            </div>
+          </div>
+
+          <div class="row g-4 p-2">
+            <div class="col-md-6">
+              <label class="form-label">Menú Asociado</label>
+              <select class="form-select form-select-sm" name="id_menu" id="nuevo_id_menu" required></select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Estado</label>
+              <select class="form-select form-select-sm" name="activo">
+                <option value="true">Activo</option>
+                <option value="false">Inactivo</option>
+              </select>
+            </div>
+            
+          </div>
+<input type="hidden" name="icono_opcion" value="svg-icon">
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('permisos.static', filename='js/menus/option.js') }}"></script>
+<script>
+    OptionEvent.init();
+</script>
+{% endblock %}
+
+
+

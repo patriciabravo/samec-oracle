@@ -1,0 +1,20 @@
+# Entorno virtual
+venv/
+.env/
+.env
+
+# Archivos de dependencias
+__pycache__/
+*.pyc
+
+# Archivos temporales / logs
+*.log
+
+#migraciones
+migrations/
+
+#archivos de vscode
+.vscode/
+
+#carpeta uploads
+uploads/

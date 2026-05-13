@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+</div>
+<div class="card">
+
+    <div class="card-header py-4">         
+            <span class="titulo_nivel_2 mb-1">
+                Proceso Institucional: {{ nombre_proceso }}
+            </span>	
+    </div>
+
+    <div class="card-body">
+        <a href="/procesos/reportar" class="btn btn-light-primary py-1 px-2">
+                &lt;&lt; Regresar
+        </a><br><br>
+        <table id="tablaFuentes" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>CRITERIO</th>
+                    <th>CONDICIÓN</th>
+                    <th>TIPO DOCUMENTO</th>
+                    <th>ARCHIVO/LINK</th>
+                    <th>REVISION</th>
+                    <th>OBSERVACION</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('procesos.static', filename='js/process_fuente.js') }}"></script>
+<script>
+    cargarTablaFuentes({{ id_proceso }});
+</script>
+{% endblock %}
