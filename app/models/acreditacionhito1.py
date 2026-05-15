@@ -1,16 +1,20 @@
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import Integer, String, ForeignKey, Boolean
+from sqlalchemy import Integer, String, ForeignKey, Sequence
 from app.extensions import db
 
 class AcreditacionHito1(db.Model):
     __tablename__ = "acreditacion_hito_1"
+    # Oracle recomienda Sequence
     id_acreditacion_hito_1: Mapped[int] = mapped_column(
         Integer,
-        primary_key=True,
-        autoincrement=True
+        Sequence('seq_acreditacion_hito_1'),
+        primary_key=True
     )
     id_autoevaluacion: Mapped[int] = mapped_column(
-        ForeignKey("autoevaluacion.id_autoevaluacion", ondelete="CASCADE"),
+        ForeignKey(
+            "autoevaluacion.id_autoevaluacion",
+            ondelete="CASCADE"
+        ),
         nullable=False
     )
     nombre: Mapped[str] = mapped_column(
@@ -21,10 +25,17 @@ class AcreditacionHito1(db.Model):
         String(255),
         nullable=False
     )
-    es_responsable: Mapped[bool] = mapped_column(
-        Boolean,
-        default=False,
+    # Oracle no maneja BOOLEAN real
+    # 1 = responsable
+    # 0 = no responsable
+    es_responsable: Mapped[int] = mapped_column(
+        Integer,
+        default=0,
         nullable=False
     )
+
     def __repr__(self) -> str:
-        return f"<AcreditacionHito1 {self.id_acreditacion_hito_1}>"
+        return (
+            f"<AcreditacionHito1 "
+            f"{self.id_acreditacion_hito_1}>"
+        )

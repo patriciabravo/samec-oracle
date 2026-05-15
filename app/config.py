@@ -18,8 +18,7 @@ MAIL_USERNAME = os.getenv("MAIL_USERNAME")
 MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 MAIL_DEFAULT_SENDER = ('Mi App Flask', 'tu_usuario@outlook.com')
     
-FULL_URL_DB = f"postgresql+psycopg2://{USER_DB}:{USER_PASSWORD}@{SERVER_DB}:{PORT}/{NAME_DB}"
-
+FULL_URL_DB = f"oracle+oracledb://{USER_DB}:{USER_PASSWORD}@{SERVER_DB}:{PORT}/{NAME_DB}"
 SECRET_KEY = "supersecret"
 UPLOADED_PATH = "uploads"  # carpeta donde se guardarán los archivos
 DROPZONE_UPLOAD_MULTIPLE = os.getenv("DROPZONE_UPLOAD_MULTIPLE")
