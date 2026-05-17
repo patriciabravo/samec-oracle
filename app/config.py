@@ -7,7 +7,7 @@ load_dotenv()
 USER_DB = os.getenv("USER_DB")
 USER_PASSWORD = os.getenv("USER_PASSWORD")
 SERVER_DB = os.getenv("SERVER_DB")
-NAME_DB = os.getenv("NAME_DB", "samec")
+NAME_DB = os.getenv("NAME_DB", "XEPDB1")
 PORT = os.getenv("PORT")
 SECRET_KEY = os.getenv("SECRET_KEY")
 MAIL_SERVER = os.getenv("MAIL_SERVER")
@@ -18,7 +18,8 @@ MAIL_USERNAME = os.getenv("MAIL_USERNAME")
 MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 MAIL_DEFAULT_SENDER = ('Mi App Flask', 'tu_usuario@outlook.com')
     
-FULL_URL_DB = f"oracle+oracledb://{USER_DB}:{USER_PASSWORD}@{SERVER_DB}:{PORT}/{NAME_DB}"
+FULL_URL_DB = f"oracle+oracledb://{USER_DB}:{USER_PASSWORD}@{SERVER_DB}:{PORT}/?service_name={NAME_DB}"
+
 SECRET_KEY = "supersecret"
 UPLOADED_PATH = "uploads"  # carpeta donde se guardarán los archivos
 DROPZONE_UPLOAD_MULTIPLE = os.getenv("DROPZONE_UPLOAD_MULTIPLE")
@@ -53,3 +54,5 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
+
+print(Config.SQLALCHEMY_DATABASE_URI)
