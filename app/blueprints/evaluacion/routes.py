@@ -12,6 +12,7 @@ from app.models import TecnicaEvaluacion, CondicionCriterio, Fuente, ProcesoInst
 from app.models import Macroproceso, Estandar, Criterio, IpressEssalud, TipoObservacion, AutoevaluacionTecnicaObservacion
 from app import db
 from app.constants import MAPA_NIVEL
+from sqlalchemy.dialects import oracle
 from sqlalchemy import and_, func, cast, String, select, literal, func, or_, case
 from sqlalchemy.orm import aliased
 from sqlalchemy.dialects.postgresql import insert
@@ -226,7 +227,7 @@ def reportatabla():
         .filter(
             Estandar.id_macroproceso == id_macroproceso
         )
-        .filter(Criterio.aplica_essalud.is_(True))        
+        .filter(Criterio.aplica_essalud == 1)        
         .group_by(
             Estandar.id_estandar,
             Estandar.codigo_estandar,
@@ -249,8 +250,14 @@ def reportatabla():
         
     #WHERE DINÁMICO POR NIVEL
     if columna_comparar is not None:
-        query = query.filter(columna_comparar.is_(True))
+        query = query.filter(columna_comparar == 1)
 
+    print(
+        query.statement.compile(
+            dialect=oracle.dialect(),
+            compile_kwargs={"literal_binds": True}
+        )
+    )
     rows = db.session.execute(query).all()
     
     return jsonify([
@@ -882,7 +889,7 @@ def actualizar_estado():
             .outerjoin(CondicionCriterio, CondicionCriterio.id_criterio == Criterio.id_criterio)
             .outerjoin(Fuente,Fuente.id_condicion == CondicionCriterio.id_condicion)
             .outerjoin(AutoevaluacionReporte, and_(AutoevaluacionReporte.id_fuente == Fuente.id_fuente,AutoevaluacionReporte.id_autoevaluacion == id_autoevaluacion))
-            .filter(Criterio.aplica_essalud == True,getattr(Criterio, columna_nombre).is_(True))
+            .filter(Criterio.aplica_essalud == 1,getattr(Criterio, columna_nombre) == 1)
             .group_by(Criterio.id_criterio, Criterio.codigo_criterio)
         )
         
@@ -1138,7 +1145,7 @@ def validarpuntajecero(id_criterio, id_autoevaluacion):
         .filter(
             Criterio.id_criterio == id_criterio,
             Criterio.aplica_essalud == True,
-            getattr(Criterio, columna_nombre).is_(True)
+            getattr(Criterio, columna_nombre) == 1
         )
         .group_by(Criterio.id_criterio, Criterio.codigo_criterio)
         .first()       

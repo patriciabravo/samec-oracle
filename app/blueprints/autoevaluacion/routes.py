@@ -104,7 +104,10 @@ def calculo_puntaje_automatico(IdIpress):
             func.count(case(((Fuente.link_fuente != None) & (Fuente.link_fuente != ''), 1))).label("total_predefinido"))
         .outerjoin(CondicionCriterio,CondicionCriterio.id_criterio == Criterio.id_criterio)
         .outerjoin(Fuente,Fuente.id_condicion == CondicionCriterio.id_condicion)
-        .filter(Criterio.aplica_essalud.is_(True),getattr(Criterio, columna_nombre).is_(True))
+        .filter(
+            Criterio.aplica_essalud == 1,
+            getattr(Criterio, columna_nombre) == 1
+        )
         .group_by(Criterio.id_criterio,Criterio.codigo_criterio)
         .order_by(Criterio.id_criterio.asc())
         .all()

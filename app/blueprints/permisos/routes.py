@@ -61,7 +61,7 @@ def getallopciones():
             func.concat(Menu.nombre_menu, ' - ', Opcion.nombre_opcion).label('opciones_rol')
         )
         .outerjoin(Menu, Menu.id_menu == Opcion.id_menu)
-        .filter(Opcion.activo.is_(True))
+        .filter(Opcion.activo == 1)
         .all()
     )
     data = [

@@ -4,7 +4,7 @@ from .word_export import generar_word_autoevaluacion
 from flask import render_template, jsonify, request, send_file
 from flask_login import login_required, current_user
 from app import db
-from sqlalchemy import func, literal
+from sqlalchemy import func, literal, text
 from sqlalchemy.orm import aliased
 from collections import defaultdict
 from app.constants import MAPA_NIVEL
@@ -114,7 +114,7 @@ def autoevaluacion_detalle(id_ipress, id_mp):
         .select_from(Autoevaluacion) 
         .join(IpressEssalud, IpressEssalud.id_ipress == Autoevaluacion.id_ipress)
         .join(RedEssalud, RedEssalud.id_red == IpressEssalud.id_red)
-        .outerjoin(Macroproceso, db.true())
+        .outerjoin(Macroproceso, text("1=1"))
         .outerjoin(Estandar, Estandar.id_macroproceso == Macroproceso.id_macroproceso)
         .outerjoin(Criterio, Criterio.id_estandar == Estandar.id_estandar)
         .outerjoin(ProcesoInstitucional, ProcesoInstitucional.id_proceso == Criterio.id_proceso)
@@ -133,12 +133,12 @@ def autoevaluacion_detalle(id_ipress, id_mp):
         )
         .filter(
             Autoevaluacion.id_autoevaluacion == id_autoevaluacion,
-            Criterio.aplica_essalud.is_(True)
+            Criterio.aplica_essalud == 1
         )
     )
     #WHERE DINÁMICO POR NIVEL
     if columna_comparar is not None:
-        query = query.filter(columna_comparar.is_(True))
+        query = query.filter(columna_comparar == 1)
         
     if id_mp is not None and id_mp != 0:
         query = query.filter(Macroproceso.id_macroproceso ==id_mp)
