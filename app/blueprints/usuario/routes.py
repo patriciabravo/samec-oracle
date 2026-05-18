@@ -24,9 +24,7 @@ def get_usuarios():
     db.session.query(
         Usuario.id_usuario,
         Usuario.username,
-        (func.concat(
-            Persona.nombres, ' ', Persona.apellido_paterno, ' ', Persona.apellido_materno
-        )).label('nombres_completos'),
+        (Persona.nombres +  ' ' + Persona.apellido_paterno + ' ' + Persona.apellido_materno).label('nombres_completos'),
         Persona.tipo_documento,
         Persona.numero_documento,
         Usuario.correo,
@@ -308,9 +306,7 @@ def get_personas():
     stmt = (
     db.session.query(
         Persona.id_persona,
-        (func.concat(
-            Persona.nombres, ' ', Persona.apellido_paterno, ' ', Persona.apellido_materno
-        )).label('nombres_completos'),
+        (Persona.nombres +  ' ' + Persona.apellido_paterno + ' ' + Persona.apellido_materno).label('nombres_completos'),
         Persona.nombres,
         Persona.apellido_paterno,
         Persona.apellido_materno,

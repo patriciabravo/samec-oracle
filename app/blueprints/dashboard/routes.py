@@ -63,7 +63,7 @@ def inject_menu():
         .select_from(RolOpcion)
         .join(Opcion, RolOpcion.id_opcion == Opcion.id_opcion)
         .join(Menu, Opcion.id_menu == Menu.id_menu)
-        .filter(RolOpcion.id_rol == id_rol, Opcion.activo == True)
+        .filter(RolOpcion.id_rol == id_rol, Opcion.activo == 1)
         .order_by(Menu.id_menu)
         .all()
     )

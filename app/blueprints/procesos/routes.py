@@ -112,7 +112,7 @@ def api_procesos():
         )
         .filter(
             CondicionCriterio.id_tecnica == 4,
-            columna_comparar == True,
+            columna_comparar == 1,
             ProcesoInstitucional.id_proceso != 0
         )
         .order_by(ProcesoInstitucional.id_proceso)
@@ -316,8 +316,8 @@ def api_fuentes_proceso(id_proceso):
         .outerjoin(ProcesoInstitucional, ProcesoInstitucional.id_proceso == Criterio.id_proceso)
         .filter(ProcesoInstitucional.id_proceso == id_proceso)
         .filter(CondicionCriterio.id_tecnica == 4)
-        .filter(Criterio.aplica_essalud == True)
-        .filter(columna_comparar == True)
+        .filter(Criterio.aplica_essalud == 1)
+        .filter(columna_comparar == 1)
         
         .order_by(Criterio.codigo_criterio)
     )

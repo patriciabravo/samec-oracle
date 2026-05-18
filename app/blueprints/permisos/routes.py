@@ -28,7 +28,7 @@ def getlistaroles():
             Rol.id_rol,
             Rol.nombre_rol,
             func.string_agg(
-                func.concat(Menu.nombre_menu, ' - ', Opcion.nombre_opcion),
+                (Menu.nombre_menu + ' - ' + Opcion.nombre_opcion),
                 ';'
             ).label('opciones_rol'),
             func.string_agg(
@@ -58,7 +58,7 @@ def getallopciones():
     resultados = (
         db.session.query(
             Opcion.id_opcion,
-            func.concat(Menu.nombre_menu, ' - ', Opcion.nombre_opcion).label('opciones_rol')
+            (Menu.nombre_menu + ' - ' + Opcion.nombre_opcion).label('opciones_rol')
         )
         .outerjoin(Menu, Menu.id_menu == Opcion.id_menu)
         .filter(Opcion.activo == 1)

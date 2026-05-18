@@ -114,8 +114,8 @@ def calculo_avance(IdIpress):
             )
         )
         .filter(
-            getattr(Criterio, columna_nombre) == True,
-            Criterio.aplica_essalud == True
+            getattr(Criterio, columna_nombre) == 1,
+            Criterio.aplica_essalud == 1
         )
         .group_by(
             Macroproceso.id_macroproceso,
@@ -294,10 +294,7 @@ def evaluador_reporte():
     resultado = (
         db.session.query(
             Macroproceso.id_macroproceso,
-            func.concat(
-                Macroproceso.codigo_macroproceso, ' - ',
-                Macroproceso.nombre_macroproceso
-            ).label("nombre_macroproceso")
+            (Macroproceso.codigo_macroproceso + " - " +  Macroproceso.nombre_macroproceso).label("nombre_macroproceso")
         )
         .join(Estandar, Estandar.id_macroproceso == Macroproceso.id_macroproceso)
         .join(Criterio, Criterio.id_estandar == Estandar.id_estandar)
@@ -491,7 +488,7 @@ def get_evaluador_reporte(id_criterio,id_ae):
                 TipoObservacion.id_tipo_observacion == AER.observacion_fuente
         )
         .filter(
-            Criterio.aplica_essalud == True,
+            Criterio.aplica_essalud == 1,
             Criterio.id_criterio == id_criterio
         )
         .order_by(CondicionCriterio.id_condicion)
@@ -989,8 +986,8 @@ def calculo_avance_calificacion_ipress(id_ipress):
             )
         )
         .filter(
-            columna_comparar == True,
-            Criterio.aplica_essalud == True
+            columna_comparar == 1,
+            Criterio.aplica_essalud == 1
         )
     )
     print(query)
@@ -1056,8 +1053,8 @@ def calculo_avance_reporte_fuentes(id_ipress):
         .outerjoin(CondicionCriterio, CondicionCriterio.id_condicion == Fuente.id_condicion)
         .outerjoin(Criterio, Criterio.id_criterio == CondicionCriterio.id_criterio)
         .filter(
-            Criterio.aplica_essalud == True,
-            columna_comparar == True,
+            Criterio.aplica_essalud == 1,
+            columna_comparar == 1,
             or_(
                 Fuente.link_fuente == None,
                 Fuente.link_fuente == ''
@@ -1144,7 +1141,7 @@ def validarpuntajecero(id_criterio, id_autoevaluacion):
         )
         .filter(
             Criterio.id_criterio == id_criterio,
-            Criterio.aplica_essalud == True,
+            Criterio.aplica_essalud == 1,
             getattr(Criterio, columna_nombre) == 1
         )
         .group_by(Criterio.id_criterio, Criterio.codigo_criterio)

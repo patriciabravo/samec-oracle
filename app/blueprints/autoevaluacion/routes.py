@@ -129,7 +129,7 @@ def calculo_puntaje_automatico(IdIpress):
                     id_autoevaluacion=id_evaluacion,
                     id_criterio=r.id_criterio,
                     puntaje_criterio=2,
-                    es_precalificado=True
+                    es_precalificado=1
                 )
                 db.session.add(nuevo)
                 insertados.append(r.id_criterio)
