@@ -68,11 +68,6 @@ class Usuario(db.Model, UserMixin):
         backref="usuarios",
         lazy="joined"
     )
-    # Relación con tabla intermedia
-    roles_asociados: Mapped[list["RolUsuario"]] = relationship(
-        "RolUsuario",
-        back_populates="usuario"
-    )
     # Relación con la tabla intermedia
     roles_asociados: Mapped[list["RolUsuario"]] = relationship("RolUsuario", back_populates="usuario")
    

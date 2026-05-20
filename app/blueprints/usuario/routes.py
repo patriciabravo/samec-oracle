@@ -3,6 +3,7 @@ from flask import render_template, jsonify, request
 from flask_login import login_required, current_user
 from app import db
 from . import usuario_bp
+from app.helpers import tiene_roles, tiene_rol
 from app.models import Usuario, Persona, Rol, RolUsuario, RedEssalud, IpressEssalud, GestorRedes
 from sqlalchemy.orm import aliased
 from sqlalchemy import select
@@ -299,7 +300,10 @@ def changepassword():
 @usuario_bp.route("/personas")
 @login_required
 def bandeja_personas():
-    return render_template("usuario/bandeja-personas.html", roles=ROLES, user=current_user, page_title="Bandeja de Personas")
+    permiso = ''
+    if tiene_rol(current_user, ROLES["ROL_ADMINISTRADOR"]):
+        permiso = 'add'
+    return render_template("usuario/bandeja-personas.html", permiso=permiso, user=current_user, page_title="Bandeja de Personas")
 
 @usuario_bp.route('/api/personas', methods=['GET'])
 def get_personas():

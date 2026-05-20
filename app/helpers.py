@@ -15,3 +15,12 @@ def inline_svg(filename):
             return Markup(f.read())
     except FileNotFoundError:
         return Markup(f"<!-- SVG {filename} no encontrado -->")
+    
+
+def tiene_roles(usuario, roles_permitidos):
+    roles_usuario = {r.id_rol for r in usuario.roles_asociados}
+    return bool(roles_usuario.intersection(roles_permitidos))
+
+def tiene_rol(usuario, rol):
+    roles_usuario = [r.id_rol for r in usuario.roles_asociados]
+    return rol in roles_usuario

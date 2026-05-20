@@ -11,11 +11,9 @@ from app.models import CondicionCriterio, Fuente, Autoevaluacion, Autoevaluacion
 from app.models import Macroproceso, Estandar, Criterio, IpressEssalud, TipoObservacion
 from app import db
 from app.constants import MAPA_NIVEL
-from sqlalchemy import and_, func, cast, String, case,select, literal, func, or_
+from sqlalchemy import and_, func, cast, String, case,select, literal, or_
 from sqlalchemy.orm import aliased
 from sqlalchemy.dialects.postgresql import insert
-
-
 #----------------------------------------------------------------------------------------------
 # Vista principal de la autoevaluacion para generar la AE para todas las Ipress
 #----------------------------------------------------------------------------------------------
@@ -27,8 +25,6 @@ def iniciar():
         user=current_user,
         page_title="Generar Autoevaluacion para IPRESS"
     )
-
-
 #----------------------------------------------------------------------------------------------
 # Listado de la Ipress y sus Autoevaluaciones
 #----------------------------------------------------------------------------------------------
@@ -67,7 +63,6 @@ def ipress_autoevaluacion():
         })
 
     return jsonify(resultado)
-
 #----------------------------------------------------------------------------------------------
 # Proceso para generar autoevaluacion del año y calificar criterios con fuentes precargadas
 #----------------------------------------------------------------------------------------------

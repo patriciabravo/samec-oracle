@@ -74,9 +74,8 @@ def guardar_puntaje_autoevaluacion():
             Autoevaluacion.id_ipress == id_ipress,
             Autoevaluacion.id_autoevaluacion == id_autoevaluacion
         ).update({
-            "puntaje_obtenido": puntaje
+            "puntaje_obtenido": float(puntaje)
         })
-
         db.session.commit()
 
         return jsonify({

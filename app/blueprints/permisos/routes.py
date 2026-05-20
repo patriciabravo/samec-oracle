@@ -27,13 +27,14 @@ def getlistaroles():
         db.session.query(
             Rol.id_rol,
             Rol.nombre_rol,
-            func.string_agg(
-                (Menu.nombre_menu + ' - ' + Opcion.nombre_opcion),
-                ';'
+            func.listagg(Menu.nombre_menu + ' - ' + Opcion.nombre_opcion,';').within_group(
+                Menu.nombre_menu
             ).label('opciones_rol'),
-            func.string_agg(
-                cast(Opcion.id_opcion, String),
+            func.listagg(
+                cast(Opcion.id_opcion, String(4000)),
                 ';'
+            ).within_group(
+                Opcion.id_opcion
             ).label('arr_opciones')
         )
         .outerjoin(RolOpcion, Rol.id_rol == RolOpcion.id_rol)

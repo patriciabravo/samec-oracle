@@ -82,6 +82,7 @@ def obtener_datos_calculo(id_autoevaluacion, id_ipress):
 
     query_total_cr = (
         db.session.query(
+            Macroproceso.id_macroproceso,
             Macroproceso.codigo_macroproceso,
             Criterio.tipo_criterio,
             func.count(Criterio.codigo_criterio).label('total_criterios')
@@ -90,8 +91,8 @@ def obtener_datos_calculo(id_autoevaluacion, id_ipress):
         .join(Macroproceso, Macroproceso.id_macroproceso == Estandar.id_macroproceso)
         .filter(columna_comparar == 1)
         .filter(Criterio.aplica_essalud == 1)
-        .group_by(Macroproceso.id_macroproceso, Criterio.tipo_criterio)
-        .order_by(Macroproceso.id_macroproceso, Criterio.tipo_criterio)
+        .group_by(Macroproceso.id_macroproceso,Macroproceso.codigo_macroproceso, Criterio.tipo_criterio)
+        .order_by(Macroproceso.id_macroproceso,Macroproceso.codigo_macroproceso, Criterio.tipo_criterio)
     )
     print(
         query_total_cr.statement.compile(
@@ -100,7 +101,7 @@ def obtener_datos_calculo(id_autoevaluacion, id_ipress):
     )
     rows = query_total_cr.all()
 
-    for macro, tipo, total in rows:
+    for idmacro, macro, tipo, total in rows:
         if macro not in result:
             result[macro] = {
                 "macroproceso": macro,
@@ -170,6 +171,7 @@ def obtener_datos_calculo(id_autoevaluacion, id_ipress):
 
     query_mp = (
         db.session.query(
+            Macroproceso.id_macroproceso,
             Macroproceso.codigo_macroproceso.label("macroproceso"),
             Criterio.tipo_criterio.label("tipo_criterio"),
             func.coalesce(func.sum(AutoevaluacionReporteCriterio.puntaje_criterio), 0).label("puntaje_macroproceso")
@@ -185,12 +187,12 @@ def obtener_datos_calculo(id_autoevaluacion, id_ipress):
             ),
             isouter=True
         )
-        .group_by(Macroproceso.id_macroproceso, Criterio.tipo_criterio)
-        .order_by(Macroproceso.id_macroproceso, Criterio.tipo_criterio)
+        .group_by(Macroproceso.id_macroproceso, Macroproceso.codigo_macroproceso, Criterio.tipo_criterio)
+        .order_by(Macroproceso.id_macroproceso, Macroproceso.codigo_macroproceso, Criterio.tipo_criterio)
     )
     rows_mp = query_mp.all()
 
-    for macro, tipo, puntaje in rows_mp:
+    for idmacro,macro, tipo, puntaje in rows_mp:
         if puntaje is None:
             puntaje = 0
         if tipo == "Estructura":
@@ -224,7 +226,7 @@ def obtener_datos_calculo(id_autoevaluacion, id_ipress):
             else:
                 result[macro]["AJ_ptje_obtenido_mp_resultado"] = 0
 
-    for macro, _, _ in rows_mp:
+    for idmacro, macro, _, _ in rows_mp:
         if macro not in result:
             result[macro] = {}
         for key in ["Z_puntaje_obtenido_por_tipo_macroproceso_estructura",
@@ -234,7 +236,7 @@ def obtener_datos_calculo(id_autoevaluacion, id_ipress):
             if key not in result[macro]:
                 result[macro][key] = 0
 
-    for macro, _, _ in rows_mp:
+    for idmacro, macro, _, _ in rows_mp:
         result[macro]["AK_sumatoria_puntaje_obtenido_mp_todos"] = round(
             result[macro].get("AH_ptje_obtenido_mp_estructura", 0) +
             result[macro].get("AI_ptje_obtenido_mp_proceso", 0) +

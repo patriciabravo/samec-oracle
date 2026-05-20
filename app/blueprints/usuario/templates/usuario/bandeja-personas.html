@@ -8,13 +8,14 @@
         Lista de Personas
     </div>
     <div class="card-body">
-        <div class="text-end">
-        {% if current_user.roles_asociados | selectattr('id_rol', 'in', [ROLES["ROL_GERENTE_GAMCC"], ROLES["ROL_ADMINISTRADOR"]]) | list | length > 0 %}
-            <button class="btn btn-back-azul btn-edit-persona" id="btn-nueva-persona" data-bs-toggle="modal" data-bs-target="#CrearPersona" data-id="0" data-tipo="nuevo" >
-              <i class="bi bi-person-plus fs-3 text-white"></i> Nueva Persona
-            </button>
-        {% endif %}
+        <div class="text-end">      
+          {% if permiso == 'add' %}
+              <button class="btn btn-back-azul btn-edit-persona" id="btn-nueva-persona" data-bs-toggle="modal" data-bs-target="#CrearPersona" data-id="0" data-tipo="nuevo" >
+                <i class="bi bi-person-plus fs-3 text-white"></i> Nueva Persona
+              </button>
+          {% endif %}
         </div>
+        <br>
         <table id="personasTable" class="table table-striped table-bordered gy-5 gs-7 ">
             <thead>
                  <tr>
@@ -85,9 +86,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-    const ROLES = {{ roles | tojson }};
-</script>
+
 <script src="{{ url_for('usuario.static', filename='js/bandeja-usuario/lista.js') }}"></script>
 <script>
     BandejaPersonasEvent.init();

@@ -31,7 +31,7 @@ ROLES_NAME= {
    3: "RED",
    4: "EVALUADOR",
    5: "EVALUADO",
-   6:" ADMINISTRADOR"
+   6: "ADMINISTRADOR"
 }
 
 MAPA_NIVEL = {

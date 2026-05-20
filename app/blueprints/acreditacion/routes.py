@@ -11,8 +11,6 @@ from flask import send_file
 from docx import Document
 from docxtpl import DocxTemplate
 from io import BytesIO
-
-
 # --- Página principal ---
 @acreditacion_bp.route("/listado/hitos", methods=["GET"])
 @login_required
