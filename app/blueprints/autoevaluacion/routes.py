@@ -13,7 +13,7 @@ from app import db
 from app.constants import MAPA_NIVEL
 from sqlalchemy import and_, func, cast, String, case,select, literal, or_
 from sqlalchemy.orm import aliased
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import insert
 #----------------------------------------------------------------------------------------------
 # Vista principal de la autoevaluacion para generar la AE para todas las Ipress
 #----------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ def calculo_puntaje_automatico(IdIpress):
             Criterio.id_criterio,
             Criterio.codigo_criterio,
             func.count(CondicionCriterio.id_tecnica).label("total_requerido"),
-            func.count(case(((Fuente.link_fuente != None) & (Fuente.link_fuente != ''), 1))).label("total_predefinido"))
+            func.count(case(((Fuente.link_fuente != None) | (Fuente.link_fuente != ''), 1))).label("total_predefinido"))
         .outerjoin(CondicionCriterio,CondicionCriterio.id_criterio == Criterio.id_criterio)
         .outerjoin(Fuente,Fuente.id_condicion == CondicionCriterio.id_condicion)
         .filter(
@@ -105,8 +105,15 @@ def calculo_puntaje_automatico(IdIpress):
         )
         .group_by(Criterio.id_criterio,Criterio.codigo_criterio)
         .order_by(Criterio.id_criterio.asc())
-        .all()
     )
+    
+    print(
+        resultados.statement.compile(
+            compile_kwargs={"literal_binds": True}
+        )
+    )
+
+    resultados = resultados.all()
 
     insertados = []
     for r in resultados:

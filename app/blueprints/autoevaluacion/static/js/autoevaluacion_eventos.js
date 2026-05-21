@@ -34,7 +34,7 @@ var AutoevaluacionEvent = {
                 {data:"nivel_ipress"},
                 {data:"es_activo",
                    render: function(data, type, row){
-                       if (data === null || data === "" || data === undefined) {
+                       if (data === null || data === "" || data === undefined  || data === 0) {
                             return '<span class="badge bg-danger text-white">Inactivo</span>';
                         } 
                         if (data == 1) {

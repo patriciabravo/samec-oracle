@@ -13,6 +13,7 @@ from app.constants import ROLES
 from app.utils import descargar_archivo_ruta
 from werkzeug.security import generate_password_hash
 from datetime import datetime, date
+from app.blueprints.usuario.services import guardar_persona_service
 
 @usuario_bp.route("/bandeja")
 @login_required
@@ -333,7 +334,24 @@ def get_personas():
         data.append(d)
     return jsonify(data)
 
+
 @usuario_bp.route('/grabarpersona', methods=['POST'])
+def grabarpersona():
+    """
+    Guardar persona
+    ---
+    tags:
+      - Usuario
+
+    responses:
+      200:
+        description: OK
+    """
+    data = request.form.to_dict(flat=True)
+    response, status = guardar_persona_service(data)
+    return jsonify(response), status
+
+""" @usuario_bp.route('/grabarpersona', methods=['POST'])
 def grabarpersona():
     data = request.form.to_dict(flat=True)
     id_persona = data.get('id_persona')
@@ -372,7 +390,7 @@ def grabarpersona():
 
     except Exception as e:
         db.session.rollback()
-        return jsonify({'success': False, 'error': str(e)}), 500
+        return jsonify({'success': False, 'error': str(e)}), 500  """
 
 @usuario_bp.route("api/getpersona/<int:id_persona>", methods=["GET"])
 def getpersona(id_persona):

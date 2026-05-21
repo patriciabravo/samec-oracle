@@ -15,7 +15,6 @@ from app.constants import MAPA_NIVEL
 from sqlalchemy.dialects import oracle
 from sqlalchemy import and_, func, cast, String, select, literal, func, or_, case
 from sqlalchemy.orm import aliased
-from sqlalchemy.dialects.postgresql import insert
 
 
 def ruta_archivo_a_url_publica(ruta_archivo):
@@ -756,16 +755,27 @@ def upsert_autoevaluacion():
                 db.session.add(nuevo)
     
         #Insertar/actualizar criterios
-        stmt = insert(AutoevaluacionReporteCriterio).values(
+        registro = AutoevaluacionReporteCriterio.query.filter_by(
             id_autoevaluacion=id_autoevaluacion,
-            id_criterio=id_criterio,
-            puntaje_criterio=puntaje,
-            es_precalificado=False
-        ).on_conflict_do_update(
-            index_elements=['id_autoevaluacion', 'id_criterio'],
-            set_={'puntaje_criterio': puntaje}
-        )
-        db.session.execute(stmt)
+            id_criterio=id_criterio
+        ).first()
+
+        if registro:
+
+            registro.puntaje_criterio = puntaje
+
+        else:
+
+            nuevo = AutoevaluacionReporteCriterio(
+                id_autoevaluacion=id_autoevaluacion,
+                id_criterio=id_criterio,
+                puntaje_criterio=puntaje,
+                es_precalificado=False
+            )
+
+            db.session.add(nuevo)
+
+        db.session.commit()
 
         #Insertar/actualizar fuentes manualmente, si la fuente tiene observaciones se guarda el id_observacion
         for f in fuentes_data:
@@ -831,7 +841,7 @@ def upsert_autoevaluacion():
     
 #-----------------------------------------------------------------------
 # Guardar el Estado de la Autoevaluacion 1:activo 2:desactivado
-# Buscar los criterios sin fuentes documentales y califica a 0
+# Buscar los criterios que no tienen fuentes y califica a 0
 #-----------------------------------------------------------------------
 @evaluacion_bp.route('/actualizar-estado', methods=['POST'])
 def actualizar_estado():
@@ -889,18 +899,15 @@ def actualizar_estado():
             .filter(Criterio.aplica_essalud == 1,getattr(Criterio, columna_nombre) == 1)
             .group_by(Criterio.id_criterio, Criterio.codigo_criterio)
         )
-        
-
-        print(resultados.statement.compile(compile_kwargs={"literal_binds": True}))
+        ##print(resultados.statement.compile(compile_kwargs={"literal_binds": True}))
         resultados = resultados.all()
 
         insertados = []
 
         for r in resultados:
             
-            puntaje_a_calificar = -1
-                
-            #Si todas las fuentes son documentos y no he subido nada de archivos entonces puntaje = 0    
+            puntaje_a_calificar = -1                
+            """ #Si todas las fuentes son documentos y no he subido nada de archivos entonces puntaje = 0    
             if (r.total_requerido == r.total_tecnica_requerido_documentos) and  (r.total_tecnica_requerido_documentos == r.total_sin_reporte) and (r.total_archivos_predefinidos == 0):
                 puntaje_a_calificar = 0
                 
@@ -910,6 +917,20 @@ def actualizar_estado():
                 
             if (r.total_requerido ==r.total_tecnica_requerido_documentos) and  (r.total_tecnica_requerido_documentos == r.total_sin_reporte)  and (r.total_archivos_predefinidos > 0):   
                 puntaje_a_calificar = 1
+             """    
+            if (r.total_requerido == r.total_tecnica_requerido_documentos):
+                if  (r.total_archivos_predefinidos > 0):
+                    if (r.total_archivos_predefinidos == r.total_tecnica_requerido_documentos):
+                        puntaje_a_calificar = 2
+                    else:
+                        puntaje_a_calificar = 1                   
+                else: ##prefefinidos == 0
+                    if (r.total_tecnica_requerido_documentos == r.total_sin_reporte):
+                        puntaje_a_calificar = 0
+            
+            if r.codigo_criterio == 'EIF-1-5':
+                print('EIF-1-5',r.codigo_criterio, puntaje_a_calificar)
+                
                 
             if puntaje_a_calificar > -1:
                 existe = (

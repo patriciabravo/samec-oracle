@@ -10,7 +10,7 @@ from app.models import Autoevaluacion, AutoevaluacionReporte, AutoevaluacionRepo
 from app.models import Macroproceso, Estandar, Criterio, IpressEssalud, RedEssalud
 from app import db
 from sqlalchemy import and_, func, cast, String, select, literal, func, or_
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import insert
 
 #-----------------------------------------
 #Vista del Grafico de Barras po Puntaje

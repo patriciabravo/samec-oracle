@@ -1,5 +1,6 @@
 import os
 from flask import Flask, send_from_directory, current_app, redirect, url_for
+from flasgger import Swagger
 from flask_login import current_user
 from .helpers import inline_svg 
 from .extensions import db, migrate, login_manager, mail #viene de extensions
@@ -34,6 +35,7 @@ def create_app():
     app.config['SQLALCHEMY_ECHO'] = True   
     app.config['UPLOAD_FOLDER'] = os.path.abspath(os.path.join(app.root_path, '..', 'uploads'))
     app.config.from_object(DevelopmentConfig)
+    swagger = Swagger(app)
     
     @app.route('/uploads/<path:filename>')
     def uploaded_file(filename):

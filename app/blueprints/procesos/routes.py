@@ -264,7 +264,6 @@ def api_fuentes_proceso(id_proceso):
     else:
         permiso = 'view'
 
-
     ipress = db.session.query(IpressEssalud).filter_by(id_ipress=id_ipress).first()
     nivel_ipress_usuario = getattr(ipress, "nivel_ipress", None)
 

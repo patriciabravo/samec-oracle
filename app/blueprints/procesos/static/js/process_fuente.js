@@ -139,7 +139,7 @@ function cargarTablaFuentes(idProceso) {
                     let xClass = "text-muted";
 
                     // ✔ VALIDADO
-                    if (data === 1) {
+                    if ((data === 1) || (row.link_fuente!= "")){
                         checkClass = "text-success";
                     }
 
