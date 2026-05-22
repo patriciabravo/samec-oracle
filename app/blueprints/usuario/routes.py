@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy import func
 from app.constants import TIPOS_DOCUMENTO
 from app.constants import ROLES
+from app.constants import ROLES_NAME
 from app.utils import descargar_archivo_ruta
 from werkzeug.security import generate_password_hash
 from datetime import datetime, date
@@ -18,7 +19,10 @@ from app.blueprints.usuario.services import guardar_persona_service
 @usuario_bp.route("/bandeja")
 @login_required
 def bandeja_usuario():
-    return render_template("usuario/bandeja-usuario.html", roles=ROLES, user=current_user, page_title="Administración de Usuarios")
+    permiso = ''
+    if tiene_rol(current_user, ROLES["ROL_ADMINISTRADOR"]):
+        permiso = 'add'
+    return render_template("usuario/bandeja-usuario.html",permiso=permiso,lista_roles=ROLES,nombre_roles=ROLES_NAME, user=current_user,page_title="Bandeja de Usuarios")
 
 @usuario_bp.route('/api/usuarios', methods=['GET'])
 def get_usuarios():

@@ -104,8 +104,6 @@ def get_redes():
 def get_ipress():
     try:
         ipress = IpressEssalud.query.all()
-        if not ipress:
-            return jsonify([]), 200
         ipress_data = [
             {"id_ipress": r.id_ipress, "nombre_ipress": r.nombre_ipress}
             for r in ipress

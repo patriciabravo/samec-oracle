@@ -8,17 +8,18 @@
         Lista de Usuarios
   </div>
   <div class="card-body">
-      <div class="text-end pb-5">
-        {% if current_user.roles_asociados | selectattr('id_rol', 'in', [ROLES["ROL_GERENTE_GAMCC"], ROLES["ROL_ADMINISTRADOR"]]) | list | length > 0 %}
+      <div class="text-end">      
+          {% if permiso == 'add' %}
             <button class="btn btn-back-azul btn-new-user-general" data-bs-toggle="modal" data-bs-target="#CrearUsuarioGeneral" data-tipo="nuevo">
               <i class="bi bi-person-plus fs-3 text-white"></i> Nuevo usuario
             </button>
             <a class="btn btn-back-azul" id="btn-nuevo-usuario-generico" data-bs-toggle="modal" data-bs-target="#CrearUsuarioGenerico">
               <i class="bi bi-person-plus fs-3 text-white"></i> Nuevo usuario IPRESS
             </a>
-        {% endif %}
+          {% endif %}
       </div>
-        <table id="usuariosTable" class="table table-striped table-bordered gy-5 gs-7 ">
+      <br>
+      <table id="usuariosTable" class="table table-striped table-bordered gy-5 gs-7 ">
           <thead>
                  <tr>
                     <th>ID</th>
@@ -85,10 +86,9 @@
               <label for="rol" class="form-label">Rol</label>
               <select class="form-select form-select-sm" id="sel_rol_essalud" name="sel_rol_essalud">
                 <option value="">Seleccione Rol</option>
-                <option value="{{ ROLES['ROL_GERENTE_GAMCC'] }}">Gerente GAMCC</option>
-                <option value="{{ ROLES['ROL_GESTOR_GAMCC'] }}">Gestor GAMCC</option>
-                <option value="{{ ROLES['ROL_RED'] }}">RED</option>
-                <option value="{{ ROLES['ROL_ADMINISTRADOR'] }}">Administrador</option>
+                <option value={{ lista_roles["ROL_GESTOR_GAMCC"] }}>{{ nombre_roles[3] }}</option>
+                <option value={{ lista_roles["ROL_RED"] }}>{{ nombre_roles[2] }}</option>
+                <option value={{ lista_roles["ROL_ADMINISTRADOR"] }}>{{ nombre_roles[6] }}</option>
               </select>            
           </div>
           <div class="col-md-6 fv-row d-none" id="div_show_red">
@@ -151,15 +151,15 @@
           </div>          
           <div class="row g-4 p-2">
             <div class="col-md-6 fv-row">
-              <label for="rol" class="form-label">Rol</label>
+              <label for="sel_rol_essalud_generico" class="form-label">Rol</label>
               <select class="form-select form-select-sm" id="sel_rol_essalud_generico" name="sel_rol_essalud_generico">
                 <option value="">Seleccione Rol</option>
-                <option value="{{ ROLES['ROL_EVALUADOR_IPRESS'] }}">Evaluador IPRESS</option>
-                <option value="{{ ROLES['ROL_COORDINADOR_IPRESS'] }}">Evaluado IPRESS</option>
+                <option value="{{ lista_roles["ROL_EVALUADOR_IPRESS"] }}">{{ nombre_roles[4] }}</option>
+                <option value="{{ lista_roles["ROL_EVALUADO_IPRESS"] }}">{{ nombre_roles[5] }}</option>
               </select>            
             </div>
             <div class="col-md-6 fv-row">
-              <label for="ipress_asignada" class="form-label">IPRESS</label>
+              <label for="sel_ipress" class="form-label">IPRESS</label>
               <select class="form-select form-select-sm" id="sel_ipress" name="sel_ipress">
                 <option value="">Seleccione IPRESS</option>
               </select>
@@ -167,7 +167,7 @@
           </div>
           <div class="row g-4 p-2">
             <div class="col-md-12 fv-row">
-                  <label for="ipress_asignada" class="form-label">Estado:&nbsp;&nbsp;</label>&nbsp;&nbsp;&nbsp;
+                  <label for="ipress_estado" class="form-label">Estado:&nbsp;&nbsp;</label>&nbsp;&nbsp;&nbsp;
                   <input type="radio" id="activo_ipress" name="estado_user_ipress" style="vertical-align: middle; margin-top: -2px;" value="1" checked>
                   <label for="activo">&nbsp;Activo</label>
                   <input type="radio" id="inactivo_ipress" name="estado_user_ipress" style="vertical-align: middle; margin-top: -2px;" value="0">
@@ -230,7 +230,8 @@
 
 {% block scripts %}
 <script>
-    const ROLES = {{ roles | tojson }};
+    const ROLES = {{ lista_roles | tojson }};
+    const ROLES_NAME = {{ nombre_roles | tojson }};
 </script>
 <script src="{{ url_for('usuario.static', filename='js/bandeja-usuario/event.js') }}"></script>
 <script>

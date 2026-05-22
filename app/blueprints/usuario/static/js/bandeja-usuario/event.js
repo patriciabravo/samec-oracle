@@ -73,6 +73,7 @@ var BandejaUsuarioEvent = {
         });
     },
     loadDropdowns: function () {
+
         $.ajax({
             url: '/dashboard/api/redes',
             type: 'GET',
@@ -103,6 +104,10 @@ var BandejaUsuarioEvent = {
                 selectIpress.empty();
                 data.forEach(r => {
                     selectIpress.append(new Option(r.nombre_ipress, r.id_ipress));
+                });
+                selectIpress.select2({
+                    placeholder: "Selecciona Ipress",
+                    width: '100%'
                 });
             },
             error: function () {
@@ -135,12 +140,12 @@ var BandejaUsuarioEvent = {
 
         $('#sel_rol_essalud').on('change', function () {
            rol_seleccionado = $(this).val();
-           if (rol_seleccionado==2){
+           if (rol_seleccionado==3){
                 $('#form_nuevo_usuario').find('#div_show_red_asignadas').removeClass('d-block').addClass('d-none');
                 $('#form_nuevo_usuario').find('#div_show_red').removeClass('d-none').addClass('d-block');             
            }
            else{
-                if (rol_seleccionado==3){
+                if (rol_seleccionado==2){
                     $('#form_nuevo_usuario').find('#div_show_red_asignadas').removeClass('d-none').addClass('d-block');
                     $('#form_nuevo_usuario').find('#div_show_red').removeClass('d-block').addClass('d-none');     
                 } 
@@ -152,7 +157,17 @@ var BandejaUsuarioEvent = {
         });
         
         $('body').on('click','.btn-new-user-general', function () {
+            $("#form_nuevo_usuario").find("input, textarea, select").val("");
+            $("#form_nuevo_usuario").find("#select_persona").val(null).trigger("change");
+            $("#form_nuevo_usuario").find("#div_show_red").removeClass('d-block').addClass('d-none');
+            $("#form_nuevo_usuario").find("#div_show_red_asignadas").removeClass('d-block').addClass('d-none');            
             $('#CrearUsuarioGeneral').find('#fila_password').show();
+        });
+
+        $('body').on('click','.btn-nuevo-usuario-generico', function () {
+            $("#form_nuevo_usuario_generico").find("input, textarea, select").val("");
+            $("#form_nuevo_usuario_generico").find("#sel_rol_essalud_generico").val(null).trigger("change");
+            $("#form_nuevo_usuario_generico").find("#sel_ipress").val(null).trigger("change");
         });
 
         $('body').on('click','.btn-editar-user-general', function () {
@@ -260,7 +275,6 @@ var BandejaUsuarioEvent = {
 
     },
     formvalidator: function () {
-                    console.log('entro aquiii generallllll');
                     const form = document.getElementById("form_nuevo_usuario");
                     const submitButton = document.getElementById("btn_guarda_usuariogeneral");
                     const valida_datos_generales = FormValidation.formValidation(form, {
@@ -361,7 +375,6 @@ var BandejaUsuarioEvent = {
                         }
                     })
                     .on('core.form.valid', function () {
-                        console.log("dta  ",$('#form_nuevo_usuario').serialize());
                         $.ajax({
                             url: '/usuario/grabarusuariogeneral',
                             type: 'POST',
