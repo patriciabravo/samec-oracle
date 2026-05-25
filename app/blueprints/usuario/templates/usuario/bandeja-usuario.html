@@ -13,7 +13,7 @@
             <button class="btn btn-back-azul btn-new-user-general" data-bs-toggle="modal" data-bs-target="#CrearUsuarioGeneral" data-tipo="nuevo">
               <i class="bi bi-person-plus fs-3 text-white"></i> Nuevo usuario
             </button>
-            <a class="btn btn-back-azul" id="btn-nuevo-usuario-generico" data-bs-toggle="modal" data-bs-target="#CrearUsuarioGenerico">
+            <a class="btn btn-back-azul btn-nuevo-usuario-generico" data-bs-toggle="modal" data-bs-target="#CrearUsuarioGenerico">
               <i class="bi bi-person-plus fs-3 text-white"></i> Nuevo usuario IPRESS
             </a>
           {% endif %}
@@ -28,9 +28,8 @@
                     <th>Documento</th>
                     <th>Correo</th>
                     <th>Rol</th>
-                    <th>Nombre de Red</th>
-                    <th>Nombre de Ipress</th>
-                    <th>Rol definido</th>
+                    <th>Red</th>
+                    <th>IPRESS</th>
                     <th>Fecha de Registro</th>
                     <th>Activo</th>                   
                     <th>Acciones</th>
@@ -40,7 +39,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="CrearUsuarioGeneral" tabindex="-1" aria-labelledby="CrearUsuarioGeneral" >
+<div class="modal fade" id="CrearUsuarioGeneral" tabindex="-1" aria-labelledby="CrearUsuarioGeneral" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
     <form id="form_nuevo_usuario" class="form" action="{{ url_for('usuario.grabarusuariogeneral') }}" method="POST">    
@@ -86,8 +85,8 @@
               <label for="rol" class="form-label">Rol</label>
               <select class="form-select form-select-sm" id="sel_rol_essalud" name="sel_rol_essalud">
                 <option value="">Seleccione Rol</option>
-                <option value={{ lista_roles["ROL_GESTOR_GAMCC"] }}>{{ nombre_roles[3] }}</option>
-                <option value={{ lista_roles["ROL_RED"] }}>{{ nombre_roles[2] }}</option>
+                <option value={{ lista_roles["ROL_GESTOR_GAMCC"] }}>{{ nombre_roles[2] }}</option>
+                <option value={{ lista_roles["ROL_RED"] }}>{{ nombre_roles[3] }}</option>
                 <option value={{ lista_roles["ROL_ADMINISTRADOR"] }}>{{ nombre_roles[6] }}</option>
               </select>            
           </div>
@@ -98,36 +97,38 @@
             </select>
           </div>
         </div>
-
         <div class="row g-4 p-2">
             <div class="col-md-12 fv-row d-none" id="div_show_red_asignadas">
               <label for="redes_asignadas" class="form-label">Redes Asignadas</label>
-              <select class="form-select form-select-sm" id="sel_redes_asignadas" name="sel_redes_asignadas[]" multiple>
+              <select class="form-select form-select-sm" id="sel_redes_asignadas" name="sel_redes_asignadas" multiple>
                 <option value="">Seleccione Redes Asignadas</option>
               </select>
             </div>
         </div>
         <div class="row g-4 p-2">
             <div class="col-md-12 fv-row">
-                  <label for="ipress_asignada" class="form-label">Estado:&nbsp;&nbsp;</label>&nbsp;&nbsp;&nbsp;
-                  <input type="radio" id="activo" name="estado" style="vertical-align: middle; margin-top: -2px;" value="1" checked>
-                  <label for="activo">&nbsp;Activo</label>
-                  <input type="radio" id="inactivo" name="estado" style="vertical-align: middle; margin-top: -2px;" value="0">
-                  <label for="inactivo">&nbsp;Inactivo</label>
+                <label class="form-label">Estado:</label>
+                <div>
+                    <input type="radio" id="activo" name="estado" value="1" checked>
+                    <label for="activo">Activo</label>
+                    &nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="inactivo" name="estado" value="0">
+                    <label for="inactivo">Inactivo</label>
+                </div>
             </div>
         </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-back-gris" data-bs-dismiss="modal">Cancelar</button>
         <button type="submit" id="btn_guarda_usuariogeneral"  class="btn btn-back-azul">Guardar</button>
       </div>
-
     </form>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="CrearUsuarioGenerico" tabindex="-1" aria-labelledby="CrearUsuarioGenerico" >
+<div class="modal fade" id="CrearUsuarioGenerico" tabindex="-1" aria-labelledby="CrearUsuarioGenerico" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
     <form id="form_nuevo_usuario_generico" class="form" action="{{ url_for('usuario.grabarusuariogenerico') }}" method="POST">    

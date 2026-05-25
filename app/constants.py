@@ -18,8 +18,8 @@ RUTA_ARCHIVOS_AUTORIZACION = '/archivos_autorizacion'
 
 ROLES = {
     "ROL_GERENTE_GAMCC": 1,
-    "ROL_GESTOR_GAMCC": 3,
-    "ROL_RED": 2,
+    "ROL_GESTOR_GAMCC": 2,
+    "ROL_RED": 3,
     "ROL_EVALUADOR_IPRESS": 4,
     "ROL_EVALUADO_IPRESS": 5,
     "ROL_ADMINISTRADOR": 6

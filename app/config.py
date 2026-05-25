@@ -17,9 +17,7 @@ MAIL_USE_SSL = os.getenv("MAIL_USE_SSL")
 MAIL_USERNAME = os.getenv("MAIL_USERNAME")
 MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 MAIL_DEFAULT_SENDER = ('Mi App Flask', 'tu_usuario@outlook.com')
-    
 FULL_URL_DB = f"oracle+oracledb://{USER_DB}:{USER_PASSWORD}@{SERVER_DB}:{PORT}/?service_name={NAME_DB}"
-
 SECRET_KEY = "supersecret"
 UPLOADED_PATH = "uploads"  # carpeta donde se guardarán los archivos
 DROPZONE_UPLOAD_MULTIPLE = os.getenv("DROPZONE_UPLOAD_MULTIPLE")
@@ -37,6 +35,7 @@ FINAL_FOLDER = UPLOAD_FOLDER + "/fuentes"
 # Configuración de Flask
 class Config:
     SQLALCHEMY_DATABASE_URI = FULL_URL_DB
+    SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = SECRET_KEY
     DROPZONE_UPLOAD_MULTIPLE = DROPZONE_UPLOAD_MULTIPLE

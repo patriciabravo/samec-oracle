@@ -14,21 +14,34 @@ var BandejaUsuarioEvent = {
                 url: '/usuario/api/usuarios',
                 dataSrc: ''
             },
+            dom: 'frtip',
             columns: [
                 { data: 'id_usuario'},
                 { data: 'username'},
-                { data: 'nombres_completos'},
-                {
-                    data: 'id_usuario',
+                { data: 'nombres_completos',
                     render: function (data, type, row) {
-                        return row.tipo_documento_texto+": "+row.numero_documento;
+                        if (row.nombres_completos!= null){
+                            return row.nombres_completos;
+                        }
+                        else{
+                            return '';
+                        }
+                    }
+                },
+                { data: 'tipo_documento_texto',
+                    render: function (data, type, row) {
+                        if (row.numero_documento!= null){
+                            return row.tipo_documento_texto+": "+row.numero_documento;
+                        }
+                        else{
+                            return '';
+                        }
                     }
                 },
                 { data: 'correo' },
                 { data: 'rol' },
                 { data: 'nombre_red' },
                 { data: 'nombre_ipress' },
-                { data: 'rol' },
                 { data: 'fecha_registro' },
                 {
                     data: 'id_usuario',
@@ -63,7 +76,7 @@ var BandejaUsuarioEvent = {
                         return  btn_edit + btn_view + btn_change_pwd;
                     },
                     orderable: false,
-                    searchable: false
+                    searchable: true
                 }
             ],
             responsive: true,
@@ -87,7 +100,7 @@ var BandejaUsuarioEvent = {
                     selectRedAgregadas.append(new Option(r.nombre_red, r.id_red));
                 });
                 selectRedAgregadas.select2({
-                    placeholder: "Selecciona una o más redes",
+                    placeholder: "Seleccione una o más redes",
                     width: '100%'
                 });
             },
@@ -106,7 +119,7 @@ var BandejaUsuarioEvent = {
                     selectIpress.append(new Option(r.nombre_ipress, r.id_ipress));
                 });
                 selectIpress.select2({
-                    placeholder: "Selecciona Ipress",
+                    placeholder: "Seleccione Ipress",
                     width: '100%'
                 });
             },
@@ -140,14 +153,14 @@ var BandejaUsuarioEvent = {
 
         $('#sel_rol_essalud').on('change', function () {
            rol_seleccionado = $(this).val();
-           if (rol_seleccionado==3){
+           if (rol_seleccionado==ROLES["ROL_RED"]){
                 $('#form_nuevo_usuario').find('#div_show_red_asignadas').removeClass('d-block').addClass('d-none');
                 $('#form_nuevo_usuario').find('#div_show_red').removeClass('d-none').addClass('d-block');             
            }
            else{
-                if (rol_seleccionado==2){
+                if (rol_seleccionado==ROLES["ROL_GESTOR_GAMCC"]){
                     $('#form_nuevo_usuario').find('#div_show_red_asignadas').removeClass('d-none').addClass('d-block');
-                    $('#form_nuevo_usuario').find('#div_show_red').removeClass('d-block').addClass('d-none');     
+                    $('#form_nuevo_usuario').find('#div_show_red').removeClass('d-block').addClass('d-none');
                 } 
                 else { 
                     $('#form_nuevo_usuario').find('#div_show_red_asignadas').removeClass('d-block').addClass('d-none');
@@ -157,17 +170,12 @@ var BandejaUsuarioEvent = {
         });
         
         $('body').on('click','.btn-new-user-general', function () {
-            $("#form_nuevo_usuario").find("input, textarea, select").val("");
+            $('#form_nuevo_usuario').find('input:not(:radio), textarea, select').val('');
             $("#form_nuevo_usuario").find("#select_persona").val(null).trigger("change");
+            $("#form_nuevo_usuario").find("#sel_redes_asignadas").val(null).trigger("change");
             $("#form_nuevo_usuario").find("#div_show_red").removeClass('d-block').addClass('d-none');
             $("#form_nuevo_usuario").find("#div_show_red_asignadas").removeClass('d-block').addClass('d-none');            
             $('#CrearUsuarioGeneral').find('#fila_password').show();
-        });
-
-        $('body').on('click','.btn-nuevo-usuario-generico', function () {
-            $("#form_nuevo_usuario_generico").find("input, textarea, select").val("");
-            $("#form_nuevo_usuario_generico").find("#sel_rol_essalud_generico").val(null).trigger("change");
-            $("#form_nuevo_usuario_generico").find("#sel_ipress").val(null).trigger("change");
         });
 
         $('body').on('click','.btn-editar-user-general', function () {
@@ -188,11 +196,13 @@ var BandejaUsuarioEvent = {
                     $('#numero_documento').val(data.numero_documento);
                     $('#correo').val(data.correo);
                     $('#sel_rol_essalud').val(data.id_rol).trigger('change');
-                    $('#select_persona').val(data.id_persona).trigger('change');                  
+                    $('#sel_red').val(data.id_red).trigger('change');                   
+                    $('#select_persona').val(data.id_persona).trigger('change'); 
+                    $('#sel_redes_asignadas').val(data.redes_asignadas).trigger('change');                
                     if (data.activo)
                         $('input#activo').prop('checked',true);
                     else
-                        $('input#inactivo').prop('checked',true);                    
+                        $('input#inactivo').prop('checked',true);
                 },
                 error: function () {
                     alert("Error al cargar los datos del usuario");
@@ -209,36 +219,11 @@ var BandejaUsuarioEvent = {
             }
         });
 
-        $('body').on('click','.btn-change-pwd', function () {
-            let userId = $(this).data('id');
-            $('#id_usuario_change').val(userId);           
+        $('body').on('click','.btn-nuevo-usuario-generico', function () {
+            $("#form_nuevo_usuario_generico").find('input:not(:radio), textarea').val('');
+            $("#form_nuevo_usuario_generico").find("#sel_rol_essalud_generico").val('').trigger("change");
+            $("#form_nuevo_usuario_generico").find("#sel_ipress").val('').trigger("change");
         });
-
-        
-        $('body').on('click','.btn_cambia_password', function () {
-                        $.ajax({
-                            url: '/usuario/changepassword',
-                            type: 'POST',
-                            data: $(form).serialize(),
-                            success: function (res) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Password actualizado',
-                                    text: 'La contraseña ha sido actualizada'
-                                }).then(() => {
-                                    $('#CambiarPasswordUsuario').modal('hide');
-                                });
-                            },
-                            error: function (err) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: err.responseJSON?.error || 'Ocurrió un problema al actualizar'
-                                });
-                            }
-                        });
-        });
-        
 
         $('body').on('click','.btn-editar-user-generico', function () {
             let userId = $(this).data('id');
@@ -271,6 +256,36 @@ var BandejaUsuarioEvent = {
                 $('#CrearUsuarioGenerico').find('.modal-title').text('Editar usuario');
             }
 
+        });
+
+        $('body').on('click','.btn-change-pwd', function () {
+            let userId = $(this).data('id');
+            $('#id_usuario_change').val(userId);           
+        });
+
+        
+        $('body').on('click','.btn_cambia_password', function () {
+                        $.ajax({
+                            url: '/usuario/changepassword',
+                            type: 'POST',
+                            data: $(form).serialize(),
+                            success: function (res) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Password actualizado',
+                                    text: 'La contraseña ha sido actualizada'
+                                }).then(() => {
+                                    $('#CambiarPasswordUsuario').modal('hide');
+                                });
+                            },
+                            error: function (err) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: err.responseJSON?.error || 'Ocurrió un problema al actualizar'
+                                });
+                            }
+                        });
         });
 
     },
@@ -383,7 +398,7 @@ var BandejaUsuarioEvent = {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Usuario Registrado',
-                                    text: 'El usuario ha sido creado correctamente'
+                                    text: 'El usuario ha sido actualizado correctamente'
                                 }).then(() => {
                                     $('#CrearUsuarioGeneral').modal('hide');
                                     $('#usuariosTable').DataTable().ajax.reload();
