@@ -169,6 +169,26 @@ var GraficosEvent = {
                                 grouping: true,
                                 dataLabels: {
                                     enabled: true,
+                                    formatter: function () {
+
+                                            let index = this.point.index;
+
+                                            let total = 0;
+
+                                            this.series.chart.series.forEach(s => {
+
+                                                total += s.data[index]?.y || 0;
+
+                                            });
+
+                                            if (total === 0) {
+                                                return '0%';
+                                            }
+
+                                            return (
+                                                (this.y / total) * 100
+                                            ).toFixed(1) + '%';
+                                        },
                                     style: {
                                         fontSize: '13px'
                                     }

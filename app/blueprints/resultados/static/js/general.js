@@ -6,7 +6,7 @@ var ResultadosFuenteEvent = {
     cargarDrops: function (){
         console.log(rolPrincipal);
         /* Para Red solo Ipress de su Red */
-        if (rolPrincipal===1){
+        if (rolPrincipal===3){
             $("#filtroIpress").empty().append(`<option value="">Seleccione</option>`);
             fetch("/graficos/api/ipress_por_red/"+IdRed)
                 .then(response => response.json())
@@ -24,7 +24,7 @@ var ResultadosFuenteEvent = {
             });
         }
 
-        if (rolPrincipal===3){
+        if (rolPrincipal==2){
             $("#filtroRed").empty().append(`<option value="">Seleccione Red</option>`);
                 fetch("/graficos/api/redes")
                     .then(response => response.json())
@@ -126,11 +126,20 @@ var ResultadosFuenteEvent = {
                         // Nivel 1: Criterio
                         if (level === 1) {
                             let r = rows.data()[0];
-
+                            let puntaje = (
+                                r.puntaje_criterio === null ||
+                                r.puntaje_criterio === undefined ||
+                                r.puntaje_criterio === ''
+                            )
+                                ? 'Sin calificar'
+                                : r.puntaje_criterio;
                             return $('<tr/>')
-                                .append(`<td colspan="5" style="padding-left:20px;font-weight:bold;background:#f8f9fa">
-                                            ${r.codigo_criterio} - Puntaje: ${r.puntaje_criterio}
-                                        </td>`);
+                                .append(`
+                                    <td colspan="5"
+                                        style="padding-left:20px;font-weight:bold;background:#f8f9fa">
+                                        ${r.codigo_criterio} - Puntaje: ${puntaje}
+                                    </td>
+                                `);
                         }
                     }
                 },

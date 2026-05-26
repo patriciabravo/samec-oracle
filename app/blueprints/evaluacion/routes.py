@@ -184,13 +184,11 @@ def reportatabla():
         .filter(Autoevaluacion.periodo == id_anio_acreditacion)
         .first()
     )
-    
     ipress = db.session.query(IpressEssalud).filter_by(id_ipress=id_ipress).first()
     columna_nombre = MAPA_NIVEL.get(ipress.nivel_ipress)
     if not columna_nombre:
         return jsonify([]), 200
-    columna_comparar = getattr(Criterio, columna_nombre)
-    
+    columna_comparar = getattr(Criterio, columna_nombre)    
     query = (
         db.session.query(
             Estandar.codigo_estandar,
@@ -239,6 +237,7 @@ def reportatabla():
             AutoevaluacionReporteCriterio.puntaje_criterio,
             AutoevaluacionReporteCriterio.es_precalificado
         )
+        .order_by(Criterio.codigo_criterio)
     )
 
     if id_macroproceso not in ["", None, "0", "null", "NULL"]:

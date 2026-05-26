@@ -8,14 +8,16 @@
         {% if rol_id == 1 or rol_id == 3  %}
                 <div class="alert">
                     <div class="row">
-                        <div class="col-md-3">
-                            <label for="filtroRed" class="form-label">
-                                RED
-                            </label>
-                            <select id="filtroRed" class="form-select">
-                                <option value=""></option>
-                            </select>
-                        </div>
+                         {% if rol_id == 1 %}
+                            <div class="col-md-3">
+                                <label for="filtroRed" class="form-label">
+                                    RED
+                                </label>
+                                <select id="filtroRed" class="form-select">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        {% endif %}
                         <div class="col-md-4">
                             <label for="filtroIpress" class="form-label">
                                 IPRESS
