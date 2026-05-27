@@ -7,12 +7,11 @@ var EvaluadorCalificarEvent = {
         this.formValidator();
     }, 
     pintarImagen: function(file) {
-
         if (!file || !file.previewElement) return;
         file.previewElement.addEventListener("click", function(e) {
             if (e.target.classList.contains("dz-remove")) return;
             let url = "";
-             if (file.dataURL) {
+            if (file.dataURL) {
                 url = file.dataURL;
             } else{         
                 url = "/uploads/fuentes/" + file.server_name.replace(/\\/g, "/") + "?t=" + Date.now();
@@ -26,7 +25,6 @@ var EvaluadorCalificarEvent = {
         });
     },
     pintarPuntaje: function(puntaje){
-
         if (puntaje === 0){
             return `<div class="symbol-label fs-2x fw-semibold text-danger bg-light-danger p-3">PUNTAJE:&nbsp;0</div>`;
         }
@@ -121,7 +119,12 @@ var EvaluadorCalificarEvent = {
                 { data: null,
                   className: "d-flex align-items-center",
                     render: function (data, type, row) {
-                        return row.checks+'&nbsp;&nbsp;'+row.select_observaciones+row.valor_fuente;
+                        if (row.id_tecnica == '3') {
+                            return '<span id="check_tecnica_observacion">'+row.checks+'&nbsp;&nbsp;'+row.select_observaciones+row.valor_fuente+'</span>';
+                        }
+                        else{
+                            return row.checks+'&nbsp;&nbsp;'+row.select_observaciones+row.valor_fuente;
+                        }
                     }
                 }    
             ],
@@ -162,17 +165,16 @@ var EvaluadorCalificarEvent = {
                         }
                     });
                 }
+                
                 $('#texto_puntaje').html(EvaluadorCalificarEvent.pintarPuntaje(puntaje_final));
                 $('.select_fuente_value').val(puntaje_final).trigger('change');
 
-
                 $('#form_calcular_puntaje_criterio .dropzone').each(function() {
-                    
                     let dropzoneId = this.id;       
                     let idCondicion = dropzoneId.replace('dropzone_', '');
                     let inputId = 'filesToInsertDB_' + idCondicion;
                     let rowData = tabla.row($(this).closest('tr')).data();
-
+                    console.log('holaaa->'+rowData);
                     let myDropzone = new Dropzone('#'+dropzoneId, {
                         url: '/auth/uploadevidencia',
                         paramName: "file",                        
@@ -180,12 +182,12 @@ var EvaluadorCalificarEvent = {
                         maxFiles: 2,
                         maxFilesize: 1, // MB
                         addRemoveLinks: true,
-                        autoProcessQueue: false,
+                        autoProcessQueue: true,
                         acceptedFiles: ".jpg",
                         dictFileTooBig: "El archivo es demasiado grande ({{filesize}}MB). Máx: {{maxFilesize}}MB.",
                         dictDefaultMessage: "Seleccione el archivo de autorización",
                         init: function() {
-
+                            console.log('hola-->'+rowData.id_tecnica+rowData.archivos);
                             let myDropzone = this;
                             let filesInput = [];
                             if (rowData.id_tecnica == 3 && rowData.archivos) {
@@ -208,14 +210,17 @@ var EvaluadorCalificarEvent = {
                                         real_filename: file.nombre,
                                         upload_filename: file.upload_filename
                                     });
-                                    });
+                                });
                                 $(`#filesToInsertDB_${rowData.id_condicion}`).val(JSON.stringify(filesInput));
                             }
+
                             this.on("addedfile", function(file) {
+                               console.log('unooo');
                                EvaluadorCalificarEvent.pintarImagen(file);
                             });
 
                             this.on("success", function(file, response) {
+                                console.log('dosssss');
                                 if (response) {
                                     file.real_name = response.real_filename;
                                     file.server_name = response.upload_filename;
@@ -232,7 +237,6 @@ var EvaluadorCalificarEvent = {
                             });
 
                             this.on("removedfile", function(file) {
-
                                 let input = $(`#filesToInsertDB_${rowData.id_condicion}`);
                                 console.log(input);
                                 console.log("input encontrado:", input.length);
@@ -242,7 +246,6 @@ var EvaluadorCalificarEvent = {
                                 files = files.filter(f => f.upload_filename !== file.server_name);
                                 input.val(JSON.stringify(files));
                                 console.log("Después:", files);
-
                                 if (file.server_name && file.isNew) {
 
                                     $.ajax({
@@ -301,9 +304,15 @@ var EvaluadorCalificarEvent = {
         }
 
         $(document).on("click", "a.btn_approve", function () {
-            console.log('aprove')
             input_def = $(this).find('i');
-            input_def.removeClass("text-muted").addClass("text-success");
+            id_tecnica = $(input_def).data('tecnica');
+            id_condicion = $(input_def).data('condicion');
+            console.log('la tecnica'+id_tecnica+$('.filesToInsertDB').val());
+            if (id_tecnica == 3 && ($('#filesToInsertDB_'+id_condicion).val()=="[]")){
+                input_def.removeClass("text-success").addClass("text-muted");
+            }else{
+                input_def.removeClass("text-muted").addClass("text-success");
+            }
             $(this).parent().find('a.btn_disapprove i').removeClass("text-danger").addClass("text-muted");
             $(this).parent().find(".valor_set").val("1");
             let id_fuente = $(this).find("i").data("idfuente");

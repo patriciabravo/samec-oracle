@@ -322,13 +322,10 @@ def uploadevidencia():
         random_filename = f"{random_file_name}{ext}"        
         if not allowed_file(filename):
             return jsonify({"error": "Solo se permiten archivos JPG"}), 400
-
-        project_root = os.path.dirname(current_app.root_path)
-        upload_path = os.path.join(project_root, 'uploads/temp_fuentes/')
+        upload_path = os.path.join(current_app.root_path,'..','uploads','temp_fuentes')       
         os.makedirs(upload_path, exist_ok=True)        
-        # guardar en disco con random_name
-        file.save(os.path.join(upload_path, random_filename))      
-
+        full_path = os.path.join(upload_path,random_filename)
+        file.save(full_path)
         print('File successfully uploaded ' + file.filename + ' to the database!')
         msg = 'Success Upload'    
     return jsonify({"message":msg, "real_filename": filename, "upload_filename": random_filename})

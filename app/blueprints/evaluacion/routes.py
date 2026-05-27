@@ -575,13 +575,13 @@ def get_evaluador_reporte(id_criterio,id_ae):
                 icon_check = ('<a href="javascript:void(0)" class="btn_approve">'
                     f'<i class="fa fa-check-circle '
                     f'{"text-success" if r.es_observada_tecnica == 1 else "text-muted"}" '
-                    'style="font-size:3rem;"></i></a>'
+                    'style="font-size:3rem;" data-tecnica="'f'{r.id_tecnica}" data-condicion="'f'{r.id_condicion}" ></i></a>'
                 )
                 icon_x = (
                     '<a href="javascript:void(0)" class="btn_disapprove">'
                     f'<i class="fa fa-times-circle '
                     f'{"text-danger" if r.es_observada_tecnica == 0 else "text-muted"}" '
-                    'style="font-size:3rem;"></i></a>'
+                    'style="font-size:3rem;" data-tecnica="'f'{r.id_tecnica}" data-condicion="'f'{r.id_condicion}" ></i></a>'
                 )                                
                 str_input_valor = '<input type="hidden" name="valor_'+str(r.id_condicion)+'" class="valor_set" value="0">'
                 str_draw_check = f'{icon_check}&nbsp;&nbsp;{icon_x}'
