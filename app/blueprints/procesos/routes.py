@@ -18,10 +18,9 @@ from sqlalchemy.orm import aliased
 from sqlalchemy import case, func, text, Integer, and_, cast, case, or_
 from sqlalchemy.exc import IntegrityError
 
-
-# ------------------------------
+# -------------------------------------
 # Listado de Procesos Institucionales
-# ------------------------------
+# -------------------------------------
 @procesos_bp.route("/reportar")
 @login_required
 def procesos():
@@ -36,20 +35,15 @@ def procesos():
     print('id evaluation ',id_evaluacion)
     return render_template("reportar.html", user=current_user, id_autoevaluacion=id_evaluacion, page_title='Reporte por Procesos Institucionales')
 
-
 # ------------------------------------------------------
 # API 1 - Datatable de Procesos Institucionales
 # ------------------------------------------------------
 @procesos_bp.route("/api/process", methods=["GET"])
 def api_procesos():
-
     IdIpress = getattr(current_user, "id_ipress", None)
     id_anio_acreditacion = constants.ACREDITACION_ACTUAL
-    
     ipress = db.session.query(IpressEssalud).filter_by(id_ipress=IdIpress).first()
-    nivel_ipress_usuario = getattr(ipress, "nivel_ipress", None)
-    
-    
+    nivel_ipress_usuario = getattr(ipress, "nivel_ipress", None)   
     MAPA_NIVEL = {
         "I-1": Criterio.nivel_i_1,
         "I-2": Criterio.nivel_i_2,
@@ -60,7 +54,6 @@ def api_procesos():
         "III-1": Criterio.nivel_iii_1
     }
     columna_comparar = MAPA_NIVEL.get(nivel_ipress_usuario)
-
     #autoevaluación activa
     id_autoevaluacion = (
         db.session.query(Autoevaluacion.id_autoevaluacion)
@@ -69,7 +62,6 @@ def api_procesos():
         .scalar()
     )
     print('id_ae',id_autoevaluacion)
-
     #reemplazar luego el nivel
     query = (
         db.session.query(
@@ -118,21 +110,17 @@ def api_procesos():
         .order_by(ProcesoInstitucional.id_proceso)
     )
     rows = query.all()
-
     print(
         query.statement.compile(
             compile_kwargs={"literal_binds": True}
         )
-    )
-    
+    )    
     resultado = {}
     for row in rows:
         id_proceso = row.id_proceso
         nombre = row.nombre_proceso
         valor1 = row.totales or 0
         tiene_obs = row.es_observado
-
-
         grupo = resultado.setdefault(id_proceso, {
             "id_proceso": id_proceso,
             "nombre_proceso": nombre,
@@ -140,16 +128,12 @@ def api_procesos():
             "cantidad_filas": 0,
             "cantidad_observaciones": 0
         })
-
         grupo["cantidad_reportes"] += valor1
         grupo["cantidad_filas"] += 1
         if tiene_obs == 0:
             grupo["cantidad_observaciones"] += 1
-    
     # Convertir a lista (sin id_proceso)
-    json_data = list(resultado.values())
-    
-    
+    json_data = list(resultado.values())       
     for item in json_data:
         if item["cantidad_filas"] > 0:
             division = item["cantidad_reportes"] / item["cantidad_filas"]
@@ -168,13 +152,9 @@ def api_procesos():
             "procesos": json_data           
     })
 
-
-
-
-# ------------------------------
+# -------------------------------------------------
 # Listado de Fuentes de acuerdo al proceso
-# ------------------------------
-
+# -------------------------------------------------
 @procesos_bp.route("/evaluado/<int:id_proceso>/fuentes",methods=["POST"])
 @login_required
 def pagina_fuentes(id_proceso):
@@ -216,7 +196,6 @@ def pagina_fuentes(id_proceso):
         data=data 
     )
 
-
 def get_uploads_base():
     """
     Retorna la ruta absoluta a la carpeta /uploads
@@ -225,8 +204,6 @@ def get_uploads_base():
     return os.path.abspath(
         os.path.join(current_app.root_path, "..", "uploads")
     )
-
-
 
 # ---------------------------------------------------------
 # API 2 - FUENTES agrupadas por técnica para un proceso
@@ -352,9 +329,6 @@ def api_fuentes_proceso(id_proceso):
         "fuentes": fuentes
     })
 
-    
-
-
 @procesos_bp.route("/api/fuente/<int:id_fuente>/temp", methods=["POST"])
 def upload_temp_fuente(id_fuente):
 
@@ -394,7 +368,6 @@ def upload_temp_fuente(id_fuente):
         "nombre_archivo": nombre_real,
         "nombre_temp": nombre_hash
     })
-
 
 @procesos_bp.route("/api/fuente/<int:id_fuente>/upload", methods=["POST"])
 @login_required

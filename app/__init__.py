@@ -18,6 +18,7 @@ from app.blueprints.graficos import graficos_bp
 from app.blueprints.resultados import resultados_bp 
 from app.blueprints.autoevaluacion import autoevaluacion_bp
 from app.blueprints.acreditacion import acreditacion_bp
+from app.blueprints.redes import redes_bp
 
 from app.models.usuario import Usuario
 from app.models.menu import Menu
@@ -71,6 +72,7 @@ def create_app():
     app.register_blueprint(resultados_bp)
     app.register_blueprint(autoevaluacion_bp)
     app.register_blueprint(acreditacion_bp)
+    app.register_blueprint(redes_bp)
 
     @app.route("/")
     def index():

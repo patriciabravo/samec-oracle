@@ -20,7 +20,6 @@ def actualizar_fuentes():
         page_title="Actualizar Fuentes Auditables"
     )
 
-
 # --- API listar macroprocesos ---
 @acredita_bp.route("/api/macroprocesos", methods=["GET"])
 def api_macroprocesos():
@@ -42,7 +41,6 @@ def api_macroprocesos():
         }
         for m in data
     ])
-
 
 # --- API listar estándares por macroproceso ---
 @acredita_bp.route("/api/estandares/<int:id_macroproceso>", methods=["GET"])
@@ -67,7 +65,6 @@ def api_estandares(id_macroproceso):
         for e in data
     ])
 
-
 # --- API listar criterios por estándar ---
 @acredita_bp.route("/api/criterios/<int:id_estandar>", methods=["GET"])
 def api_criterios(id_estandar):
@@ -90,7 +87,6 @@ def api_criterios(id_estandar):
         }
         for c in data
     ])
-
 
 # --- API LISTA COMBINADA PARA LA TABLA ---
 @acredita_bp.route("/api/combinado", methods=["GET"])
@@ -134,7 +130,6 @@ def api_combinado():
         for r in rows
     ])
 
-
 # --- Página administrar condiciones  ---
 @acredita_bp.route("/condicion/actualizar", methods=["POST"])
 @login_required
@@ -148,7 +143,6 @@ def actualizar_condiciones():
         id_criterio=id_criterio,
         nombre_criterio=nombre_criterio
     )
-
 
 @acredita_bp.route("/api/condiciones/<int:id>", methods=["GET"])
 def ver_condiciones(id):
@@ -249,12 +243,10 @@ def grabarcondicion():
         db.session.rollback()
         return jsonify({'success': False, 'mensaje': str(e)}), 500
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in {'pdf'}
-           
-           
+                  
 @acredita_bp.route('/uploadfile', methods=["GET","POST"])
 def uploadregistro():
     msg = ''
@@ -278,7 +270,6 @@ def uploadregistro():
         print('File successfully uploaded ' + file.filename + ' to the database!')
         msg = 'Success Upload'    
     return jsonify({"message":msg, "real_filename": filename, "upload_filename": random_filename})
-
 
 @acredita_bp.route("/api/condicion/<int:id>", methods=["GET"])
 def get_condicion(id):
@@ -306,7 +297,6 @@ def get_condicion(id):
     }
     return jsonify(data)
 
-
 @acredita_bp.route("/api/fuentes/<int:id_condicion>")
 def get_fuentes(id_condicion):
     fuentes = Fuente.query.filter_by(id_condicion=id_condicion).all()
@@ -319,7 +309,6 @@ def get_fuentes(id_condicion):
         for f in fuentes
     ]
     return jsonify(data)
-
 
 @acredita_bp.route('/grabarfuentes', methods=['POST'])
 def grabarfuentes():

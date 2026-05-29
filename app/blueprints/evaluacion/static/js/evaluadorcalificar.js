@@ -104,8 +104,8 @@ var EvaluadorCalificarEvent = {
                             boton_fuente+='<div class="dz-message needsclick">';
                             boton_fuente+='<i class="ki-duotone ki-file-up fs-3x text-primary"><span class="path1"></span><span class="path2"></span></i>';
                             boton_fuente+='<div class="ms-4">';
-                            boton_fuente+='<h3 class="fs-5 fw-bold text-gray-900 mb-1">Drop files here or click to upload.</h3>';
-                            boton_fuente+='<span class="fs-7 fw-semibold text-gray-500">Upload up to 10 files</span>';
+                            boton_fuente+='<h3 class="fs-5 fw-bold text-gray-900 mb-1">Arrastra archivos aquí o haz clic para subirlos.</h3>';
+                            boton_fuente+='<span class="fs-7 fw-semibold text-gray-500">Sube hasta 5 archivos.</span>';
                             boton_fuente+='</div>';
                             boton_fuente+='</div>';
                             boton_fuente+='</div>';
@@ -179,7 +179,7 @@ var EvaluadorCalificarEvent = {
                         url: '/auth/uploadevidencia',
                         paramName: "file",                        
                         parallelUploads: 5,
-                        maxFiles: 2,
+                        maxFiles: 5,
                         maxFilesize: 1, // MB
                         addRemoveLinks: true,
                         autoProcessQueue: true,
