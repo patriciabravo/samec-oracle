@@ -1,9 +1,9 @@
 from flask import Blueprint
 
 redes_bp = Blueprint(
-    "redes",
+    "ipress",
     __name__,
-    url_prefix="/redes",
+    url_prefix="/ipress",
     template_folder="templates",
     static_folder="static",
     static_url_path="/static"

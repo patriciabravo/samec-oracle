@@ -3,7 +3,7 @@ from app.models import RedEssalud, Macrorregion
 from flask_login import login_required
 
 
-class RedService:
+class IpressService:
 
     @staticmethod
     @login_required

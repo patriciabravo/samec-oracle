@@ -131,6 +131,7 @@ def get_usuario_general_service(id_usuario):
     if not result:
         return None
     
+    ids_redes = []    
     if (result.id_rol == ROLES["ROL_GESTOR_GAMCC"]):
         redes = (
             db.session.query(GestorRedes.id_red)
@@ -149,7 +150,7 @@ def get_usuario_general_service(id_usuario):
         "id_usuario": result.id_usuario,
         "id_persona": result.id_persona,
         "id_rol": result.id_rol,
-        "id_red": result.id_rol,
+        "id_red": result.id_red,
         "id_ipress": result.id_ipress,
         "correo": result.correo,
         "redes_asignadas": ids_redes,
