@@ -29,8 +29,6 @@ function cargarTablaFuentes(idProceso) {
             {
             data: null,
             render: function (row) {
-
-
                 // --- Si existe link_fuente: mostrar solo texto ---
                 if (row.link_fuente && row.link_fuente.trim() !== "") {
                 return `
@@ -134,15 +132,14 @@ function cargarTablaFuentes(idProceso) {
             {
                 data: "es_observado",               
                 render: function (data, type, row) {
-
                     let checkClass = "text-muted";
                     let xClass = "text-muted";
 
                     // ✔ VALIDADO
-                    if ((data === 1) || (row.link_fuente!= "")){
+                    /*if ((data === 1) || (row.link_fuente!= "")){*/
+                    if ((data === 1) || (row.link_fuente != null && row.link_fuente != "")) {
                         checkClass = "text-success";
                     }
-
                     // ✖ OBSERVADO
                     if (data === 0) {
                         xClass = "text-danger";

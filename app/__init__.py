@@ -122,16 +122,19 @@ def create_app():
         
         # Obtiene el nombre del rol, si no existe usa “USUARIO”
         rol_titulo = ROLES_NAME.get(id_rol, "USUARIO")
-
         return dict(rol_titulo=rol_titulo)
 
         
     @login_manager.user_loader
     def load_user(id_usuario):
-        user = Usuario.query.get(int(id_usuario))
+        user = Usuario.query.get(int(id_usuario))       
 
         if user:
             ipress = IpressEssalud.query.get(user.id_ipress)
+            red = RedEssalud.query.get(user.id_red)    
+                        
+            if red:
+                user.red_nombre = red.nombre_red
 
             if ipress:
                 user.ipress_nombre = ipress.nombre_ipress

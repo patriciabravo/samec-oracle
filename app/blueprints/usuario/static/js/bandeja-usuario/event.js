@@ -120,7 +120,8 @@ var BandejaUsuarioEvent = {
                 });
                 selectIpress.select2({
                     placeholder: "Seleccione Ipress",
-                    width: '100%'
+                    width: '100%',
+                    dropdownParent: $('#CrearUsuarioGenerico')
                 });
             },
             error: function () {
