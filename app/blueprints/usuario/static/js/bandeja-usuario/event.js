@@ -56,7 +56,7 @@ var BandejaUsuarioEvent = {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        if ((row.id_rol==ROLES["ROL_EVALUADOR_IPRESS"]) || (row.id_rol==ROLES["ROL_COORDINADOR_IPRESS"])) {
+                        if ((row.id_rol==ROLES["ROL_EVALUADOR_IPRESS"]) || (row.id_rol==ROLES["ROL_EVALUADO_IPRESS"])) {
                             bs_target = "#CrearUsuarioGenerico";
                             btn_edit_class = "btn-editar-user-generico";
                         }
