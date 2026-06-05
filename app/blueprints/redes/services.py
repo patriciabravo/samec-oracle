@@ -30,13 +30,11 @@ class RedService:
         ]
 
     @staticmethod
+    @login_required
     def obtener_red(id_red):
-
         red = RedEssalud.query.get(id_red)
-
         if not red:
             return None
-
         return {
             "id_red": red.id_red,
             "codigo_red": red.codigo_red,
@@ -45,49 +43,40 @@ class RedService:
         }
 
     @staticmethod
+    @login_required
     def crear_red(data):
-
         nueva_red = RedEssalud(
             codigo_red=data.get('codigo_red'),
             nombre_red=data.get('nombre_red'),
             macrorregion=data.get('macrorregion')
         )
-
         db.session.add(nueva_red)
         db.session.commit()
-
         return {
             "message": "Red creada correctamente",
             "id_red": nueva_red.id_red
         }
 
     @staticmethod
+    @login_required
     def actualizar_red(id_red, data):
-
         red = RedEssalud.query.get(id_red)
-
         if not red:
             return None
-
         red.codigo_red = data.get('codigo_red')
         red.nombre_red = data.get('nombre_red')
         red.macrorregion = data.get('macrorregion')
-
         db.session.commit()
-
         return {
             "message": "Red actualizada correctamente"
         }
 
     @staticmethod
+    @login_required
     def eliminar_red(id_red):
-
         red = RedEssalud.query.get(id_red)
-
         if not red:
             return None
-
         db.session.delete(red)
         db.session.commit()
-
         return True

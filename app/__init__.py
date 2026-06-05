@@ -20,6 +20,7 @@ from app.blueprints.autoevaluacion import autoevaluacion_bp
 from app.blueprints.acreditacion import acreditacion_bp
 from app.blueprints.redes import redes_bp
 from app.blueprints.macrorregion import macrorregion_bp
+from app.blueprints.ipress import ipress_bp
 
 from app.models.usuario import Usuario
 from app.models.menu import Menu
@@ -75,17 +76,16 @@ def create_app():
     app.register_blueprint(acreditacion_bp)
     app.register_blueprint(redes_bp)
     app.register_blueprint(macrorregion_bp)
+    app.register_blueprint(ipress_bp)
 
     @app.route("/")
     def index():
         return redirect(url_for("auth.logueo"))
 
     @app.context_processor
-    def inject_menu():
-        
+    def inject_menu():        
         if not current_user.is_authenticated:
-            return dict(menu_dict={})  # si no está logueado, no hay menú
-        
+            return dict(menu_dict={})  # si no está logueado, no hay menú        
         id_rol = current_user.roles_asociados[0].id_rol    
         filas = (
             db.session.query(
@@ -106,42 +106,33 @@ def create_app():
             menu_dict[resultado].append(
                 {"opcion": nombre_opcion, "ruta": ruta_opcion}
             )
-        return dict(menu_dict=menu_dict)
-    
+        return dict(menu_dict=menu_dict)    
 
     @app.context_processor
     def inject_role_title():
         if not current_user.is_authenticated:
-            return dict(rol_titulo="")
-        
+            return dict(rol_titulo="")        
         # Obtiene el id_rol del usuario
         id_rol = current_user.roles_asociados[0].id_rol
-
         # Usa ROLES_NAME que ya está importado
-        from app.constants import ROLES_NAME
-        
+        from app.constants import ROLES_NAME        
         # Obtiene el nombre del rol, si no existe usa “USUARIO”
         rol_titulo = ROLES_NAME.get(id_rol, "USUARIO")
         return dict(rol_titulo=rol_titulo)
-
         
     @login_manager.user_loader
     def load_user(id_usuario):
-        user = Usuario.query.get(int(id_usuario))       
-
+        user = Usuario.query.get(int(id_usuario))
         if user:
             ipress = IpressEssalud.query.get(user.id_ipress)
-            red = RedEssalud.query.get(user.id_red)    
-                        
+            red = RedEssalud.query.get(user.id_red)                        
             if red:
                 user.red_nombre = red.nombre_red
-
             if ipress:
                 user.ipress_nombre = ipress.nombre_ipress
                 user.ipress_nivel = ipress.nivel_ipress
                 red = RedEssalud.query.get(ipress.id_red)
                 user.red_nombre = red.nombre_red
-
         return user
     
     return app
