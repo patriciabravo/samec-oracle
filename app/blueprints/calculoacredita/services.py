@@ -94,11 +94,11 @@ def obtener_datos_calculo(id_autoevaluacion, id_ipress):
         .group_by(Macroproceso.id_macroproceso,Macroproceso.codigo_macroproceso, Criterio.tipo_criterio)
         .order_by(Macroproceso.id_macroproceso,Macroproceso.codigo_macroproceso, Criterio.tipo_criterio)
     )
-    print(
+    '''print(
         query_total_cr.statement.compile(
             compile_kwargs={"literal_binds": True}
         )
-    )
+    )'''
     rows = query_total_cr.all()
 
     for idmacro, macro, tipo, total in rows:

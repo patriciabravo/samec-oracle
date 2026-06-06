@@ -725,9 +725,7 @@ def upsert_autoevaluacion():
     condiciones_data = data.get("condiciones_data",[])
     files_json = data.get("filesToSend")
     files_data = json.loads(files_json) if files_json else []
-    print(files_data)
-    
-    
+      
     try: 
 
         sync_archivos_autoevaluacion(id_autoevaluacion, files_data)
@@ -1010,7 +1008,6 @@ def calculo_avance_calificacion_ipress(id_ipress):
             Criterio.aplica_essalud == 1
         )
     )
-    print(query)
     resultado = query.first()
     total_criterios = resultado.total_criterios or 0
     total_calificados = resultado.total_calificados or 0

@@ -6,6 +6,14 @@
         Lista de Ipress
     </div>
     <div class="card-body">
+        <div class="text-end">      
+        {% if permiso == 'add' %}
+            <button class="btn btn-back-azul btn-nueva-ipress" id="btn-nueva-ipress" data-bs-toggle="modal" data-bs-target="#Modal_EditarIpress" data-id="0" data-tipo="nuevo" >
+                <i class="bi bi-person-plus fs-3 text-white"></i> Nueva IPRESS
+            </button>
+        {% endif %}
+        </div>
+        <br>
         <table id="tablaIpress" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -94,7 +102,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-back-gris" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" id="btn_guarda_red"  class="btn btn-back-azul">Guardar</button>
+        <button type="submit" id="btn_guarda_ipress"  class="btn btn-back-azul">Guardar</button>
       </div>
     </form>
     </div>

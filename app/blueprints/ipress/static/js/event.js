@@ -184,6 +184,16 @@ var IpressEvent = {
             $('.btn-back-gris').trigger('focus');
         });
 
+        $('body').on('click','.btn-nueva-ipress', function () {
+            $('#form_edit_ipress').find('input:not(:radio), textarea, select').val('');
+            $("#form_edit_ipress").find("#sel_nivel_ipress").val(null).trigger("change");
+            $("#form_edit_ipress").find("#sel_tipo_ipress").val(null).trigger("change");
+            $("#form_edit_ipress").find("#sel_red_ipress").val(null).trigger("change");
+            $("#form_edit_ipress").find("#sel_departamento").val(null).trigger("change");            
+            $("#form_edit_ipress").find("#sel_provincia").val(null).trigger("change");
+            $("#form_edit_ipress").find("#sel_distrito").val(null).trigger("change");
+        });
+
         $('body').on('click','.btn-edit-ipress', function () {
             let IpressId = $(this).data('id');
             let mode = $(this).data('tipo');
@@ -196,12 +206,6 @@ var IpressEvent = {
                     $('#form_edit_ipress').find('#nombre_ipress').val(data.nombre_ipress);
                     $('#form_edit_ipress').find('#sel_nivel_ipress').val(data.nivel_ipress).trigger('change');
                     $('#form_edit_ipress').find('#sel_tipo_ipress').val(data.tipo_ipress).trigger('change');
-
-                    console.log('Valor recibido:', data.tipo_ipress);
-                    console.log('Valor actual:', $('#sel_tipo_ipress').val());
-                    console.log('Texto seleccionado:', $('#sel_tipo_ipress option:selected').text());
-
-
                     $('#form_edit_ipress').find('#sel_red_ipress').val(data.id_red).trigger('change');
                     $('#form_edit_ipress').find('#sel_departamento').val(data.id_departamento).trigger('change');
                     cargarProvincias(data.id_departamento)
@@ -236,7 +240,7 @@ var IpressEvent = {
     },
     formvalidator: function () {
                     const form = document.getElementById("form_edit_ipress");
-                    const submitButton = document.getElementById("btn_guarda_red");
+                    const submitButton = document.getElementById("btn_guarda_ipress");
                     const valida_datos_ipress = FormValidation.formValidation(form, {
                         fields: {
                             codigo_ipress: {

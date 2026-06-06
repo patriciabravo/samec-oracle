@@ -107,11 +107,11 @@ def calculo_puntaje_automatico(IdIpress):
         .order_by(Criterio.id_criterio.asc())
     )
     
-    print(
+    '''print(
         resultados.statement.compile(
             compile_kwargs={"literal_binds": True}
         )
-    )
+    )'''
 
     resultados = resultados.all()
 

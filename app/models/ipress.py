@@ -4,6 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, ForeignKey, String, Sequence
 
 from app.extensions import db
+from app.models.red import RedEssalud
 
 
 class IpressEssalud(db.Model):

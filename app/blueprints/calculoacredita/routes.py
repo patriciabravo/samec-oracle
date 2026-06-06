@@ -14,8 +14,6 @@ from app.constants import ACREDITACION_ACTUAL
 def resultados():
     id_autoevaluacion = request.form.get("id_autoevaluacion")
     id_ipress = request.form.get("id_ipress")
-    
-    print('aqui',request.form)
     return render_template(
         "calculoacredita.html",
         current_user=current_user,

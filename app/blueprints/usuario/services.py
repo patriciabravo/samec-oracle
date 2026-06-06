@@ -85,12 +85,12 @@ def obtener_usuarios_service():
         .outerjoin(IpressEssalud, Usuario.id_ipress == IpressEssalud.id_ipress)
         .order_by(Persona.id_persona)
     )    
-    print(
+    '''print(
         stmt.statement.compile(
             dialect=db.engine.dialect,
             compile_kwargs={"literal_binds": True}
         )
-    )
+    )'''
     results = db.session.execute(stmt).mappings().all()
     data = []
     for row in results:

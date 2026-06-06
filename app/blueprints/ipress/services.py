@@ -89,39 +89,37 @@ class IpressService:
     @staticmethod
     @login_required
     def actualizar_ipress(ipress_id, data):
+        print('data--->',data)
         ipress = IpressEssalud.query.get(ipress_id)
         if not ipress:
             return None
-        ipress.codigo_ipress = data.get("codigo",ipress.codigo_ipress)
-        ipress.nombre_ipress = data.get("nombre",ipress.nombre_ipress)
-        ipress.tipo_ipress = data.get("tipo_ipress",ipress.tipo_ipress)
-        ipress.nivel_ipress = data.get("nivel_ipress",ipress.nivel_ipress)
-        ipress.id_red = data.get("id_red",ipress.id_red)
-        #ipress.departamento = data.get("departamento", ipress.departamento)
-        #ipress.provincia = data.get("provincia", ipress.provincia)
-        ipress.id_distrito = data.get("id_distrito", ipress.id_distrito)
+        ipress.codigo_ipress = data.get("codigo_ipress",ipress.codigo_ipress)
+        ipress.nombre_ipress = data.get("nombre_ipress",ipress.nombre_ipress)
+        ipress.tipo_ipress = data.get("sel_tipo_ipress",ipress.tipo_ipress)
+        ipress.nivel_ipress = data.get("sel_nivel_ipress",ipress.nivel_ipress)
+        ipress.id_red = data.get("sel_red_ipress",ipress.id_red)
+        ipress.id_distrito = data.get("sel_distrito", ipress.id_distrito)
         ipress.es_activo = data.get("estado_ipress", ipress.es_activo)
         db.session.commit()
         return {
             "success": True,
             "message": "IPRESS actualizada correctamente"
         }
-        
-        
+                
     @staticmethod
     @login_required
     def crear_ipress(data):
+        print(data)
         ipress = IpressEssalud(
-            codigo=data.get("codigo"),
-            nombre=data.get("nombre"),
+            codigo_ipress=data.get("codigo_ipress"),
+            nombre_ipress=data.get("nombre_ipress"),
             tipo_ipress = data.get("tipo_ipress"),
             nivel_ipress = data.get("nivel_ipress"),
-            red=data.get("id_red"),
-            departamento=data.get("departamento"),
-            provincia=data.get("provincia"),
-            distrito=data.get("distrito"),
-            estado=data.get("estado",1)
+            id_red=data.get("id_red"),
+            id_distrito=data.get("id_distrito"),
+            es_activo=data.get("es_activo",1)
         )
+        print('hola--',ipress)
         db.session.add(ipress)
         db.session.commit()
         return ipress
@@ -153,7 +151,6 @@ class IpressService:
     @staticmethod
     @login_required
     def get_provincias(id_departamento):
-
         provincias = Provincia.query.filter_by(
             id_departamento=id_departamento
         ).order_by(
