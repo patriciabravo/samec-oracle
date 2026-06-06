@@ -261,19 +261,9 @@ var IpressEvent = {
                         }
                     })
                     .on('core.form.valid', function () {
-                        const id = $('#form_edit_ipress').find('#id_ipress').val();
-                        const data = {
-                            codigo_ipress: $('#codigo_ipress').val(),
-                            nombre_ipress: $('#nombre_ipress').val(),
-                            nivel_ipress: $('#nivel_ipress').val(),
-                            tipo_ipress: $('#sel_tipo_ipress').val(),
-                            id_red: $('#sel_red').val(),
-                            id_departamento: $('#sel_departamento').val(),
-                            id_provincia: $('#sel_provincia').val(),
-                            id_distrito: $('#sel_distrito').val()
-                        };
                         let method;
                         let url;
+                        const id = $('#form_edit_ipress').find('#id_ipress').val();
                         if (id) {
                             method = 'PUT';
                             url = `/ipress/${id}`;
@@ -284,14 +274,23 @@ var IpressEvent = {
                         $.ajax({
                             url: url,
                             type: method,
-                            contentType: 'application/json',
-                            data: JSON.stringify(data),
-                            success: function (response) {
-                                $('#Modal_EditarIpress').modal('hide');
-                                $('#tablaIpress').DataTable().ajax.reload();
+                            data: $(form).serialize(),
+                            success: function (res) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'IPRESS Actualizada',
+                                    text: 'IPRESS ha sido actualizado correctamente'
+                                }).then(() => {
+                                    $('#Modal_EditarIpress').modal('hide');
+                                    $('#tablaIpress').DataTable().ajax.reload();
+                                });
                             },
-                            error: function (xhr) {
-                                alert("Error al cargar los datos de la Ipress");
+                            error: function (err) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: err.responseJSON?.error || 'Ocurrió un problema al actualizar'
+                                });
                             }
                         });
                     });

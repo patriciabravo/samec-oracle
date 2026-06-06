@@ -25,8 +25,7 @@ def listar_ipress():
 @ipress_bp.route('/<int:id_ipress>', methods=['PUT'])
 @login_required
 def actualizar_ipress(id_ipress):
-    data = request.get_json()
-    print('dataaaa->',data)
+    data = request.form
     response = IpressService.actualizar_ipress(id_ipress, data)
     if response is None:
             return jsonify({"message": "Ipress no encontrada"}), 404
@@ -34,7 +33,7 @@ def actualizar_ipress(id_ipress):
 
 @ipress_bp.route('/', methods=['POST'])
 def crear_ipress():
-    data = request.get_json()
+    data = request.form
     response = IpressService.crear_ipress(data)
     return jsonify(response), 201
 

@@ -89,7 +89,6 @@ class IpressService:
     @staticmethod
     @login_required
     def actualizar_ipress(ipress_id, data):
-        print('data--->',data)
         ipress = IpressEssalud.query.get(ipress_id)
         if not ipress:
             return None
@@ -109,20 +108,22 @@ class IpressService:
     @staticmethod
     @login_required
     def crear_ipress(data):
-        print(data)
         ipress = IpressEssalud(
             codigo_ipress=data.get("codigo_ipress"),
             nombre_ipress=data.get("nombre_ipress"),
-            tipo_ipress = data.get("tipo_ipress"),
-            nivel_ipress = data.get("nivel_ipress"),
-            id_red=data.get("id_red"),
-            id_distrito=data.get("id_distrito"),
-            es_activo=data.get("es_activo",1)
+            tipo_ipress = data.get("sel_tipo_ipress"),
+            nivel_ipress = data.get("sel_nivel_ipress"),
+            id_red=data.get("sel_red_ipress"),
+            id_distrito=data.get("sel_distrito"),
+            es_activo=data.get("estado_ipress",1)
         )
-        print('hola--',ipress)
         db.session.add(ipress)
         db.session.commit()
-        return ipress
+        return {
+            "success": True,
+            "message": "IPRESS creada correctamente",
+            "id_ipress": ipress.id_ipress
+        }
 
     @staticmethod
     @login_required
