@@ -51,11 +51,11 @@
         <input type="hidden" name="id_criterio" id="id_criterio" value="">
         <div class="row">
             <div class="col-md-2 mb-3">
-                <label class="form-label">Código Criterio</label>
+                <label for="codigo_criterio" class="form-label">Código Criterio</label>
                 <input type="text" class="form-control form-control-sm" id="codigo_criterio" name="codigo_criterio" required>
             </div>
             <div class="col-md-3 mb-3">
-                <label class="form-label">Tipo Criterio</label>
+                <label for="sel_tipo_criterio" class="form-label">Tipo Criterio</label>
                 <select class="form-select form-select-sm select2" id="sel_tipo_criterio" name="sel_tipo_criterio">
                     <option value="">Seleccione</option>
                     <option value="Estructura">Estructura</option>
@@ -64,7 +64,7 @@
                 </select>
             </div>
             <div class="col-md-7 mb-3">
-                <label class="form-label">Proceso Institucional</label>
+                <label for="sel_procesoinstitucional" class="form-label">Proceso Institucional</label>
                 <select class="form-select form-select-sm" id="sel_procesoinstitucional" name="sel_procesoinstitucional">
                     <option value="">Seleccione</option>
                 </select>
@@ -73,7 +73,7 @@
         <div class="row">
             <div class="col-md-12 mb-3">
                 <label class="form-label">Nombre Criterio</label>
-                <textarea class="form-control" id="nombre_ipress" name="nombre_ipress" required></textarea>
+                <textarea class="form-control" id="nombre_criterio" name="nombre_criterio" required></textarea>
             </div>
         </div>
 
@@ -165,14 +165,6 @@
                     <option value="1">SI</option>
                     <option value="0">NO</option>
                 </select>
-            </div>
-            <div class="col-md-6 mb-3">
-                  <label class="form-label">Estado:&nbsp;&nbsp;</label>
-                  <select class="form-select form-select-sm select2" id="sel_criterio_activo" name="sel_criterio_activo">
-                    <option value="">Seleccione</option>
-                    <option value="1">Activo</option>
-                    <option value="0">Inactivo</option>
-                  </select>
             </div>
         </div>
       </div>
