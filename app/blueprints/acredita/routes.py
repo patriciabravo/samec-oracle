@@ -9,13 +9,14 @@ from app.models import TecnicaEvaluacion, CondicionCriterio, Fuente, ProcesoInst
 from app.models import Macroproceso, Estandar, Criterio
 from app import db
 from sqlalchemy import func, cast, String
+from .services import AcreditaService
 
 # --- Página principal ---
 @acredita_bp.route("/fuentes/actualizar", methods=["GET"])
 @login_required
 def actualizar_fuentes():
     return render_template(
-        "macroproceso.html",
+        "administrarfuentes.html",
         user=current_user,
         page_title="Actualizar Fuentes Auditables"
     )
@@ -347,3 +348,19 @@ def grabarfuentes():
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'mensaje': e})
+    
+@acredita_bp.route('/procesosinstitucionales', methods=['GET'])
+def listar_procesos():
+    response = AcreditaService.listar_procesos()
+    return jsonify(response), 200
+
+@acredita_bp.route('/criterio/<int:id_criterio>', methods=['GET'])
+def obtener_criterio(id_criterio):
+    response = AcreditaService.obtener_criterio(id_criterio)
+    if not response:
+        return jsonify({
+            "success": False,
+            "message": "Criterio no encontrado"
+        }), 404
+
+    return jsonify(response), 200
