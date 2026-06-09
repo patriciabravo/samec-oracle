@@ -6,7 +6,6 @@ var FuentesEvent = {
         this.loadTabla();
     },
     loadCombos: function () {
-
         $.get("/acredita/api/macroprocesos", function (data) {
             let sel = $("#sel_macroproceso");
             sel.empty().append(`<option value="0">Seleccione</option>`);
@@ -16,7 +15,6 @@ var FuentesEvent = {
                 </option>`);
             });
         });
-
     },
     bindEvents: function () {
         $("#sel_macroproceso").on("change", function () {
@@ -87,18 +85,6 @@ var FuentesEvent = {
                 { data: "macro" },
                 { data: "estandar" },
                 { data: "criterio" },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        btn_edit= `<button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-edit-criterio" 
-                        data-id="${row.id_criterio}" data-bs-toggle="modal" data-bs-target="#Modal_EditarCriterio" data-tipo="edit" >
-                        <i class="fas fa-edit"></i>Editar</button>`;
-                        btn_view=  `<button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-edit-criterio"
-                        data-id="${row.id_criterio}" data-bs-toggle="modal" data-bs-target="#Modal_EditarCriterio" data-tipo="ver" >
-                        <i class="fas fa-eye"></i>Ver</button>`;                           
-                        return  btn_edit + '&nbsp;&nbsp;' + btn_view;
-                    }
-                },
                 {
                     data: null,
                     render: function (data, type, row) {
