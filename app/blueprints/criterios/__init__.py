@@ -1,9 +1,9 @@
 from flask import Blueprint
 
-redes_bp = Blueprint(
-    "redes",
+criterios_bp = Blueprint(
+    "criterios",
     __name__,
-    url_prefix="/redes",
+    url_prefix="/criterios",
     template_folder="templates",
     static_folder="static",
     static_url_path="/static"

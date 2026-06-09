@@ -21,6 +21,7 @@ from app.blueprints.acreditacion import acreditacion_bp
 from app.blueprints.redes import redes_bp
 from app.blueprints.macrorregion import macrorregion_bp
 from app.blueprints.ipress import ipress_bp
+from app.blueprints.criterios import criterios_bp
 
 from app.models.usuario import Usuario
 from app.models.menu import Menu
@@ -77,6 +78,7 @@ def create_app():
     app.register_blueprint(redes_bp)
     app.register_blueprint(macrorregion_bp)
     app.register_blueprint(ipress_bp)
+    app.register_blueprint(criterios_bp)    
 
     @app.route("/")
     def index():

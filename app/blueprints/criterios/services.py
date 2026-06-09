@@ -1,82 +1,78 @@
 from app import db
-from app.models import RedEssalud, Macrorregion
-from flask_login import login_required
+from flask_login import login_required, current_user
+from collections import defaultdict
+from app.models import ProcesoInstitucional, Criterio
 
-
-class RedService:
-
+class CriteriosService:
     @staticmethod
     @login_required
-    def listar_redes():      
-        redes = db.session.query(
-            RedEssalud.id_red,
-            RedEssalud.codigo_red,
-            RedEssalud.nombre_red,
-            Macrorregion.nombre_macrorregion
-        ).join(
-            Macrorregion,
-            RedEssalud.macrorregion == Macrorregion.id_macroregion
-        ).all()
-        print(redes)
-               
+    def listar_criterios():
+        criterios = (
+            Criterio.query
+            .outerjoin(ProcesoInstitucional,ProcesoInstitucional.id_proceso == Criterio.id_proceso)
+            .add_columns(ProcesoInstitucional.nombre_proceso)
+            .order_by(Criterio.id_criterio)
+            .all()
+        )
+        
         return [
             {
-                "id_red": red.id_red,
-                "codigo_red": red.codigo_red,
-                "nombre_red": red.nombre_red,
-                "macrorregion": red.nombre_macrorregion
+                "id_criterio": criterio.id_criterio,
+                "codigo_criterio": criterio.codigo_criterio,
+                "nombre_criterio": criterio.nombre_criterio,
+                "puntaje_0_txt": criterio.puntaje_0_txt,
+                "puntaje_1_txt": criterio.puntaje_1_txt,
+                "puntaje_2_txt": criterio.puntaje_2_txt,
+                "aplica_essalud": criterio.aplica_essalud,
+                "tipo_criterio": criterio.tipo_criterio,
+                "id_proceso": criterio.id_proceso,
+                "nombre_proceso": nombre_proceso
             }
-            for red in redes
+            for criterio, nombre_proceso in criterios
         ]
 
     @staticmethod
     @login_required
-    def obtener_red(id_red):
-        red = RedEssalud.query.get(id_red)
-        if not red:
-            return None
-        return {
-            "id_red": red.id_red,
-            "codigo_red": red.codigo_red,
-            "nombre_red": red.nombre_red,
-            "macrorregion": red.macrorregion
-        }
+    def listar_procesos():
+        procesos = ProcesoInstitucional.query.order_by(
+            ProcesoInstitucional.nombre_proceso
+        ).all()
+
+        return [
+            {
+                "id_proceso": p.id_proceso,
+                "nombre_proceso": p.nombre_proceso
+            }
+            for p in procesos
+        ]
 
     @staticmethod
     @login_required
-    def crear_red(data):
-        nueva_red = RedEssalud(
-            codigo_red=data.get('codigo_red'),
-            nombre_red=data.get('nombre_red'),
-            macrorregion=data.get('macrorregion')
+    def obtener_criterio(id_criterio):
+        resultado = (
+            db.session.query(
+                Criterio.id_criterio,
+                Criterio.codigo_criterio,
+                Criterio.nombre_criterio,
+                Criterio.puntaje_0_txt,
+                Criterio.puntaje_1_txt,
+                Criterio.puntaje_2_txt,
+                Criterio.aplica_essalud,
+                Criterio.tipo_criterio,
+                Criterio.nivel_i_1,
+                Criterio.nivel_i_2,
+                Criterio.nivel_i_3,
+                Criterio.nivel_i_4,
+                Criterio.nivel_ii_1,
+                Criterio.nivel_ii_2,
+                Criterio.nivel_iii_1,
+                Criterio.id_proceso,
+                ProcesoInstitucional.nombre_proceso
+            )
+            .outerjoin(ProcesoInstitucional,ProcesoInstitucional.id_proceso == Criterio.id_proceso)
+            .filter(Criterio.id_criterio == id_criterio)
+            .first()
         )
-        db.session.add(nueva_red)
-        db.session.commit()
-        return {
-            "message": "Red creada correctamente",
-            "id_red": nueva_red.id_red
-        }
-
-    @staticmethod
-    @login_required
-    def actualizar_red(id_red, data):
-        red = RedEssalud.query.get(id_red)
-        if not red:
+        if not resultado:
             return None
-        red.codigo_red = data.get('codigo_red')
-        red.nombre_red = data.get('nombre_red')
-        red.macrorregion = data.get('macrorregion')
-        db.session.commit()
-        return {
-            "message": "Red actualizada correctamente"
-        }
-
-    @staticmethod
-    @login_required
-    def eliminar_red(id_red):
-        red = RedEssalud.query.get(id_red)
-        if not red:
-            return None
-        db.session.delete(red)
-        db.session.commit()
-        return True
+        return resultado._asdict()

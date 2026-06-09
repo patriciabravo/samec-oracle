@@ -3,6 +3,7 @@ var CriteriosEvent = {
     init: function () {
         this.loadCombos();
         this.bindEvents();
+        this.loadTabla();
     },
     loadCombos: function () {
 
@@ -64,6 +65,53 @@ var CriteriosEvent = {
 
         $('#Modal_EditarCriterio').on('hidden.bs.modal', function () {
             document.activeElement.blur();
+        });
+    },
+    loadTabla: function () {
+
+        let tabla = $("#tablaCriterios").DataTable({
+            destroy: true,
+            ajax: {
+                url: "/criterios/lista",
+                dataSrc: ""
+            },
+            columns: [
+                { data: "codigo_criterio" },
+                { data: "nombre_criterio" },
+                { data: "tipo_criterio" },
+                { data: "nombre_proceso" },
+                {
+                    data: "aplica_essalud",
+                    render: function (data, type, row) {
+                        btn_aplica = 'No';
+                        if (row.aplica_essalud == '1')
+                            btn_aplica = 'Si';
+                        return btn_aplica;
+                    }                    
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        btn_edit= `<button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-edit-criterio" 
+                        data-id="${row.id_criterio}" data-bs-toggle="modal" data-bs-target="#Modal_EditarCriterio" data-tipo="edit" >
+                        <i class="fas fa-edit"></i>Editar</button>`;
+                        btn_view=  `<button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-edit-criterio"
+                        data-id="${row.id_criterio}" data-bs-toggle="modal" data-bs-target="#Modal_EditarCriterio" data-tipo="ver" >
+                        <i class="fas fa-eye"></i>Ver</button>`;                           
+                        return  btn_edit + '&nbsp;&nbsp;' + btn_view;
+                    }
+                }
+            ],
+            columnDefs: [
+                {
+                    targets: 3,
+                    width: "120px",
+                    className: "text-nowrap"
+                }
+            ],
+            language: {
+                url: "/static/json/es-ES.json"
+            }
         });
     }
 };
