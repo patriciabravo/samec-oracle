@@ -1,18 +1,12 @@
 {% extends "layout.html" %}
-<!--<link href="{{ url_for('static', filename='plugins/global/plugins.bundle.css') }}" rel="stylesheet">
-<link href="{{ url_for('static', filename='css/style.bundle.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />-->
 {% block content %}
 <div class="card">
-    <div class="card-header py-4">
-        <h4>{{nombre_criterio}}</h4>
-    </div>
-
+    <div class="card-header card-subtitle-header py-6">{{nombre_criterio}}</div>
     <div class="card-body">
-        <button class="btn btn-back-azul btn-add-condicion" id="btn-nueva-condicion" data-bs-toggle="modal" data-bs-target="#AddCondicion" data-idcondicion="0" data-tipo="nuevo" >
+        <button class="btn btn-back-azul btn-add-condicion" id="btn-nueva-condicion" data-bs-toggle="modal" data-bs-target="#Modal_AddCondicion" data-idcondicion="0" data-tipo="nuevo" >
                 <i class="bi bi-person-plus fs-3 text-white"></i> Agregar Condición
-        </button>
-        <table id="tablaCondiciones" class="table table-striped table-bordered">
+        </button><br>
+        <table id="tablaCondiciones" class="table table-striped table-bordered pt-6">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -20,7 +14,8 @@
                     <th>PUNTAJE</th>
                     <th>TECNICA</th>
                     <th>NOMBRE FUENTE</th>
-                    <th>ACCION</th>
+                    <th>CONDICION</th>
+                    <th>FUENTE</th>
                 </tr>
             </thead>
         </table>
@@ -28,40 +23,60 @@
     </div>
 </div>
 
-<div class="modal fade modal-add-condicion" id="AddCondicion" tabindex="-1" aria-labelledby="AddCondicion" >
+<div class="modal fade modal-add-condicion" id="Modal_AddCondicion" tabindex="-1" aria-labelledby="Modal_AddCondicion" >
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-    <form id="form_nueva_condicion" class="form" action="{{ url_for('acredita.grabarcondicion') }}" method="POST">     
+    <form id="form_nueva_condicion" class="form" action="" method="POST">     
       <div class="modal-header">
-        <h5 class="modal-title" >Agregar Condición a Criterio</h5>
+        <h5 class="modal-title">Editar Condición</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
+            <input type="hidden" name="id_criterio" id="id_criterio" value="{{id_criterio}}">
+            <input type="hidden" name="id_condicion" id="id_condicion" value="{{id_condicion}}">
             <div class="row g-4 p-2">
                 <div class="col-md-12 fv-row">
-                    <input type="hidden" name="id_criterio" id="id_criterio" value="{{id_criterio}}">
-                    <input type="hidden" name="id_condicion" id="id_condicion" value="{{id_condicion}}">
                     <label for="nombre_condicion" class="form-label">Nombre de Condición</label>
                     <input type="text" class="form-control form-control-sm" id="nombre_condicion" name="nombre_condicion">
                 </div>                
             </div>
             <div class="row g-4 p-2">
-                <div class="col-md-12 fv-row">
-                    <label for="puntaje_condicion" class="form-label">Puntaje Condición</label>
+                <div class="col-md-6 fv-row">
+                    <label for="select_puntaje" class="form-label">Puntaje Condición</label>
                     <select class="form-select form-select-sm" id="select_puntaje" name="select_puntaje">
-                        <option value="0">0</option>
+                        <option value=""></option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                     </select>
                 </div>                
-            </div>
-            <div class="row g-4 p-2">
-                <div class="col-md-12 fv-row">
-                    <label for="tecnica" class="form-label">Tecnica de Evaluación</label>
+                <div class="col-md-6 fv-row">
+                    <label for="select_tecnica" class="form-label">Tecnica de Evaluación</label>
                     <select class="form-select form-select-sm" id="select_tecnica" name="select_tecnica">
                         <option value="">Selecciona tecnica</option>
                     </select>
                 </div>                
+            </div>
+            <div class="row p-2">
+                <div class="col-md-12 fv-row">
+                    <label for="normativa_condicion" class="form-label">Normativa de la Condición</label>
+                    <textarea class="form-control form-control-sm" id="normativa_condicion" name="normativa_condicion"></textarea>
+                </div>                
+            </div>
+            <div class="row p-2">
+                <div class="col-md-12 fv-row">
+                    <label for="link_normativa" class="form-label">Link de Normativa</label>
+                    <textarea class="form-control form-control-sm" id="link_normativa" name="link_normativa"></textarea>
+                </div>                
+            </div>
+            <div class="row p-2">
+              <div class="col-md-4 fv-row">
+                  <label for="tipo_condicion" class="form-label">Tipo de Condición</label>
+                  <select class="form-select form-select-sm" id="tipo_condicion" name="tipo_condicion">
+                    <option value="">--</option>
+                    <option value="Y">Y - (Fuente 1) Y (Fuente 2) Y (Fuente 3)</option>
+                    <option value="O">O - (Fuente 1) O (Fuente 2) O (Fuente 3)</option>
+                  </select>
+              </div>
             </div>
       </div>
       <div class="modal-footer">
@@ -73,7 +88,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="AdmFuentes" tabindex="-1" aria-labelledby="AdmFuentes" >
+<div class="modal fade" id="Modal_AddFuentes" tabindex="-1" aria-labelledby="Modal_AddFuentes" >
   <div class="modal-dialog modal-lg">
     <div class="modal-content">      
       <div class="modal-header">
@@ -83,20 +98,6 @@
       <div class="modal-body">
         <form id="form_update_fuentes" class="form" action="" method="POST">     
           <input type="hidden" name="id_condicion" id="id_condicion" value="">
-           <!--<div class="row">
-            <div class="col-md-12">
-            <input type="hidden" name="id_condicion" value="{{id_condicion}}">
-                <label>Nombre de la fuente</label>
-                <input type="text" name="fuente" class="form-control" required>
-            </div>
-            </div>
-            <button id="btnAgregarDropzone" class="btn btn-primary mt-3">
-                Agregar otro Dropzone
-            </button>
-            <div class="row">
-                <div class="col-md-6" id="contenedorDropzones" >
-                </div>
-            </div>-->
           <table class="table table-bordered" id="tablaFuentes">
             <thead>
               <tr>
@@ -120,11 +121,10 @@
 </div>
 {% endblock %}
 {% block scripts %}
-	<!--<script src="{{ url_for('static', filename='js/scripts.bundle.js') }}"></script>
-		<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>-->
 <script src="{{ url_for('acredita.static', filename='js/condiciones.js') }}"></script>
 <script>
+    const ROLES = {{ lista_roles | tojson }};
+    const ROLES_NAME = {{ nombre_roles | tojson }};
     const idCriterio = {{id_criterio|tojson}};
     CondicionesEvent.init();
 </script>

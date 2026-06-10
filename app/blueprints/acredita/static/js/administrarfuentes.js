@@ -66,10 +66,11 @@ var FuentesEvent = {
             MacroprocesoEvent.loadTabla();
         });
 
+        $('#Modal_AddCondicion').on('hidden.bs.modal', function () {
+            document.activeElement.blur();
+        });
     },
-
     loadTabla: function () {
-
         let tabla = $("#tablaCombinada").DataTable({
             destroy: true,
             ajax: {

@@ -15,6 +15,18 @@ var CondicionesEvent = {
                 url: `/acredita/api/condiciones/${idCriterio}`,
                 dataSrc: ''
             },
+            columnDefs: [
+                {
+                    targets: 5,
+                    width: "120px",
+                    className: "text-nowrap"
+                },
+                {
+                    targets: 6,
+                    width: "120px",
+                    className: "text-nowrap"
+                }
+            ],
             columns: [
                 { data: 'id_condicion'},
                 { data: 'nombre_condicion'},
@@ -40,22 +52,29 @@ var CondicionesEvent = {
                 {
                     data: null,
                     render: function(data) {
-
-                        str_adm_condicion =`<button class="btn btn-sm btn-secondary btn-text-azul m-2 btn-add-condicion" data-idcondicion="${data.id_condicion}" data-bs-toggle="modal" data-bs-target="#AddCondicion"><i class="bi bi-list-check"></i></i>Editar Condicion</button>`;
+                        btn_edit= `<button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-add-condicion" data-idcondicion="${data.id_condicion}" data-bs-toggle="modal" data-bs-target="#Modal_AddCondicion" data-tipo="edit" >
+                        <i class="fas fa-edit"></i>Editar</button>`;
+                        btn_view=  `<button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-add-condicion" data-idcondicion="${data.id_condicion}" data-bs-toggle="modal" data-bs-target="#Modal_AddCondicion" data-tipo="ver" >
+                        <i class="fas fa-eye"></i>Ver</button>`;                           
+                        return  btn_edit + '&nbsp;&nbsp;' + btn_view;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data) {
                         str_adm_fuente='';
                         if (data.id_tecnica == 4) {
-                              str_adm_fuente =`<button class="btn btn-sm btn-secondary btn-text-azul m-2" data-idcondicion="${data.id_condicion}" data-bs-toggle="modal" data-bs-target="#AdmFuentes"><i class="bi bi-link"></i>Editar Fuentes</button>`;
+                              str_adm_fuente =`<button class="btn btn-sm btn-secondary btn-text-azul btn-add-fuentes" data-idcondicion="${data.id_condicion}" data-bs-toggle="modal" data-bs-target="#Modal_AddFuentes"><i class="bi bi-link"></i>Editar Fuente</button>`;
                         }
-                        return str_adm_condicion+str_adm_fuente;
+                        return str_adm_fuente;
                     }
-                }                
+                }                 
             ],
             responsive: true,
             language: {
                 url: "/static/json/es-ES.json"
             }
         });
-
     },
     loadCombos: function () {
         const selectPuntaje = $('#select_puntaje');
@@ -87,67 +106,54 @@ var CondicionesEvent = {
     
     },
     bindEvents: function () {
-        /*Dropzone.autoDiscover = false;
-        var dz = null;
-        let contador = 1;
-        let dropzones = [];
 
-        $("#btnAgregarDropzone").on("click", function() {
-            str_add='<div class="dz-message needsclick">'
-            +'<i class="bi bi-cloud-arrow-up fs-3x text-primary"></i>'
-            +'<div class="fs-3 fw-bold text-gray-900 mb-1">Suelta los archivos aquí o haz clic.</div>'
-            +'<div class="fs-6 text-gray-500">Tamaño máximo 20 MB</div>'
-            +'</div>';
-            const div = document.createElement("div");
-            div.id = "dropzone_" + contador;
-            div.classList.add("dropzone-dinamico");
-            div.innerHTML = str_add;
-            $("#contenedorDropzones").append(div);
-            //Crea dropzone con ID dinámico
-            const dz = new Dropzone("#dropzone_" + contador, {
-                url: "/acredita/uploadfile",
-                paramName: "file",
-                maxFiles: 10,
-                maxFilesize: 10,
-                addRemoveLinks: true,
-                dictDefaultMessage: "Arrastra archivos aquí o haz clic"
-            });
-            dropzones.push(dz);
-            contador++;
-        });*/
-
-        $('#AddCondicion').on('show.bs.modal', function (event) {
-            console.log('abre el modal');
-            const button = $(event.relatedTarget);
-            const idCond = button.data('idcondicion');
-            const tipo = button.data('tipo');
-            console.log('id de condicon '+idCond);
-            if (idCond == 0){
-                $('#form_nueva_condicion')[0].reset();
-                $('#id_condicion').val(0);
-                $('#select_tecnica').val(null).trigger('change');
-                $('#select_puntaje').val(null).trigger('change');
+        $('body').on('click','.btn-add-condicion', function () {
+            const idCriterio = $('#id_criterio').val();
+            const idCondicion = $(this).data('idcondicion');
+            const tipo = $(this).data('tipo');
+            if (tipo=="nuevo"){
+                $('#form_nueva_condicion').find('input:not(:radio), textarea, select').val('');
+                $("#form_nueva_condicion").find("#select_puntaje").val(null).trigger("change");
+                $("#form_nueva_condicion").find("#select_tecnica").val(null).trigger("change");
+                $("#form_nueva_condicion").find("#tipo_condicion").val(null).trigger("change");
             } else {
+                $('#form_nueva_condicion').find('#select_puntaje')
                 $.ajax({
-                    url: `/acredita/api/condicion/${idCond}`,
+                    url: `/acredita/api/condicion/${idCondicion}`,
                     method: 'GET',
                     dataType: 'json',
-                    success: function (data) {
-                        $('#id_condicion').val(idCond);
-                        $('#nombre_condicion').val(data.nombre_condicion);
-                        $('#select_puntaje').val(data.puntaje_condicion).trigger('change');
-                        $('#select_tecnica').val(data.id_tecnica).trigger('change');
+                    success: function (data) {     
+                            $('#form_nueva_condicion').find('#id_criterio').val(idCriterio);
+                            $('#form_nueva_condicion').find('#id_condicion').val(idCondicion);                                               
+                            $('#form_nueva_condicion').find('#nombre_condicion').val(data.nombre_condicion);
+                            $('#form_nueva_condicion').find('#select_puntaje').val(data.puntaje_condicion).trigger('change');
+                            $('#form_nueva_condicion').find('#select_tecnica').val(data.id_tecnica).trigger('change');
+                            $('#form_nueva_condicion').find('#normativa_condicion').val(data.normativa_condicion);
+                            $('#form_nueva_condicion').find('#link_normativa').val(data.link_normativa);
+                            $('#form_nueva_condicion').find('#tipo_condicion').val(data.tipo_condicion).trigger('change');                        
                     },
                     error: function (xhr, status, error) {
                         console.error('Error al cargar condición:', error);
                     }
                 });
+                $('.modal-title').text(tipo === 'nuevo' ? 'Nueva condición' : 'Editar condición');
+                if (tipo === 'ver') {
+                    $('#Modal_AddCondicion').find('input, select, textarea').prop('disabled', true);
+                    $('#Modal_AddCondicion').find('.modal-footer').hide();
+                    $('#Modal_AddCondicion').find('.modal-title').text('Ver Condicion');
+                } else {
+                    $('#Modal_AddCondicion').find('input, select, textarea').prop('disabled', false);
+                    $('#Modal_AddCondicion').find('.modal-footer').show();
+                    $('#Modal_AddCondicion').find('.modal-title').text('Editar Condicion');
+                }
             }
-            $('.modal-title').text(tipo === 'nuevo' ? 'Nueva condición' : 'Editar condición');
         });
 
+        $('#Modal_AddCondicion').on('hidden.bs.modal', function () {
+            document.activeElement.blur();
+        });
 
-        $('#AdmFuentes').on('show.bs.modal', function (event) {
+        $('body').on('click','.btn-add-fuentes', function () {
             const button = $(event.relatedTarget);
             const idCond = button.data('idcondicion');
             $('#form_update_fuentes').find('#id_condicion').val(idCond);
@@ -229,31 +235,29 @@ var CondicionesEvent = {
                         }
                     })
                     .on('core.form.valid', function () {
+                        let method;
+                        let url;
+                        const id = $('#form_nueva_condicion').find('#id_criterio').val();
+                        if (id) {
+                            method = 'PUT';
+                            url = `/acredita/condicion/${id}`;
+                        } else {
+                            method = 'POST';
+                            url = '/acredita/condicion';
+                        }
                         $.ajax({
-                            url: '/acredita/grabarcondicion',
-                            async: false,
-                            type: 'POST',
-                            contentType: "application/json",
+                            url: url,
+                            type: method,
                             data: $(form).serialize(),
                             success: function (res) {
-                                if (res.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Condicion Registrada',
-                                        text: res.message
-                                    }).then(() => {
-                                        $('#AddCondicion').modal('hide');
-                                        $('#tablaCondiciones').DataTable().ajax.reload();
-                                    });
-                                } else{
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error Condición Registrada',
-                                        text: res.message
-                                    }).then(() => {
-                                        $('#AddCondicion').modal('hide');
-                                    });
-                                }
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Condicion Actualizada',
+                                    text: 'Condicion ha sido actualizado correctamente'
+                                }).then(() => {
+                                    $('#Modal_AddCondicion').modal('hide');
+                                    $('#tablaCondiciones').DataTable().ajax.reload();
+                                });
                             },
                             error: function (err) {
                                 Swal.fire({
@@ -312,7 +316,7 @@ var CondicionesEvent = {
                                         title: 'Fuentes Registrada',
                                         text: res.message
                                     }).then(() => {
-                                        $('#AdmFuentes').modal('hide');
+                                        $('#Modal_AddFuentes').modal('hide');
                                     });
                                 } else{
                                     Swal.fire({
@@ -320,7 +324,7 @@ var CondicionesEvent = {
                                         title: 'Error en Grabar Fuentes',
                                         text: res.message
                                     }).then(() => {
-                                        $('#AdmFuentes').modal('hide');
+                                        $('#Modal_AddFuentes').modal('hide');
                                     });
                                 }
                                 $('#tablaCondiciones').DataTable().ajax.reload();

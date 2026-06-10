@@ -1,7 +1,7 @@
 from app import db
 from flask_login import login_required, current_user
 from collections import defaultdict
-from app.models import ProcesoInstitucional, Criterio
+from app.models import ProcesoInstitucional, Criterio, CondicionCriterio, TecnicaEvaluacion
 
 class AcreditaService:
 
@@ -50,3 +50,93 @@ class AcreditaService:
         if not resultado:
             return None
         return resultado._asdict()
+    
+    @staticmethod
+    @login_required
+    def crear_condicion(data):
+        try:
+            condicion = CondicionCriterio(
+                id_criterio=data.get('id_criterio'),
+                nombre_condicion=data.get('nombre_condicion'),
+                puntaje_condicion=data.get('select_puntaje'),
+                id_tecnica=data.get('select_tecnica'),
+                normativa_condicion=data.get('normativa_condicion'),
+                link_normativa=data.get('link_normativa'),
+                tipo_condicion=data.get('tipo_condicion')
+            )
+
+            db.session.add(condicion)
+            db.session.commit()
+
+            return {
+                'success': True,
+                'mensaje': 'Condición registrada correctamente',
+                'id_condicion': condicion.id_condicion
+            }
+
+        except Exception as e:
+            db.session.rollback()
+            return {
+                'success': False,
+                'mensaje': str(e)
+            }
+
+    @staticmethod
+    @login_required
+    def actualizar_condicion(id_condicion, data):
+        try:
+            condicion = CondicionCriterio.query.get(id_condicion)
+            if not condicion:
+                return {
+                    'success': False,
+                    'mensaje': 'Condición no encontrada'
+                }
+            condicion.id_criterio = data.get('id_criterio')
+            condicion.nombre_condicion = data.get('nombre_condicion')
+            condicion.puntaje_condicion = data.get('select_puntaje')
+            condicion.id_tecnica = data.get('select_tecnica')
+            condicion.normativa_condicion = data.get('normativa_condicion')
+            condicion.link_normativa = data.get('link_normativa')
+            condicion.tipo_condicion = data.get('tipo_condicion')
+            db.session.commit()
+            return {
+                'success': True,
+                'mensaje': 'Condición actualizada correctamente'
+            }
+        except Exception as e:
+            db.session.rollback()
+            return {
+                'success': False,
+                'mensaje': str(e)
+            }
+
+    def get_condicion_by_id(id_condicion):
+        condicion = (
+            db.session.query(
+                CondicionCriterio.id_condicion,
+                CondicionCriterio.nombre_condicion,
+                CondicionCriterio.id_tecnica,
+                TecnicaEvaluacion.nombre_tecnica,
+                CondicionCriterio.puntaje_condicion,
+                CondicionCriterio.normativa_condicion,
+                CondicionCriterio.link_normativa,
+                CondicionCriterio.id_criterio,
+                CondicionCriterio.tipo_condicion
+            )
+            .outerjoin(TecnicaEvaluacion,TecnicaEvaluacion.id_tecnica == CondicionCriterio.id_tecnica)
+            .filter(CondicionCriterio.id_condicion == id_condicion)
+            .first()
+        )
+        if not condicion:
+            return None
+        return {
+            "id_condicion": condicion.id_condicion,
+            "nombre_condicion": condicion.nombre_condicion,
+            "id_tecnica": condicion.id_tecnica,
+            "nombre_tecnica": condicion.nombre_tecnica,
+            "puntaje_condicion": condicion.puntaje_condicion,
+            "normativa_condicion": condicion.normativa_condicion,
+            "link_normativa": condicion.link_normativa,
+            "id_criterio": condicion.id_criterio,
+            "tipo_condicion": condicion.tipo_condicion,
+        }

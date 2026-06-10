@@ -8,6 +8,8 @@ from werkzeug.utils import secure_filename
 from app.models import TecnicaEvaluacion, CondicionCriterio, Fuente, ProcesoInstitucional
 from app.models import Macroproceso, Estandar, Criterio
 from app import db
+from app.constants import ROLES
+from app.constants import ROLES_NAME
 from sqlalchemy import func, cast, String
 from .services import AcreditaService
 
@@ -15,11 +17,7 @@ from .services import AcreditaService
 @acredita_bp.route("/fuentes/actualizar", methods=["GET"])
 @login_required
 def actualizar_fuentes():
-    return render_template(
-        "administrarfuentes.html",
-        user=current_user,
-        page_title="Actualizar Fuentes Auditables"
-    )
+    return render_template("administrarfuentes.html",lista_roles=ROLES,nombre_roles=ROLES_NAME,user=current_user,page_title="Actualizar Fuentes Auditables")
 
 # --- API listar macroprocesos ---
 @acredita_bp.route("/api/macroprocesos", methods=["GET"])
@@ -137,13 +135,7 @@ def api_combinado():
 def actualizar_condiciones():
     id_criterio = request.form.get("id_criterio")
     nombre_criterio = request.form.get("nombre_criterio")
-    return render_template(
-        "condiciones.html",
-        user=current_user,
-        page_title="Actualizar Condiciones y Fuentes",
-        id_criterio=id_criterio,
-        nombre_criterio=nombre_criterio
-    )
+    return render_template("condiciones.html",lista_roles=ROLES,nombre_roles=ROLES_NAME,user=current_user,id_criterio=id_criterio,nombre_criterio=nombre_criterio,page_title="Actualizar Condiciones y Fuentes")
 
 @acredita_bp.route("/api/condiciones/<int:id>", methods=["GET"])
 def ver_condiciones(id):
@@ -211,38 +203,17 @@ def api_tecnicas():
         for m in data
     ])
         
-@acredita_bp.route('/grabarcondicion', methods=['POST'])
-def grabarcondicion():
-    data = request.form.to_dict(flat=True)
-    id_criterio = data.get('id_criterio')
-    id_condicion = data.get('id_condicion')
-    nombre_condicion = data.get('nombre_condicion')
-    select_puntaje = data.get('select_puntaje')
-    select_tecnica = data.get('select_tecnica')
-    try:
-        if id_condicion:
-            condicion = CondicionCriterio.query.get(id_condicion)
-            condicion.id_criterio = id_criterio
-            condicion.nombre_condicion = nombre_condicion
-            condicion.puntaje_condicion = select_puntaje
-            condicion.id_tecnica = select_tecnica
-            mensaje = 'Condición actualizada correctamente'
-        else:
-            condicion = CondicionCriterio(
-                id_criterio = id_criterio,
-                nombre_condicion = nombre_condicion,
-                puntaje_condicion = select_puntaje,
-                id_tecnica = select_tecnica
-            )
-            db.session.add(condicion)
-            mensaje = 'Condición registrada correctamente'
+@acredita_bp.route('/condicion', methods=['POST'])
+def crear_condicion():
+    data = request.form
+    resultado = AcreditaService.crear_condicion(data)
+    return jsonify(resultado), 200 if resultado['success'] else 400
 
-        db.session.commit()
-        return jsonify({'success': True, 'mensaje': mensaje})
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'success': False, 'mensaje': str(e)}), 500
+@acredita_bp.route('/condicion/<int:id_condicion>', methods=['PUT'])
+def actualizar_condicion(id_condicion):
+    data = request.form
+    resultado = AcreditaService.actualizar_condicion(id_condicion,data)
+    return jsonify(resultado), 200 if resultado['success'] else 400
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -274,29 +245,10 @@ def uploadregistro():
 
 @acredita_bp.route("/api/condicion/<int:id>", methods=["GET"])
 def get_condicion(id):
-    stmt = (
-        db.session.query(
-            CondicionCriterio.id_condicion,
-            CondicionCriterio.nombre_condicion,
-            CondicionCriterio.id_tecnica,
-            TecnicaEvaluacion.nombre_tecnica,
-            CondicionCriterio.puntaje_condicion
-        )
-        .outerjoin(TecnicaEvaluacion, TecnicaEvaluacion.id_tecnica == CondicionCriterio.id_tecnica)
-        .filter(CondicionCriterio.id_condicion == id)
-    ).first()
-
-    if not stmt:
+    condicion = AcreditaService.get_condicion_by_id(id)
+    if not condicion:
         return jsonify({"error": "Condición no encontrada"}), 404
-
-    data = {
-        "id_condicion": stmt.id_condicion,
-        "nombre_condicion": stmt.nombre_condicion,
-        "id_tecnica": stmt.id_tecnica,
-        "nombre_tecnica": stmt.nombre_tecnica,
-        "puntaje_condicion": stmt.puntaje_condicion
-    }
-    return jsonify(data)
+    return jsonify(condicion), 200
 
 @acredita_bp.route("/api/fuentes/<int:id_condicion>")
 def get_fuentes(id_condicion):
