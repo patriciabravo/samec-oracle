@@ -4,6 +4,7 @@ var CriteriosEvent = {
         this.loadCombos();
         this.bindEvents();
         this.loadTabla();
+        this.formvalidator();
     },
     loadCombos: function () {
 
@@ -21,6 +22,13 @@ var CriteriosEvent = {
             });
         });
 
+    },
+    bindEvents: function () {
+
+        $('#Modal_EditarCriterio').on('hidden.bs.modal', function () {
+            document.activeElement.blur();
+        });
+        
         $('body').on('click','.btn-edit-criterio', function () {
             let criterioId = $(this).data('id');
             let mode = $(this).data('tipo');
@@ -29,6 +37,7 @@ var CriteriosEvent = {
                 type: 'GET',
                 success: function (data) {
                     console.log(data);
+                    $('#form_edit_criterio').find('#id_criterio').val(criterioId);
                     $('#form_edit_criterio').find('#codigo_criterio').val(data.codigo_criterio);
                     $('#form_edit_criterio').find('#sel_tipo_criterio').val(data.tipo_criterio);
                     $('#form_edit_criterio').find('#sel_procesoinstitucional').val(data.id_proceso).trigger('change');
@@ -59,13 +68,6 @@ var CriteriosEvent = {
                 $('#Modal_EditarCriterio').find('.modal-title').text('Editar Red');
             }
         });
-
-    },
-    bindEvents: function () {
-
-        $('#Modal_EditarCriterio').on('hidden.bs.modal', function () {
-            document.activeElement.blur();
-        });
     },
     loadTabla: function () {
 
@@ -75,6 +77,8 @@ var CriteriosEvent = {
                 url: "/criterios/lista",
                 dataSrc: ""
             },
+            searching: true,
+            dom: 'frtip',
             columns: [
                 { data: "codigo_criterio" },
                 { data: "nombre_criterio" },
@@ -104,7 +108,7 @@ var CriteriosEvent = {
             ],
             columnDefs: [
                 {
-                    targets: 3,
+                    targets: 5,
                     width: "120px",
                     className: "text-nowrap"
                 }
@@ -113,5 +117,62 @@ var CriteriosEvent = {
                 url: "/static/json/es-ES.json"
             }
         });
-    }
+    },
+    formvalidator: function () {
+                    const form = document.getElementById("form_edit_criterio");
+                    const submitButton = document.getElementById("btn_guarda_criterio");
+                    const valida_datos_ipress = FormValidation.formValidation(form, {
+                        fields: {
+                            codigo_criterio: {
+                                validators: {
+                                    notEmpty: {
+                                        message: "Ingrese el código IPRESS."
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            bootstrap: new FormValidation.plugins.Bootstrap5({
+                                rowSelector: ".row",
+                                eleInvalidClass: "",
+                                eleValidClass: ""
+                            }),
+                            submitButton: new FormValidation.plugins.SubmitButton()
+                        }
+                    })
+                    .on('core.form.valid', function () {
+                        let method;
+                        let url;
+                        const id = $('#form_edit_criterio').find('#id_criterio').val();
+                        if (id) {
+                            method = 'PUT';
+                            url = `/criterios/${id}`;
+                        } else {
+                            method = 'POST';
+                            url = '/criterios';
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            data: $(form).serialize(),
+                            success: function (res) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Criterio Actualizado',
+                                    text: 'Criterio ha sido actualizado correctamente'
+                                }).then(() => {
+                                    $('#Modal_EditarCriterio').modal('hide');
+                                    $('#tablaCriterios').DataTable().ajax.reload();
+                                });
+                            },
+                            error: function (err) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: err.responseJSON?.error || 'Ocurrió un problema al actualizar'
+                                });
+                            }
+                        });
+                    });
+    }  
 };

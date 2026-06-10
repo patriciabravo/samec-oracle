@@ -17,34 +17,40 @@ def bandeja():
     return render_template("/bandeja-criterios.html",permiso=permiso,lista_roles=ROLES,nombre_roles=ROLES_NAME, user=current_user,page_title="Bandeja de Criterios")
 
 @criterios_bp.route('/lista', methods=['GET'])
-def listar_redes():
+def listar_criterios():
     response = CriteriosService.listar_criterios()
     return jsonify(response), 200
 
-@criterios_bp.route('/<int:id_red>', methods=['GET'])
-def obtener_red(id_red):
-    response = CriteriosService.obtener_red(id_red)    
+@criterios_bp.route('/<int:id_criterio>', methods=['GET'])
+def obtener_criterio(id_criterio):
+    response = CriteriosService.obtener_criterio(id_criterio)    
     if not response:
-        return jsonify({"message": "Red no encontrada"}), 404
+        return jsonify({"message": "Criterio no encontrada"}), 404
     return jsonify(response), 200
 
 @criterios_bp.route('/', methods=['POST'])
-def crear_red():
-    data = request.get_json()
-    response = CriteriosService.crear_red(data)
+def crear_criterio():
+    data = request.form
+    response = CriteriosService.crear_criterio(data)
     return jsonify(response), 201
 
-@criterios_bp.route('/<int:id_red>', methods=['PUT'])
-def actualizar_red(id_red):
-    data = request.get_json()
-    response = CriteriosService.actualizar_red(id_red, data)
+@criterios_bp.route('/<int:id_criterio>', methods=['PUT'])
+def actualizar_criterio(id_criterio):
+    data = request.form
+    response = CriteriosService.actualizar_criterio(
+        id_criterio,
+        data
+    )
     if not response:
-        return jsonify({"message": "Red no encontrada"}), 404
+        return jsonify({
+            "success": False,
+            "message": "Criterio no encontrado"
+        }), 404
     return jsonify(response), 200
 
-@criterios_bp.route('/<int:id_red>', methods=['DELETE'])
-def eliminar_red(id_red):
-    response = CriteriosService.eliminar_red(id_red)
+@criterios_bp.route('/<int:id_criterio>', methods=['DELETE'])
+def eliminar_red(id_criterio):
+    response = CriteriosService.eliminar_criterio(id_criterio)
     if not response:
-        return jsonify({"message": "Red no encontrada"}), 404
-    return jsonify({"message": "Red eliminada correctamente"}), 200
+        return jsonify({"message": "Criterio no encontrada"}), 404
+    return jsonify({"message": "Criterio eliminado correctamente"}), 200
