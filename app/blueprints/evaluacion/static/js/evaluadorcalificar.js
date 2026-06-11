@@ -26,15 +26,15 @@ var EvaluadorCalificarEvent = {
     },
     pintarPuntaje: function(puntaje){
         if (puntaje === 0){
-            return `<div class="symbol-label fs-2x fw-semibold text-danger bg-light-danger p-3">PUNTAJE:&nbsp;0</div>`;
+            return `<div class="symbol-label fs-2x fw-semibold text-danger bg-light-danger p-3">&nbsp;PUNTAJE:&nbsp;0</div>`;
         }
         if (puntaje === 1){
-            return `<div class="symbol-label fs-2x fw-semibold text-warning bg-light-warning p-3">PUNTAJE:&nbsp;1</div>`;
+            return `<div class="symbol-label fs-2x fw-semibold text-warning bg-light-warning p-3">&nbsp;PUNTAJE:&nbsp;1</div>`;
         }
         if (puntaje === 2){
-            return `<div class="symbol-label fs-2x fw-semibold text-success bg-light-success p-3">PUNTAJE:&nbsp;2</div>`;
+            return `<div class="symbol-label fs-2x fw-semibold text-success bg-light-success p-3">&nbsp;PUNTAJE:&nbsp;2</div>`;
         }
-        return `<div class="symbol-label fs-2x fw-semibold text-secondary bg-light-secondary p-3">PUNTAJE:&nbsp;Sin Calificar</div>`;
+        return `<div class="symbol-label fs-2x fw-semibold text-secondary bg-light-secondary p-3">&nbsp;PUNTAJE:&nbsp;Sin Calificar</div>`;
     },
     loadTabla: function () {
 
