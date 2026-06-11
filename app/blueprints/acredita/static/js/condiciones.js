@@ -17,12 +17,7 @@ var CondicionesEvent = {
             },
             columnDefs: [
                 {
-                    targets: 5,
-                    width: "120px",
-                    className: "text-nowrap"
-                },
-                {
-                    targets: 6,
+                    targets: 4,
                     width: "120px",
                     className: "text-nowrap"
                 }
@@ -31,24 +26,7 @@ var CondicionesEvent = {
                 { data: 'id_condicion'},
                 { data: 'nombre_condicion'},
                 { data: 'puntaje_condicion' },
-                { data: 'nombre_tecnica' },
-                {
-                    data: "fuentes",
-                    render: function (fuentes) {
-                        if (!fuentes || fuentes.length === 0) {
-                            return "<span class='text-muted'>Sin fuentes</span>";
-                        }
-                        let html = "";
-                        fuentes.forEach(f => {
-                            html += ``
-                            if (f.link_fuente)
-                                html += `${f.nombre_fuente}&nbsp;<a href="${f.link_fuente}" target="_blank" class="d-block"><i class="bi bi-file-earmark-arrow-down-fill fs-2 text-success"></i></a>`;
-                            else
-                                html += `${f.nombre_fuente}`;
-                        });
-                        return html;
-                    }
-                },
+                { data: 'nombre_tecnica' },                
                 {
                     data: null,
                     render: function(data) {
@@ -57,6 +35,23 @@ var CondicionesEvent = {
                         btn_view=  `<button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-add-condicion" data-idcondicion="${data.id_condicion}" data-bs-toggle="modal" data-bs-target="#Modal_AddCondicion" data-tipo="ver" >
                         <i class="fas fa-eye"></i>Ver</button>`;                           
                         return  btn_edit + '&nbsp;&nbsp;' + btn_view;
+                    }
+                },
+                {
+                    data:null,
+                    render: function (data) {
+                        if (!data.fuentes || data.fuentes.length === 0) {
+                            return "<span class='text-muted'>Sin fuentes</span>";
+                        }
+                        let html = "";
+                        data.fuentes.forEach(f => {
+                            html += ``
+                            if (f.link_fuente)
+                                html += `${f.nombre_fuente}&nbsp;<a href="${f.link_fuente}" target="_blank" class="d-block"><i class="bi bi-file-earmark-arrow-down-fill fs-2 text-success"></i></a>`;
+                            else
+                                html += `${f.nombre_fuente}`;
+                        });
+                        return html+'-->'+data.id_tecnica;
                     }
                 },
                 {
@@ -154,12 +149,11 @@ var CondicionesEvent = {
         });
 
         $('body').on('click','.btn-add-fuentes', function () {
-            const button = $(event.relatedTarget);
-            const idCond = button.data('idcondicion');
-            $('#form_update_fuentes').find('#id_condicion').val(idCond);
+            const idCondicion = $(this).data('idcondicion');
+            $('#form_update_fuentes').find('#id_condicion').val(idCondicion);
             $("#tablaFuentes tbody").empty();
             $.ajax({
-                url: `/acredita/api/fuentes/${idCond}`,
+                url: `/acredita/fuentes/${idCondicion}`,
                 success: function (data) {
                     data.forEach(function (f) {
                         let fila = `<tr>
@@ -180,7 +174,6 @@ var CondicionesEvent = {
             </tr>`;
             $("#tablaFuentes tbody").append(nuevaFila);
         });
-        
 
         $("#tablaFuentes").on("click", ".btnAgregarFila", function () {
             console.log('en add fila');

@@ -42,3 +42,10 @@ MAPA_NIVEL = {
     "II-2": "nivel_ii_2",
     "III-1": "nivel_iii_1"
 }
+
+TECNICA = {
+    "ENTREVISTA": 1,
+    "MUESTRA": 2,
+    "IMAGEN": 3,
+    "DOCUMENTO": 4
+}

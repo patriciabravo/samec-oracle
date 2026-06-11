@@ -10,6 +10,7 @@ from app.models import Macroproceso, Estandar, Criterio
 from app import db
 from app.constants import ROLES
 from app.constants import ROLES_NAME
+from app.constants import TECNICA
 from sqlalchemy import func, cast, String
 from .services import AcreditaService
 
@@ -17,7 +18,7 @@ from .services import AcreditaService
 @acredita_bp.route("/fuentes/actualizar", methods=["GET"])
 @login_required
 def actualizar_fuentes():
-    return render_template("administrarfuentes.html",lista_roles=ROLES,nombre_roles=ROLES_NAME,user=current_user,page_title="Actualizar Fuentes Auditables")
+    return render_template("administrarfuentes.html",lista_roles=ROLES,nombre_roles=ROLES_NAME,tecnica=TECNICA,user=current_user,page_title="Actualizar Fuentes Auditables")
 
 # --- API listar macroprocesos ---
 @acredita_bp.route("/api/macroprocesos", methods=["GET"])
@@ -135,7 +136,7 @@ def api_combinado():
 def actualizar_condiciones():
     id_criterio = request.form.get("id_criterio")
     nombre_criterio = request.form.get("nombre_criterio")
-    return render_template("condiciones.html",lista_roles=ROLES,nombre_roles=ROLES_NAME,user=current_user,id_criterio=id_criterio,nombre_criterio=nombre_criterio,page_title="Actualizar Condiciones y Fuentes")
+    return render_template("condiciones.html",lista_roles=ROLES,nombre_roles=ROLES_NAME,tecnica=TECNICA,user=current_user,id_criterio=id_criterio,nombre_criterio=nombre_criterio,page_title="Actualizar Condiciones y Fuentes")
 
 @acredita_bp.route("/api/condiciones/<int:id>", methods=["GET"])
 def ver_condiciones(id):
@@ -250,7 +251,7 @@ def get_condicion(id):
         return jsonify({"error": "Condición no encontrada"}), 404
     return jsonify(condicion), 200
 
-@acredita_bp.route("/api/fuentes/<int:id_condicion>")
+@acredita_bp.route("/fuentes/<int:id_condicion>")
 def get_fuentes(id_condicion):
     fuentes = Fuente.query.filter_by(id_condicion=id_condicion).all()
     data = [

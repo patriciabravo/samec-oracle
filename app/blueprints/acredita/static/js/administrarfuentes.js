@@ -22,7 +22,6 @@ var FuentesEvent = {
 
             $("#sel_estandar").empty().append(`<option value="0">Seleccione</option>`);
             $("#sel_criterio").empty().append(`<option value="0">Seleccione</option>`);
-
             if (id_macro !== "0") {
                 $.get("/acredita/api/estandares/" + id_macro, function (data) {
                     data.forEach(e => {
@@ -34,8 +33,7 @@ var FuentesEvent = {
                     });
                 });
             }
-
-            MacroprocesoEvent.loadTabla();
+            FuentesEvent.loadTabla();
         });
 
         $("#sel_estandar").on("change", function () {

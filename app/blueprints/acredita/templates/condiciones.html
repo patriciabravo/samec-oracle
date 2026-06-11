@@ -10,12 +10,12 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>CONDICION</th>
+                    <th>NOMBRE DE LA CONDICION</th>
                     <th>PUNTAJE</th>
                     <th>TECNICA</th>
-                    <th>NOMBRE FUENTE</th>
-                    <th>CONDICION</th>
-                    <th>FUENTE</th>
+                    <th></th>
+                    <th>NOMBRE DE FUENTE</th>
+                    <th></th>
                 </tr>
             </thead>
         </table>
@@ -92,7 +92,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">      
       <div class="modal-header">
-        <h5 class="modal-title" id="editarModalLabel">Administrar Fuentes</h5>
+        <h5 class="modal-title">Administrar Fuentes</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>      
       <div class="modal-body">
@@ -108,8 +108,7 @@
             </thead>
             <tbody>            
             </tbody>
-          </table>
-        
+          </table>        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-back-gris" data-bs-dismiss="modal">Cancelar</button>
@@ -125,6 +124,7 @@
 <script>
     const ROLES = {{ lista_roles | tojson }};
     const ROLES_NAME = {{ nombre_roles | tojson }};
+    const TECNICA = {{ tecnica | tojson }};
     const idCriterio = {{id_criterio|tojson}};
     CondicionesEvent.init();
 </script>
