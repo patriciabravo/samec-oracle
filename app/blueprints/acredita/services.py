@@ -54,8 +54,7 @@ class AcreditaService:
     @staticmethod
     @login_required
     def crear_condicion(data):
-        try:
-            condicion = CondicionCriterio(
+        condicion = CondicionCriterio(
                 id_criterio=data.get('id_criterio'),
                 nombre_condicion=data.get('nombre_condicion'),
                 puntaje_condicion=data.get('select_puntaje'),
@@ -63,24 +62,15 @@ class AcreditaService:
                 normativa_condicion=data.get('normativa_condicion'),
                 link_normativa=data.get('link_normativa'),
                 tipo_condicion=data.get('tipo_condicion')
-            )
-
-            db.session.add(condicion)
-            db.session.commit()
-
-            return {
-                'success': True,
-                'mensaje': 'Condición registrada correctamente',
-                'id_condicion': condicion.id_condicion
-            }
-
-        except Exception as e:
-            db.session.rollback()
-            return {
-                'success': False,
-                'mensaje': str(e)
-            }
-
+        )
+        db.session.add(condicion)
+        db.session.commit()
+        return {
+            "success": True,
+            "message": "Condicion creada correctamente",
+            "id_ipress": condicion.id_condicion
+        }
+        
     @staticmethod
     @login_required
     def actualizar_condicion(id_condicion, data):
@@ -110,6 +100,8 @@ class AcreditaService:
                 'mensaje': str(e)
             }
 
+    @staticmethod
+    @login_required
     def get_condicion_by_id(id_condicion):
         condicion = (
             db.session.query(

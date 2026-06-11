@@ -51,14 +51,14 @@ var CondicionesEvent = {
                             else
                                 html += `${f.nombre_fuente}`;
                         });
-                        return html+'-->'+data.id_tecnica;
+                        return html;
                     }
                 },
                 {
                     data: null,
                     render: function(data) {
                         str_adm_fuente='';
-                        if (data.id_tecnica == 4) {
+                        if (data.id_tecnica == TECNICA["DOCUMENTO"]) {
                               str_adm_fuente =`<button class="btn btn-sm btn-secondary btn-text-azul btn-add-fuentes" data-idcondicion="${data.id_condicion}" data-bs-toggle="modal" data-bs-target="#Modal_AddFuentes"><i class="bi bi-link"></i>Editar Fuente</button>`;
                         }
                         return str_adm_fuente;
@@ -106,11 +106,13 @@ var CondicionesEvent = {
             const idCriterio = $('#id_criterio').val();
             const idCondicion = $(this).data('idcondicion');
             const tipo = $(this).data('tipo');
-            if (tipo=="nuevo"){
+            if (tipo ==="nuevo"){
                 $('#form_nueva_condicion').find('input:not(:radio), textarea, select').val('');
                 $("#form_nueva_condicion").find("#select_puntaje").val(null).trigger("change");
                 $("#form_nueva_condicion").find("#select_tecnica").val(null).trigger("change");
                 $("#form_nueva_condicion").find("#tipo_condicion").val(null).trigger("change");
+                $('#form_nueva_condicion').find('#id_criterio').val(idCriterio);
+                $('.modal-title').text('Nueva condición');
             } else {
                 $('#form_nueva_condicion').find('#select_puntaje')
                 $.ajax({
@@ -131,7 +133,7 @@ var CondicionesEvent = {
                         console.error('Error al cargar condición:', error);
                     }
                 });
-                $('.modal-title').text(tipo === 'nuevo' ? 'Nueva condición' : 'Editar condición');
+                $('.modal-title').text('Editar condición');
                 if (tipo === 'ver') {
                     $('#Modal_AddCondicion').find('input, select, textarea').prop('disabled', true);
                     $('#Modal_AddCondicion').find('.modal-footer').hide();
@@ -151,28 +153,26 @@ var CondicionesEvent = {
         $('body').on('click','.btn-add-fuentes', function () {
             const idCondicion = $(this).data('idcondicion');
             $('#form_update_fuentes').find('#id_condicion').val(idCondicion);
-            $("#tablaFuentes tbody").empty();
+            $("#tablaFuentes tbody").html("");
+            filanueva = `<tr><td><input type="hidden" class="form-control id_fuente" />
+            <input type="text" class="form-control nombre_fuente" /></td>
+            <td><input type="text" class="form-control link_fuente" /></td>
+            <td><button class="btn btn-danger btn-sm btnEliminar"><i class="fa fa-trash"></i></button></td></tr>`;
+            fila = '';
             $.ajax({
                 url: `/acredita/fuentes/${idCondicion}`,
                 success: function (data) {
                     data.forEach(function (f) {
-                        let fila = `<tr>
-                                    <td><input type="hidden" class="form-control id_fuente" value="${f.id_fuente}">
+                        fila += `<tr><td><input type="hidden" class="form-control id_fuente" value="${f.id_fuente}">
                                     <input type="text" class="form-control nombre_fuente" value="${f.nombre_fuente}"></td>
                                     <td><input type="text" class="form-control link_fuente" value="${f.link_fuente}"></td>
-                                    <td><button class="btn btn-danger btn-sm btnEliminar"><i class="fa fa-trash"></i></button></td>
-                                </tr>`;
-                        $("#tablaFuentes tbody").append(fila);
-                    });
+                                    <td><button class="btn btn-danger btn-sm btnEliminar"><i class="fa fa-trash"></i></button></td></tr>`;
+                    });                    
+                    $("#tablaFuentes tbody").append(fila+filanueva);
                 }
             });
-            let nuevaFila = `<tr>
-                <td><input type="hidden" class="form-control id_fuente" />
-                <input type="text" class="form-control nombre_fuente" /></td>
-                <td><input type="text" class="form-control link_fuente" /></td>
-                <td><button class="btn btn-danger btn-sm btnEliminar"><i class="fa fa-trash"></i></button></td>
-            </tr>`;
-            $("#tablaFuentes tbody").append(nuevaFila);
+
+
         });
 
         $("#tablaFuentes").on("click", ".btnAgregarFila", function () {
@@ -230,7 +230,7 @@ var CondicionesEvent = {
                     .on('core.form.valid', function () {
                         let method;
                         let url;
-                        const id = $('#form_nueva_condicion').find('#id_criterio').val();
+                        const id = $('#form_nueva_condicion').find('#id_condicion').val();
                         if (id) {
                             method = 'PUT';
                             url = `/acredita/condicion/${id}`;
