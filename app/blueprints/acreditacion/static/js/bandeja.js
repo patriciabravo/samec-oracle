@@ -3,10 +3,8 @@ var ListadoEvent = {
     contadorComite: 1,
     init: function () {
         this.events();
-
     },
     pintarImagen: function(file) {
-
         if (!file || !file.previewElement) return;
         file.previewElement.addEventListener("click", function(e) {
             if (e.target.classList.contains("dz-remove")) return;
@@ -28,45 +26,59 @@ var ListadoEvent = {
         let self = this;
         $('#btnAgregarMiembro').on('click', function () {
             ListadoEvent.agregarFilaComite();
-
         });
+
         $(document).on('click', '.btnEliminarComite', function () {
             $(this).closest('tr').remove();
         });
+
         $(document).on('hidden.bs.modal', '#modalHito1', function () {
             document.activeElement?.blur();
         });
+
         $('#btnDescargarHito1').on('click', function () {
             let id_autoevaluacion = $('#id_autoevaluacion').val();
-            window.open(
-                `/acreditacion/api/hito-1/word/3`,
-                '_blank'
-            );
+            window.open(`/acreditacion/api/hito-1/word/3`,'_blank');
         });
-                   
-            let myDropzoneH1 = new Dropzone('#dropzone_H1', {
+
+        const previewTemplate = `<div class="dz-preview d-flex justify-content-between align-items-center border rounded p-2 mb-1">
+            <i class="bi bi-file-earmark-pdf fs-2 text-primary"></i>&nbsp;<span class="text-primary pl-2" data-dz-name></span>&nbsp;
+            <a class="btn btn-sm btn-light-danger" data-dz-remove><i class="bi bi-trash fs-2"></i></a>
+            </div>`;
+        $('.dropzone_hitos').each(function () {
+            if (this.dropzone) {
+                return;
+            }
+            const fila = $(this).closest('tr');
+            new Dropzone(this, {
                 url: '/auth/uploadhito',
+                previewTemplate: previewTemplate,
                 paramName: "file",
                 maxFiles: 1,
                 maxFilesize: 1,
                 acceptedFiles: ".pdf",
+                createImageThumbnails: false,
+                dictDefaultMessage: "<i class='bi bi-cloud-upload fs-2 btn-text-azul'></i><br><span class='btn-text-azul'>Arrastre un PDF o haga clic aquí</span>",
                 addRemoveLinks: true,
                     init: function () {
                             this.on("success", function (file, response) {
                                 file.server_name = response.upload_filename;
                                 file.isNew = true;
-                                $('#filesToInsertDB_H1').val(JSON.stringify([{
+                                $('.filesToInsertDB').val(JSON.stringify([{
                                     real_filename: response.real_filename,
                                     upload_filename: response.upload_filename
                                 }]));
                             });
                             this.on("removedfile", function (file) {
-                                $('#filesToInsertDB_H1').val("");
+                                $('.filesToInsertDB').val("");
                                 if (file.server_name && file.isNew) {
                                     $.ajax({
                                         url: `/auth/delete-evidencia/${file.server_name}`,
                                         type: "DELETE"
                                     });
+                                }
+                                if (this.files.length === 0) {
+                                    fila.find('.btn-save-hito').show();
                                 }
                             });
                             this.on("addedfile", function (file) {
@@ -82,15 +94,13 @@ var ListadoEvent = {
                                         window.open(url, "_blank");
                                     }
                                 });
+                                fila.find('.btn-save-hito').show();
                             });
 
                         }
-                    });
+            });
+        });
 
-
-
-
-                    
     },
     agregarFilaComite: function () {
         let index = this.contadorComite;
