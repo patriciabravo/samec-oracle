@@ -28,4 +28,5 @@ from .tipo_observacion import TipoObservacion
 from .autoevaluacioncomentariotecnica import AutoevaluacionComentarioTecnica
 from .autoevaluaciontecnicaobservacion import AutoevaluacionTecnicaObservacion
 from .autoevaluacionhistorico import AutoevaluacionHistorico
-from .acreditacionhito1 import AcreditacionHito1
+from .acreditacionh1equipoacreditacion import AcreditacionH1EquipoAcreditacion
+from .acreditacionreportehitos import AcreditacionReporteHitos

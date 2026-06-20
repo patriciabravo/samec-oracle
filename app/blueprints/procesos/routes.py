@@ -33,7 +33,7 @@ def procesos():
         .scalar()
     )
     print('id evaluation ',id_evaluacion)
-    return render_template("reportar.html", user=current_user, id_autoevaluacion=id_evaluacion, page_title='Reporte por Procesos Institucionales')
+    return render_template("reportar.html", user=current_user, id_autoevaluacion=id_evaluacion, page_title="Reporte por Procesos Institucionales")
 
 # ------------------------------------------------------
 # API 1 - Datatable de Procesos Institucionales

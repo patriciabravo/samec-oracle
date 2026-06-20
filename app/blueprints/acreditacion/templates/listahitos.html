@@ -240,13 +240,14 @@
             <h5 class="modal-title btn-text-azul">Definir Comité de Acreditación - Hito 1</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>        
-        <div class="modal-body">
+        <div class="modal-body">                
                 <div class="mb-3 text-end">
                     <button type="button" class="btn btn-light-primary btn-sm" id="btnAgregarMiembro"> <i class="bi bi-plus-lg"></i>
                         Agregar Miembro
                     </button>
                 </div>
                 <div class="table-responsive">
+                    <input type="hidden" name="id_autoevaluacion" id="id_autoevaluacion" value="{{id_autoevaluacion}}">
                     <table class="table table-bordered align-middle">
                         <thead class="table-light">
                             <tr>
@@ -266,8 +267,8 @@
                                   </td>
                                   <td>
                                       <select class="form-select" name="miembro_lider[0]">
-                                          <option value="NO" selected>NO</option>
-                                          <option value="SI">SI</option>
+                                          <option value="0" selected>NO</option>
+                                          <option value="1">SI</option>
                                       </select>
                                   </td>
                                   <td class="text-center">

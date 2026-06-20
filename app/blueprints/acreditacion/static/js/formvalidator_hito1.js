@@ -26,7 +26,6 @@ var FormValidatorHito1 = {
             }
         })
         .on('core.form.valid', function () {
-            console.log("llega aqui");
             $.ajax({
                 url: '/acreditacion/api/hito-1/guardar',
                 async: false,

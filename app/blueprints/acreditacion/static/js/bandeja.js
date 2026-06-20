@@ -121,12 +121,8 @@ var ListadoEvent = {
                 <td>
                     <select class="form-select"
                             name="miembro_lider[${index}]">
-                        <option value="NO" selected>
-                            NO
-                        </option>
-                        <option value="SI">
-                            SI
-                        </option>
+                        <option value="0" selected>NO</option>
+                        <option value="1">SI</option>
                     </select>
                 </td>
                 <td class="text-center">

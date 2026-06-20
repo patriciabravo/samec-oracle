@@ -1,106 +1,54 @@
 import os
 import secrets
 from . import acreditacion_bp
-from flask import render_template, jsonify, request, current_app
+from flask import render_template, jsonify, request
 from flask_login import login_required, current_user
-from collections import defaultdict
-from werkzeug.utils import secure_filename
-from app.models import AcreditacionHito1
 from app import db
 from flask import send_file
 from docx import Document
 from docxtpl import DocxTemplate
 from io import BytesIO
-# --- Página principal ---
+from app.models import AcreditacionH1EquipoAcreditacion
+from app.blueprints.acreditacion.service import AcreditacionHitoService
+
 @acreditacion_bp.route("/listado/hitos", methods=["GET"])
 @login_required
 def listado_hitos():
-    id_autoevaluacion = request.form.get("id_autoevaluacion")
     id_ipress = request.form.get("id_ipress")
     return render_template(
         "listahitos.html",
         user=current_user,
         page_title="Reporte de Hitos",
-        id_autoevaluacion=id_autoevaluacion,
-        id_ipress=id_ipress
+        id_autoevaluacion=current_user.id_autoevaluacion,
+        id_ipress=current_user.id_ipress
     )   
  
 @acreditacion_bp.route("/api/hito-1/guardar",methods=["POST"])
 @login_required
 def guardar_hito_1():
-
     try:
-        id_autoevaluacion = 3
-        form = request.form
+        id_autoevaluacion = request.form.get("id_autoevaluacion")
         if not id_autoevaluacion:
-
             return jsonify({
                 "success": False,
                 "message": "Falta id_autoevaluacion"
             }), 400
 
-        # =========================
-        # AGRUPAR POR ÍNDICE [0], [1], [2]
-        # =========================
-        data = {}
-
-        for key, value in form.items():
-
-            if "[" in key and "]" in key:
-
-                base = key.split("[")[0]
-                index = key.split("[")[1].replace("]", "")
-
-                if index not in data:
-                    data[index] = {}
-
-                data[index][base] = value
-
-        # =========================
-        # DELETE ANTERIOR
-        # =========================
-        AcreditacionHito1.query.filter_by(
-            id_autoevaluacion=id_autoevaluacion
-        ).delete()
-
-        # =========================
-        # INSERT
-        # =========================
-        for idx in data:
-
-            item = data[idx]
-
-            nombre = item.get("miembro_nombre", "").strip()
-            cargo = item.get("miembro_cargo", "").strip()
-            lider = item.get("miembro_lider", "NO")
-
-            if not nombre or not cargo:
-                continue
-
-            registro = AcreditacionHito1(
-                id_autoevaluacion=id_autoevaluacion,
-                nombre=nombre,
-                cargo=cargo,
-                es_responsable=(lider == "SI")
-            )
-
-            db.session.add(registro)
-
-        db.session.commit()
-
+        id_acreditacion = id_autoevaluacion
+        AcreditacionHitoService.guardar_hito_1(
+            id_acreditacion,
+            request.form
+        )
         return jsonify({
             "success": True,
             "message": "Hito 1 guardado correctamente"
         })
-
     except Exception as e:
-
-        db.session.rollback()
-
         return jsonify({
             "success": False,
             "message": str(e)
         }), 500
+        
         
 @acreditacion_bp.route("/api/hito-1/word/<int:id_autoevaluacion>")
 def generar_word_hito_1(id_autoevaluacion):

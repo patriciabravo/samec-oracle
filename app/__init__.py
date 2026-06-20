@@ -31,7 +31,8 @@ from app.models.ipress import IpressEssalud
 from app.models.red import RedEssalud
 from collections import defaultdict
 from app.constants import ROLES_NAME
-from app.models import Persona, Usuario, RedEssalud, IpressEssalud
+from app.constants import ACREDITACION_ACTUAL
+from app.models import Persona, Usuario, RedEssalud, IpressEssalud, Autoevaluacion
 
 def create_app():
     app = Flask(__name__)
@@ -135,6 +136,8 @@ def create_app():
                 user.ipress_nivel = ipress.nivel_ipress
                 red = RedEssalud.query.get(ipress.id_red)
                 user.red_nombre = red.nombre_red
+                autoevaluacion_result = Autoevaluacion.query.filter_by(periodo=ACREDITACION_ACTUAL,id_ipress=user.id_ipress).first()
+                user.id_autoevaluacion = autoevaluacion_result.id_autoevaluacion                
         return user
     
     return app
