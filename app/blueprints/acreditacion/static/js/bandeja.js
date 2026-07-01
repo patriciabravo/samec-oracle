@@ -3,42 +3,64 @@ var ListadoEvent = {
     contadorComite: 1,
     init: function () {
         this.events();
-    },
-    pintarImagen: function(file) {
-        if (!file || !file.previewElement) return;
-        file.previewElement.addEventListener("click", function(e) {
-            if (e.target.classList.contains("dz-remove")) return;
-            let url = "";
-             if (file.dataURL) {
-                url = file.dataURL;
-            } else{         
-                url = "/uploads/fuentes/" + file.server_name.replace(/\\/g, "/") + "?t=" + Date.now();
-            }
-            if (!url) {
-                console.warn("No hay URL para este archivo", file);
-                return;
-            }
-            $("#previewImage").attr("src", url);
-            $("#modalPreview").modal("show");
-        });
+        this.generartemplates();
     },
     events: function () {
         let self = this;
-        $('#btnAgregarMiembro').on('click', function () {
-            ListadoEvent.agregarFilaComite();
-        });
-
-        $(document).on('click', '.btnEliminarComite', function () {
-            $(this).closest('tr').remove();
-        });
 
         $(document).on('hidden.bs.modal', '#modalHito1', function () {
             document.activeElement?.blur();
         });
 
-        $('#btnDescargarHito1').on('click', function () {
-            let id_autoevaluacion = $('#id_autoevaluacion').val();
-            window.open(`/acreditacion/api/hito-1/word/3`,'_blank');
+        $(document).on('click','.btn-edit-hito1', function () {
+            let IdAcreditacion = $(this).data('id');
+            console.log(IdAcreditacion);
+            $.ajax({
+                url: `/acreditacion/hito1/${IdAcreditacion}`,
+                type: 'GET',
+                success: function(response) {
+                    if (!response.success) {
+                        alert('No se pudo obtener la información');
+                        return;
+                    }
+                    const miembros = response.data;
+                    $('#tablaMiembros').find('tbody#filas_miembros').empty();
+                    miembros.forEach(function(miembro) {
+                        let fila = `
+                            <tr>
+                                <td><input type="hidden" name="id_miembro[]" value="${miembro.id_miembro}">
+                                    <input type="text" class="form-control" name="miembro_nombre[]" value="${miembro.nombre_miembro}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="miembro_cargo[]" value="${miembro.cargo_miembro}">
+                                </td>
+                                <td>
+                                    <select class="form-select" name="miembro_lider[]">
+                                        <option value="0" ${miembro.es_lider == 0 ? 'selected' : ''}>NO</option>
+                                        <option value="1" ${miembro.es_lider == 1 ? 'selected' : ''}>SI</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-light-danger btn-sm btnEliminarMiembro"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>`;
+                        $('#tablaMiembros').find('tbody#filas_miembros').append(fila);
+                    });
+                    $('#modalHito1').modal('show');
+                },
+                error: function(xhr) {
+                    console.error(xhr);
+                    alert('Error al cargar la información');
+                }
+            });
+        });
+
+        $('#btnAgregarMiembro').on('click', function () {
+            ListadoEvent.agregarFilaComite();
+        });
+
+        $(document).on('click', '.btnEliminarMiembro', function () {
+            $(this).closest('tr').remove();
         });
 
         const previewTemplate = `<div class="dz-preview d-flex justify-content-between align-items-center border rounded p-2 mb-1">
@@ -49,7 +71,7 @@ var ListadoEvent = {
             if (this.dropzone) {
                 return;
             }
-            const fila = $(this).closest('tr');
+            const modal_name = $(this).closest('#modalResolucionHito1');
             new Dropzone(this, {
                 url: '/auth/uploadhito',
                 previewTemplate: previewTemplate,
@@ -78,7 +100,7 @@ var ListadoEvent = {
                                     });
                                 }
                                 if (this.files.length === 0) {
-                                    fila.find('.btn-save-hito').show();
+                                    modal_name.find('.btn-save-hito').show();
                                 }
                             });
                             this.on("addedfile", function (file) {
@@ -94,7 +116,7 @@ var ListadoEvent = {
                                         window.open(url, "_blank");
                                     }
                                 });
-                                fila.find('.btn-save-hito').show();
+                                modal_name.find('.btn-save-hito').show();
                             });
 
                         }
@@ -103,24 +125,24 @@ var ListadoEvent = {
 
     },
     agregarFilaComite: function () {
-        let index = this.contadorComite;
+
         let fila = `
             <tr>
                 <td>
                     <input type="text"
                            class="form-control"
-                           name="miembro_nombre[${index}]"
+                           name="miembro_nombre[]"
                            placeholder="Ingrese nombre">
                 </td>
                 <td>
                     <input type="text"
                            class="form-control"
-                           name="miembro_cargo[${index}]"
+                           name="miembro_cargo[]"
                            placeholder="Ingrese cargo">
                 </td>
                 <td>
                     <select class="form-select"
-                            name="miembro_lider[${index}]">
+                            name="miembro_lider[]">
                         <option value="0" selected>NO</option>
                         <option value="1">SI</option>
                     </select>
@@ -133,8 +155,19 @@ var ListadoEvent = {
                 </td>
             </tr>
         `;
-        $('#tablaMiembros').append(fila);
+        $('#tablaMiembros').find('tbody#filas_miembros').append(fila);
         this.contadorComite++;
-    }
+    },
+    generartemplates: function() {
+
+        $('#btnDescargarHito1').on('click', function (e) {
+            e.preventDefault();
+            console.log('el boton descargar');
+            let id_autoevaluacion = $('#id_autoevaluacion').val();
+            window.open(`/acreditacion/api/hito-1/word/${id_autoevaluacion}`,'_blank');
+        });
+
+    }   
+
 
 };

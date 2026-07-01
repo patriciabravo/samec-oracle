@@ -57,20 +57,18 @@
                 <tr>
                     <td class="btn-text-azul">Hito 1: Conformación del Equipo de Acreditación</td>
                     <td>
-                        <button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-edit-criterio" data-bs-target="#modalHito1" data-bs-toggle="modal">
+                        <button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-edit-hito1" data-id="{{id_autoevaluacion}}" data-bs-target="#modalHito1" data-bs-toggle="modal">
                             <i class="bi bi-people-fill"></i>Definir Equipo de Acreditación
                         </button>
                     </td>
                     <td>
-                        <a href="http://document.pdf" target="_blank" class="btn btn-sm btn-secondary me-3 btn-text-azul btn-edit-criterio" >
+                        <a href="#" class="btn btn-sm btn-secondary me-3 btn-text-azul" id="btnDescargarHito1" >
                             <i class="bi bi-download"></i>Descargar Resolución
                         </a>
                     </td>
                     <td class="d-flex justify-content-center align-items-center">
-                        <input type="hidden" class="filesToInsertDB" id="filesToInsertDB_H1" name="filesToInsertDB_H1">
-                        <div class="dropzone dropzone_hitos" id="dropzone_H1"></div>
-                        <button type="button" class="btn btn-sm btn-secondary me-3 btn-text-azul btn-save-hito m-4 btnGrabarArchivo" style="display:none;">
-                            <i class="bi bi-save btn-text-azul"></i>&nbsp;Grabar
+                        <button class="btn btn-sm btn-secondary me-3 btn-text-azul btn-save-hito1" data-id="{{id_autoevaluacion}}" data-bs-target="#modalResolucionHito1" data-bs-toggle="modal">
+                            <i class="bi bi-people-fill"></i>Subir Resolución de Equipo de Acreditación
                         </button>
                     </td>
                     <td class="text-center">
@@ -248,7 +246,7 @@
                 </div>
                 <div class="table-responsive">
                     <input type="hidden" name="id_autoevaluacion" id="id_autoevaluacion" value="{{id_autoevaluacion}}">
-                    <table class="table table-bordered align-middle">
+                    <table class="table table-bordered align-middle" id="tablaMiembros">
                         <thead class="table-light">
                             <tr>
                                   <th width="42%" class="text-center btn-text-azul">Nombre</th>
@@ -257,7 +255,7 @@
                                   <th width="8%" class="text-center btn-text-azul">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="tablaMiembros">
+                        <tbody id="filas_miembros">
                               <tr>
                                   <td>
                                       <input type="text" class="form-control" name="miembro_nombre[0]" placeholder="Ingrese nombre">
@@ -281,6 +279,43 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary" id="btnGuardarComite">Guardar Comité</button>
+        </div>        
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FORMATO HITO 1 -->
+<div class="modal fade" id="modalResolucionHito1" tabindex="-1" aria-labelledby="modalResolucionHito1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+    <form id="form_hito_1" class="form" action="" method="POST">       
+        <div class="modal-header">
+            <h5 class="modal-title btn-text-azul">Resolución de Conformación de Equipo de Acreditación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>        
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">No. de Resolución</label>
+                    <input type="text" class="form-control" id="nro_resolucion_equipo_acreditacion" name="nro_resolucion_equipo_acreditacion" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Fecha de Resolución</label>
+                    <input type="text" class="form-control" id="fecha_resolucion_equipo_acreditacion" name="fecha_resolucion_equipo_acreditacion" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Resolución de Equipo de Acreditación</label>                    
+                    <input type="hidden" class="filesToInsertDB" id="filesToInsertDB_H1" name="filesToInsertDB_H1">
+                    <div class="dropzone dropzone_hitos" id="dropzone_H1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-light-primary btn-save-hito" style="display:none;"><i class="bi bi-save"></i>&nbsp;Grabar</button>
         </div>        
     </form>
     </div>
@@ -352,15 +387,9 @@
                     </table>
                 </div>
             </div>
-            <!-- FOOTER -->
             <div class="modal-footer">
-                <button type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">Cancelar
-                      </button>
-                <button type="button" class="btn btn-primary">
-                    Guardar Evaluadores
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary"> Guardar Evaluadores </button>
             </div>
         </div>
     </div>

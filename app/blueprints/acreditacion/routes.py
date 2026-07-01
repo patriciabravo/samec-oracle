@@ -8,8 +8,9 @@ from flask import send_file
 from docx import Document
 from docxtpl import DocxTemplate
 from io import BytesIO
-from app.models import AcreditacionH1EquipoAcreditacion
+from app.models import AcreditacionH1EquipoAcreditacion, Autoevaluacion, IpressEssalud, RedEssalud
 from app.blueprints.acreditacion.service import AcreditacionHitoService
+from app.constants import ACREDITACION_ACTUAL
 
 @acreditacion_bp.route("/listado/hitos", methods=["GET"])
 @login_required
@@ -48,82 +49,68 @@ def guardar_hito_1():
             "success": False,
             "message": str(e)
         }), 500
-        
-        
-@acreditacion_bp.route("/api/hito-1/word/<int:id_autoevaluacion>")
-def generar_word_hito_1(id_autoevaluacion):
 
+@acreditacion_bp.route('/hito1/<int:id_acreditacion>',methods=['GET'])
+@login_required
+def editar_hito_1(id_acreditacion):
+    response = AcreditacionHitoService.obtener_hito_1(id_acreditacion)
+    return jsonify({
+        "success": True,
+        "data": response
+    }), 200
+
+@acreditacion_bp.route("/api/hito-1/word/<int:id_autoevaluacion>")
+@login_required
+def generar_word_hito_1(id_autoevaluacion):
     try:
-        registros = AcreditacionHito1.query.filter_by(
-            id_autoevaluacion=id_autoevaluacion
-        ).all()
-        # =========================
-        # CARGAR TEMPLATE WORD
-        # =========================
-        template_path = os.path.join(
-            os.path.dirname(__file__),
-            "..",
-            "..",
-            "documents",
-            "templates",
-            "template_hito1.docx"
+        registro = (
+            db.session.query(
+                Autoevaluacion,
+                IpressEssalud.nombre_ipress,
+                RedEssalud.nombre_red
+            )
+            .join(IpressEssalud, Autoevaluacion.id_ipress == IpressEssalud.id_ipress)
+            .join(RedEssalud, IpressEssalud.id_red == RedEssalud.id_red)           
+            .filter(Autoevaluacion.id_autoevaluacion == id_autoevaluacion)
+            .first()
         )
 
+        template_path = os.path.join(os.path.dirname(__file__),"..","..","documents","templates","template_hito1.docx")
         doc = Document(template_path)
 
-        # =========================
-        # REEMPLAZO SIMPLE DE VARIABLES
-        # =========================
         for p in doc.paragraphs:
-
             if "{{red_prestacional}}" in p.text:
                 p.text = p.text.replace(
                     "{{red_prestacional}}",
-                    "RED TEST"
+                    registro[2]
                 )
-
             if "{{ipress_name}}" in p.text:
                 p.text = p.text.replace(
                     "{{ipress_name}}",
-                    "IPRESS TEST 1"
+                    registro[1]
+                )
+            if "{{anio_acreditacion}}" in p.text:
+                p.text = p.text.replace(
+                    "{{anio_acreditacion}}",
+                    str(ACREDITACION_ACTUAL)
                 )
 
-        # =========================
-        # BUSCAR TABLA Y RELLENARLA
-        # =========================
         table = doc.tables[0]  # asumimos que es la primera tabla
-
-        # limpiar filas excepto encabezado
         for i in range(len(table.rows) - 1, 0, -1):
             table._tbl.remove(table.rows[i]._tr)
 
-        # =========================
-        # INSERTAR FILAS
-        # =========================
+        registros = AcreditacionH1EquipoAcreditacion.query.filter_by(id_acreditacion=id_autoevaluacion).all()        
         for r in registros:
-
             row = table.add_row().cells
+            row[0].text = r.nombre_miembro
+            row[1].text = r.cargo_miembro
+            row[2].text = "SI" if r.es_lider else "NO"
 
-            row[0].text = r.nombre
-            row[1].text = r.cargo
-            row[2].text = "SI" if r.es_responsable else "NO"
-
-        # =========================
-        # EXPORTAR EN MEMORIA
-        # =========================
         file_stream = BytesIO()
         doc.save(file_stream)
         file_stream.seek(0)
-
-        return send_file(
-            file_stream,
-            as_attachment=True,
-            download_name="hito_1_generado.docx",
-            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        )
-
+        return send_file(file_stream,as_attachment=True,download_name="hito_1_generado.docx",mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
     except Exception as e:
-
         return {
             "success": False,
             "message": str(e)
